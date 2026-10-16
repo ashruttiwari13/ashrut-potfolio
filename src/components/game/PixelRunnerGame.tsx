@@ -60,8 +60,8 @@ export const PixelRunnerGame: React.FC = () => {
       {/* Quick Controls Cheat Sheet */}
       <div className="p-2.5 bg-pastel-warm/70 border border-pastel-dark/30 rounded-xl text-[11px] text-center text-pastel-dark font-medium flex flex-wrap items-center justify-around gap-2">
         <span>🎮 <strong>A / D or ← →</strong> Move</span>
-        <span>⬆️ <strong>W / Space</strong> Jump</span>
-        <span>⚔️ <strong>Left Click</strong> Sword Slash</span>
+        <span>⬆️ <strong>W / Space</strong> Jump &amp; Double Jump</span>
+        <span>⚔️ <strong>Left Click</strong> Aim &amp; Slash</span>
         <span>✨ <strong>Right Click</strong> Crystal Blast</span>
         <span>🗝️ <strong>E</strong> Interact</span>
         <span>⏸️ <strong>Esc</strong> Pause</span>

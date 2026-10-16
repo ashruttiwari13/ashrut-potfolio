@@ -463,8 +463,8 @@
     <div class="card-panel" style="text-align:left; font-size:0.55rem; line-height:1.8;">
       <p><strong style="color:var(--accent-gold);">DESKTOP CONTROLS:</strong></p>
       <p>• <strong>A / D or ← / →</strong> : Move Left &amp; Right</p>
-      <p>• <strong>W / Space / ↑</strong> : Jump (Hold for high arc)</p>
-      <p>• <strong>Left Mouse Button (LMB)</strong> : Melee Sword Slash</p>
+      <p>• <strong>W / Space / ↑</strong> : Jump &amp; Double Jump (Press twice in mid-air)</p>
+      <p>• <strong>Left Mouse Button (LMB)</strong> : Melee Sword Slash (Faces mouse click direction)</p>
       <p>• <strong>Right Mouse Button (RMB)</strong> : Special Crystal Wave (Uses SP)</p>
       <p>• <strong>E</strong> : Interact with Doors &amp; Checkpoints</p>
       <p>• <strong>Esc</strong> : Pause / Resume</p>
@@ -586,6 +586,24 @@ class RetroAudio {
       gain.connect(this.ctx.destination);
       osc.start(now);
       osc.stop(now + 0.12);
+    } catch(e) {}
+  }
+
+  doubleJump() {
+    if (this.muted || !this.ctx) return;
+    try {
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(340, now);
+      osc.frequency.exponentialRampToValueAtTime(760, now + 0.14);
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.14);
     } catch(e) {}
   }
 
@@ -1127,6 +1145,12 @@ class InputController {
       try { window.focus(); } catch(err) {}
       if (game.state !== 'playing' || !game.player) return;
 
+      // Turn player towards mouse click position
+      const rect = this.canvas.getBoundingClientRect();
+      const mouseCanvasX = (e.clientX - rect.left) * (this.canvas.width / rect.width);
+      const mouseWorldX = mouseCanvasX + (game.camera ? game.camera.x : 0);
+      game.player.facing = mouseWorldX < (game.player.x + game.player.width / 2) ? -1 : 1;
+
       if (e.button === 0) {
         // Left Mouse Button: Normal Sword Slash
         this.mouse.normalAttack = true;
@@ -1253,6 +1277,9 @@ class Player {
     this.coyoteCounter = 0;
     this.jumpBuffer = 0;
 
+    this.maxJumps = 2;
+    this.jumpsLeft = 2;
+
     this.health = currentDiff.maxHealth;
     this.maxHealth = currentDiff.maxHealth;
     this.invulnerableTimer = 0;
@@ -1261,7 +1288,7 @@ class Player {
     this.attackTimer = 0;
     this.attackDuration = 0.22;
     this.attackCooldownTimer = 0;
-    this.attackCooldown = 0.28;
+    this.attackCooldown = 0.25;
     this.attackHitbox = null;
 
     this.specialCooldown = 3.0;
@@ -1279,6 +1306,7 @@ class Player {
     this.vx = 0;
     this.vy = 0;
     this.grounded = false;
+    this.jumpsLeft = this.maxJumps;
     this.health = currentDiff.maxHealth;
     this.maxHealth = currentDiff.maxHealth;
     this.invulnerableTimer = 0;
@@ -1295,20 +1323,27 @@ class Player {
     this.attackCooldownTimer = this.attackCooldown;
     audio.slash();
 
-    const reach = 26;
+    // Generous, reliable 16-bit sword hitbox covering body overlap, forward reach, and vertical clearance
+    const forwardReach = 36;
+    const bodyOverlap = 10;
+    const totalW = forwardReach + bodyOverlap;
+    const startX = this.facing === 1 ? (this.x - bodyOverlap) : (this.x + this.width - forwardReach);
+
     this.attackHitbox = {
-      x: this.facing === 1 ? this.x + this.width : this.x - reach,
-      y: this.y + 2,
-      width: reach,
-      height: this.height - 4,
-      damage: 15,
-      active: true
+      x: startX,
+      y: this.y - 6,
+      width: totalW,
+      height: this.height + 14,
+      damage: 25,
+      active: true,
+      hitEnemies: new Set(),
+      hitBoss: false
     };
 
     game.particles.emit(
-      this.facing === 1 ? this.x + this.width + 8 : this.x - 8,
-      this.y + 12,
-      '#ffffff', 4, 1.5, 0
+      this.facing === 1 ? this.x + this.width + 12 : this.x - 12,
+      this.y + 10,
+      '#70f3ff', 5, 2.0, 0
     );
   }
 
@@ -1380,27 +1415,42 @@ class Player {
       if (Math.abs(this.vx) < 0.1) this.vx = 0;
     }
 
-    // Coyote & Buffer Jump
+    // Coyote, Buffer & Double Jump
     if (this.grounded) {
       this.coyoteCounter = 0.12;
+      this.jumpsLeft = this.maxJumps;
     } else {
       this.coyoteCounter -= dt;
     }
 
     if (input.jumpPressed) {
-      this.jumpBuffer = 0.12;
       input.jumpPressed = false;
+      this.jumpBuffer = 0.12;
     } else {
       this.jumpBuffer -= dt;
     }
 
-    if (this.jumpBuffer > 0 && this.coyoteCounter > 0) {
-      this.vy = this.jumpForce;
-      this.grounded = false;
-      this.coyoteCounter = 0;
-      this.jumpBuffer = 0;
-      audio.jump();
-      game.particles.emit(this.x + this.width / 2, this.y + this.height, '#e0d8f0', 4, 1.2, 0.05);
+    if (this.jumpBuffer > 0) {
+      if (this.coyoteCounter > 0 || this.grounded) {
+        // First jump from ground / ledge
+        this.vy = this.jumpForce;
+        this.grounded = false;
+        this.coyoteCounter = 0;
+        this.jumpBuffer = 0;
+        this.jumpsLeft = this.maxJumps - 1;
+        audio.jump();
+        game.particles.emit(this.x + this.width / 2, this.y + this.height, '#e0d8f0', 5, 1.4, 0.05);
+      } else if (this.jumpsLeft > 0) {
+        // DOUBLE JUMP in mid-air!
+        this.vy = this.jumpForce * 0.94;
+        this.jumpsLeft--;
+        this.jumpBuffer = 0;
+        audio.doubleJump();
+        game.camera.shake(2);
+        // Double jump visual burst effect (cyan/gold dust ring)
+        game.particles.emit(this.x + this.width / 2, this.y + this.height, '#70f3ff', 8, 2.5, 0.1);
+        game.particles.emit(this.x + this.width / 2, this.y + this.height / 2, '#ffd966', 6, 1.8, 0.05);
+      }
     }
 
     if (!input.keys.jump && this.vy < -1.8) {
@@ -1437,9 +1487,13 @@ class Player {
 
     // Update attack hitbox location
     if (this.attackHitbox && this.isAttacking) {
-      const reach = 26;
-      this.attackHitbox.x = this.facing === 1 ? this.x + this.width : this.x - reach;
-      this.attackHitbox.y = this.y + 2;
+      const forwardReach = 36;
+      const bodyOverlap = 10;
+      const totalW = forwardReach + bodyOverlap;
+      this.attackHitbox.x = this.facing === 1 ? (this.x - bodyOverlap) : (this.x + this.width - forwardReach);
+      this.attackHitbox.y = this.y - 6;
+      this.attackHitbox.width = totalW;
+      this.attackHitbox.height = this.height + 14;
     }
 
     // Abyss death
@@ -1487,6 +1541,21 @@ class Player {
     ctx.translate(rx + this.width / 2, ry + this.height / 2);
     ctx.scale(this.facing, 1);
     ctx.drawImage(sprite, -12, -13);
+
+    // Visible sword slash arc
+    if (this.isAttacking) {
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.arc(12, -2, 16, -Math.PI * 0.45, Math.PI * 0.45);
+      ctx.stroke();
+      ctx.strokeStyle = '#70f3ff';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(14, -2, 18, -Math.PI * 0.35, Math.PI * 0.35);
+      ctx.stroke();
+    }
+
     ctx.restore();
   }
 }
@@ -1563,11 +1632,18 @@ class Enemy {
     this.vx = this.speed;
     this.facing = 1;
     this.hurtTimer = 0;
+    this.knockbackTimer = 0;
   }
 
   update(dt, player, level) {
     if (!this.alive) return;
     if (this.hurtTimer > 0) this.hurtTimer -= dt;
+
+    if (this.knockbackTimer > 0) {
+      this.knockbackTimer -= dt;
+      this.x += this.vx;
+      return;
+    }
 
     if (this.type === 'slime') {
       this.x += this.vx;
@@ -1612,15 +1688,19 @@ class Enemy {
 
     this.facing = this.vx > 0 ? 1 : -1;
 
-    // Contact damage check
-    if (this.checkOverlap(this.x, this.y, this.width, this.height, player.x, player.y, player.width, player.height)) {
+    // Contact damage check (skip when enemy is staggered/hurt)
+    if (this.hurtTimer <= 0 && this.checkOverlap(this.x, this.y, this.width, this.height, player.x, player.y, player.width, player.height)) {
       player.takeDamage(this.damage, this.x + this.width / 2);
     }
   }
 
-  takeDamage(amt) {
+  takeDamage(amt, knockDir = 0) {
     this.hp -= amt;
-    this.hurtTimer = 0.2;
+    this.hurtTimer = 0.22;
+    this.knockbackTimer = 0.16;
+    if (knockDir !== 0) {
+      this.vx = knockDir * 2.8;
+    }
     audio.hit();
     game.particles.emit(this.x + this.width / 2, this.y + this.height / 2, '#ff7b90', 6, 2.0);
 
@@ -2438,15 +2518,20 @@ class Game {
     if (this.player.isAttacking && this.player.attackHitbox && this.player.attackHitbox.active) {
       const hb = this.player.attackHitbox;
       for (const en of this.level.enemies) {
-        if (en.alive && hb.x < en.x + en.width && hb.x + hb.width > en.x &&
+        if (en.alive && hb.hitEnemies && !hb.hitEnemies.has(en) &&
+            hb.x < en.x + en.width && hb.x + hb.width > en.x &&
             hb.y < en.y + en.height && hb.y + hb.height > en.y) {
-          en.takeDamage(hb.damage);
+          hb.hitEnemies.add(en);
+          en.takeDamage(hb.damage, this.player.facing);
+          this.camera.shake(3);
         }
       }
-      if (this.level.boss && this.level.boss.alive &&
+      if (this.level.boss && this.level.boss.alive && !hb.hitBoss &&
           hb.x < this.level.boss.x + this.level.boss.width && hb.x + hb.width > this.level.boss.x &&
           hb.y < this.level.boss.y + this.level.boss.height && hb.y + hb.height > this.level.boss.y) {
+        hb.hitBoss = true;
         this.level.boss.takeDamage(hb.damage);
+        this.camera.shake(5);
       }
     }
 
