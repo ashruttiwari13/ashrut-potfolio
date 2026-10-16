@@ -65,7 +65,12 @@ global.document = {
           lineTo: () => {},
           stroke: () => {},
           arc: () => {},
-          fill: () => {}
+          ellipse: () => {},
+          rect: () => {},
+          closePath: () => {},
+          quadraticCurveTo: () => {},
+          fill: () => {},
+          createRadialGradient: () => ({ addColorStop: () => {} })
         })
       };
     }

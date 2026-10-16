@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>HAUNTED HOUSE: THE ESCAPE · 3D Horror Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Quicksand:wght@600;700;800&family=Special+Elite&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    :root {
+      --blood-red: #8b0000;
+      --bloody-glow: #ff2a2a;
+      --dark-wood: #18120c;
+      --fog-black: #050406;
+      --parchment: #ded3b8;
+    }
+
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: 'Special Elite', monospace;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      touch-action: none;
+    }
+
+    #gameContainer {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      overflow: hidden;
+    }
+
+    #webglCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Screen Overlay Effects */
+    #vignette {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      box-shadow: inset 0 0 140px rgba(0, 0, 0, 0.95), inset 0 0 60px rgba(0, 0, 0, 0.9);
+      z-index: 5;
+    }
+
+    #bloodVignette {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      box-shadow: inset 0 0 100px rgba(255, 0, 0, 0.8), inset 0 0 50px rgba(139, 0, 0, 0.9);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 6;
+    }
+
+    #grain {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.08;
+      background: repeating-radial-gradient(#000 0 0.0001%, #fff 0 0.0002%);
+      z-index: 7;
+    }
+
+    /* First Person HUD */
+    #hud {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px;
+    }
+
+    #crosshair {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 6px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      transition: all 0.15s ease;
+      pointer-events: none;
+    }
+
+    #crosshair.active {
+      width: 20px;
+      height: 20px;
+      background: transparent;
+      border: 2px solid var(--bloody-glow);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--bloody-glow);
+    }
+
+    #interactPrompt {
+      position: absolute;
+      top: calc(50% + 24px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 10, 10, 0.85);
+      border: 1px solid #5a3030;
+      color: #ffd2d2;
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      display: none;
+      white-space: nowrap;
+      text-shadow: 1px 1px 2px #000;
+    }
+
+    .top-hud {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    .day-badge {
+      font-family: 'Nosifer', cursive;
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      color: var(--bloody-glow);
+      text-shadow: 0 0 15px rgba(255, 42, 42, 0.7);
+      background: rgba(10, 5, 5, 0.75);
+      padding: 6px 16px;
+      border: 1px solid #4a1515;
+      border-radius: 4px;
+    }
+
+    .objective-box {
+      background: rgba(15, 10, 10, 0.85);
+      border: 1px solid #4a3020;
+      padding: 8px 16px;
+      border-radius: 4px;
+      max-width: 440px;
+      text-align: right;
+    }
+
+    .objective-title {
+      font-size: 0.7rem;
+      color: #a89474;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .objective-text {
+      font-size: 0.85rem;
+      color: #f0e6d2;
+    }
+
+    .bottom-hud {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      width: 100%;
+    }
+
+    .meter-cluster {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .meter-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(15, 10, 10, 0.8);
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 1px solid #3d2424;
+      font-size: 0.75rem;
+      min-width: 220px;
+    }
+
+    .meter-bar {
+      flex: 1;
+      height: 8px;
+      background: #241414;
+      border-radius: 2px;
+      overflow: hidden;
+      border: 1px solid #4a2222;
+    }
+
+    .stamina-fill {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #38ef7d, #11998e);
+      transition: width 0.1s linear;
+    }
+
+    .battery-fill {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #ffd966, #ff9900);
+      transition: width 0.2s linear;
+    }
+
+    .inventory-slot {
+      background: rgba(15, 10, 10, 0.85);
+      border: 2px solid #5a3030;
+      border-radius: 6px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: #ffd966;
+    }
+
+    .hiding-indicator {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(5, 5, 15, 0.9);
+      border: 1px solid #5070a0;
+      color: #90c0ff;
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      display: none;
+      box-shadow: 0 0 20px rgba(80, 130, 255, 0.4);
+    }
+
+    /* Modals & Screens */
+    .screen-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(5, 4, 6, 0.96);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .game-title {
+      font-family: 'Nosifer', cursive;
+      font-size: clamp(1.8rem, 5vw, 3.8rem);
+      color: var(--bloody-glow);
+      text-shadow: 0 0 25px rgba(255, 0, 0, 0.8), 4px 4px 0px #000;
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+
+    .game-subtitle {
+      font-family: 'Special Elite', monospace;
+      font-size: clamp(0.75rem, 1.8vw, 1.1rem);
+      color: #a89474;
+      letter-spacing: 4px;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+    }
+
+    .menu-card {
+      background: rgba(20, 14, 14, 0.9);
+      border: 2px solid #4a2020;
+      border-radius: 8px;
+      padding: 24px 30px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9), 0 0 20px rgba(139, 0, 0, 0.25);
+    }
+
+    .btn-col {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .horror-btn {
+      font-family: 'Special Elite', monospace;
+      font-size: 1rem;
+      padding: 12px 24px;
+      background: #1e1212;
+      color: #ffdede;
+      border: 2px solid #5a2424;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .horror-btn:hover {
+      background: #4a1515;
+      border-color: var(--bloody-glow);
+      color: #fff;
+      box-shadow: 0 0 16px rgba(255, 42, 42, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .horror-btn-primary {
+      background: #4a0d0d;
+      border-color: #8b0000;
+      font-weight: bold;
+    }
+
+    .horror-btn-primary:hover {
+      background: #7a1515;
+      box-shadow: 0 0 24px rgba(255, 0, 0, 0.7);
+    }
+
+    .diff-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .diff-btn {
+      padding: 10px;
+      background: #140d0d;
+      border: 1px solid #3d1c1c;
+      color: #c9b8b8;
+      font-family: inherit;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .diff-btn.active {
+      background: #4a1212;
+      border-color: var(--bloody-glow);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(255, 42, 42, 0.4);
+    }
+
+    /* Mobile On-Screen Controls */
+    #mobileControls {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 25;
+      display: none;
+    }
+
+    .touch-stick-zone {
+      position: absolute;
+      bottom: 25px;
+      left: 25px;
+      width: 130px;
+      height: 130px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 2px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      pointer-events: auto;
+    }
+
+    .touch-btn-cluster {
+      position: absolute;
+      bottom: 25px;
+      right: 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: auto;
+    }
+
+    .touch-action-btn {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: rgba(30, 18, 18, 0.85);
+      border: 2px solid #5a2828;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      touch-action: none;
+    }
+
+    .touch-action-btn:active {
+      background: #6a1a1a;
+      transform: scale(0.92);
+    }
+
+    @media (max-width: 850px) {
+      #mobileControls { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="gameContainer">
+  <!-- Three.js 3D Viewport -->
+  <canvas id="webglCanvas"></canvas>
+
+  <!-- Atmosphere Overlays -->
+  <div id="vignette"></div>
+  <div id="bloodVignette"></div>
+  <div id="grain"></div>
+
+  <!-- In-Game 3D HUD -->
+  <div id="hud" style="display:none;">
+    <div class="top-hud">
+      <div class="day-badge" id="dayDisplay">DAY 1</div>
+      <div class="objective-box">
+        <div class="objective-title">Current Objective</div>
+        <div class="objective-text" id="objectiveText">Search the bedroom for a way out...</div>
+      </div>
+    </div>
+
+    <!-- Central Interactive Crosshair -->
+    <div id="crosshair"></div>
+    <div id="interactPrompt">[E] Interact</div>
+    <div class="hiding-indicator" id="hidingBanner">👁️ YOU ARE HIDING [E to exit]</div>
+
+    <div class="bottom-hud">
+      <div class="meter-cluster">
+        <div class="meter-row">
+          <span>STAMINA</span>
+          <div class="meter-bar"><div class="stamina-fill" id="staminaFill"></div></div>
+        </div>
+        <div class="meter-row">
+          <span>FLASHLIGHT</span>
+          <div class="meter-bar"><div class="battery-fill" id="batteryFill"></div></div>
+          <span id="batteryPercent">100%</span>
+        </div>
+      </div>
+
+      <div class="inventory-slot" id="inventorySlot">
+        <span>HANDS:</span>
+        <strong id="inventoryItem">EMPTY</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Touch Virtual Controls -->
+  <div id="mobileControls">
+    <div class="touch-stick-zone" id="touchMoveZone"></div>
+    <div class="touch-btn-cluster">
+      <button class="touch-action-btn" id="mBtnInteract">✋</button>
+      <button class="touch-action-btn" id="mBtnFlashlight">🔦</button>
+      <button class="touch-action-btn" id="mBtnCrouch">🧎</button>
+      <button class="touch-action-btn" id="mBtnSprint">⚡</button>
+    </div>
+  </div>
+
+  <!-- 1. Main Title Menu Screen -->
+  <div id="titleScreen" class="screen-overlay">
+    <h1 class="game-title">HAUNTED HOUSE</h1>
+    <h2 class="game-subtitle">THE ESCAPE · 3D SURVIVAL HORROR</h2>
+
+    <div class="menu-card">
+      <p style="font-size:0.85rem; line-height:1.6; color:#d4c4b0; margin-bottom:18px;">
+        You wake up locked inside the decrepit mansion of <strong>THE KEEPER</strong>. She hears every sound you make. Explore the house, search drawers, locate keys and tools, disarm the front door locks, and escape before your 5 Days expire.
+      </p>
+
+      <div style="font-size:0.75rem; color:#a89474; margin-bottom:8px; text-transform:uppercase;">
+        Select Difficulty:
+      </div>
+      <div class="diff-selector">
+        <button class="diff-btn" data-diff="easy">EASY<br><span style="font-size:0.65rem; color:#888;">Slow Keeper · High Battery</span></button>
+        <button class="diff-btn active" data-diff="normal">NORMAL<br><span style="font-size:0.65rem; color:#888;">Standard Horror</span></button>
+        <button class="diff-btn" data-diff="hard">NIGHTMARE<br><span style="font-size:0.65rem; color:#888;">Fast Keeper · Pitch Black</span></button>
+      </div>
+
+      <div class="btn-col">
+        <button class="horror-btn horror-btn-primary" id="startBtn">☠️ ENTER THE HOUSE (PLAY)</button>
+        <button class="horror-btn" id="howToPlayBtn">📜 SURVIVAL MANUAL &amp; CONTROLS</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Controls & Survival Manual Modal -->
+  <div id="controlsModal" class="screen-overlay" style="display:none;">
+    <h2 class="game-title" style="font-size:2rem;">SURVIVAL MANUAL</h2>
+    <div class="menu-card" style="text-align:left; font-size:0.8rem; line-height:1.8;">
+      <p><strong style="color:var(--bloody-glow);">FIRST-PERSON CONTROLS:</strong></p>
+      <p>• <strong>W / A / S / D</strong> : Walk through the corridors</p>
+      <p>• <strong>MOUSE</strong> : Look around (Click game screen to lock mouse)</p>
+      <p>• <strong>LEFT SHIFT</strong> : Sprint (Drains stamina)</p>
+      <p>• <strong>C / CTRL</strong> : Crouch (Sneak under beds and crawlspaces)</p>
+      <p>• <strong>E / LEFT CLICK</strong> : Interact with doors, drawers, items, and hiding spots</p>
+      <p>• <strong>F</strong> : Toggle Flashlight on / off</p>
+      <p>• <strong>G</strong> : Drop carried item (Creates a noise lure!)</p>
+      <p>• <strong>ESC</strong> : Pause / Resume</p>
+      <hr style="border:0; border-top:1px dashed #4a2525; margin:10px 0;">
+      <p><strong style="color:#ffd966;">SURVIVAL RULES:</strong></p>
+      <p>1. <strong>Don't make noise</strong>: Dropping items or knocking over dishes will alert The Keeper to investigate.</p>
+      <p>2. <strong>Hide when she's near</strong>: Press [E] on beds or inside wardrobes to hide until she walks away.</p>
+      <p>3. <strong>5 Days to Escape</strong>: If she catches you, you lose a day. After Day 5, she never lets you leave.</p>
+    </div>
+    <button class="horror-btn" id="closeControlsBtn" style="margin-top:14px;">RETURN TO MENU</button>
+  </div>
+
+  <!-- 3. Day Transition Screen (Fade out upon getting knocked out) -->
+  <div id="dayScreen" class="screen-overlay" style="display:none;">
+    <h2 class="game-title" id="dayTitleText" style="font-size:2.8rem; color:#ff3333;">DAY 2</h2>
+    <p id="daySubtext" style="font-size:1rem; color:#b5a090; margin-top:10px;">
+      Your head throbs with pain. She dragged you back to bed...
+    </p>
+    <button class="horror-btn horror-btn-primary" id="wakeUpBtn" style="margin-top:24px;">WAKE UP</button>
+  </div>
+
+  <!-- 4. Pause Screen -->
+  <div id="pauseScreen" class="screen-overlay" style="display:none;">
+    <h2 class="game-title" style="font-size:2.4rem;">GAME PAUSED</h2>
+    <div class="menu-card">
+      <div class="btn-col">
+        <button class="horror-btn horror-btn-primary" id="resumeBtn">▶ RESUME GAME</button>
+        <button class="horror-btn" id="restartGameBtn">🔄 RESTART RUN</button>
+        <button class="horror-btn" id="quitToTitleBtn">🏠 TITLE MENU</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Game Over (Day 5 Defeat) -->
+  <div id="defeatScreen" class="screen-overlay" style="display:none;">
+    <h2 class="game-title" style="font-size:3rem; color:#ff1111;">YOU DIED</h2>
+    <p style="font-size:1.1rem; color:#c7a8a8; margin-top:8px;">Day 5 has ended. Your soul now belongs to The Keeper.</p>
+    <div class="menu-card" style="margin-top:20px;">
+      <div class="btn-col">
+        <button class="horror-btn horror-btn-primary" id="retryGameBtn">☠️ TRY AGAIN</button>
+        <button class="horror-btn" id="defeatQuitBtn">🏠 TITLE MENU</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Victory Screen (Escaped!) -->
+  <div id="victoryScreen" class="screen-overlay" style="display:none;">
+    <h2 class="game-title" style="font-size:2.8rem; color:#66ff88; text-shadow:0 0 25px rgba(100,255,140,0.8);">YOU ESCAPED!</h2>
+    <p style="font-size:1rem; color:#d4edd4; margin-top:8px;">You unsealed the locks and broke through the front door into the moonlight!</p>
+    <div class="menu-card" style="margin-top:20px;">
+      <div id="victoryStats" style="font-size:0.85rem; line-height:1.8; color:#ffd966; margin-bottom:14px; text-align:left;"></div>
+      <div class="btn-col">
+        <button class="horror-btn horror-btn-primary" id="playAgainBtn">🏆 PLAY AGAIN</button>
+        <button class="horror-btn" id="victoryQuitBtn">🏠 TITLE MENU</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Local Three.js with fallback to CDN -->
+<script src="libs/three.min.js"></script>
+<script>
+  if (typeof THREE === 'undefined') {
+    document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\\/script>');
+  }
+</script>
+
+<!-- Main 3D Game Logic -->
+<script src="js/haunted-house.js"></script>
+
+</body>
+</html>

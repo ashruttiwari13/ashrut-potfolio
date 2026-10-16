@@ -67,13 +67,23 @@
       z-index: 6;
     }
 
+    #damageFlash {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at center, rgba(255, 0, 0, 0.45) 15%, rgba(180, 0, 0, 0.9) 95%);
+      opacity: 0;
+      transition: opacity 0.08s ease-out;
+      z-index: 7;
+    }
+
     #grain {
       position: absolute;
       inset: 0;
       pointer-events: none;
       opacity: 0.08;
       background: repeating-radial-gradient(#000 0 0.0001%, #fff 0 0.0002%);
-      z-index: 7;
+      z-index: 8;
     }
 
     /* First Person HUD */
@@ -199,6 +209,14 @@
       border-radius: 2px;
       overflow: hidden;
       border: 1px solid #4a2222;
+    }
+
+    .health-fill {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #ff1a1a, #990000);
+      box-shadow: 0 0 8px rgba(255, 30, 30, 0.7);
+      transition: width 0.15s ease-out;
     }
 
     .stamina-fill {
@@ -418,7 +436,20 @@
   <!-- Atmosphere Overlays -->
   <div id="vignette"></div>
   <div id="bloodVignette"></div>
+  <div id="damageFlash"></div>
   <div id="grain"></div>
+
+  <!-- Real-Time Enemy & Gameplay Debug Monitor (Toggle with ` or U) -->
+  <div id="debugOverlay" style="display:none; position:absolute; top:20px; left:20px; background:rgba(0,0,0,0.88); border:1px solid #00ff66; color:#00ff66; font-family:monospace; font-size:12px; padding:12px; border-radius:4px; z-index:99; pointer-events:none; line-height:1.5; box-shadow:0 0 16px rgba(0,255,100,0.3); min-width:260px;">
+    <div style="font-weight:bold; color:#fff; border-bottom:1px solid #00ff66; margin-bottom:6px; padding-bottom:3px; letter-spacing:1px;">[DEBUG MONITOR - TOGGLE: ` / U]</div>
+    <div>ENEMY STATE: <span id="dbgEnemyState" style="color:#ffcc00; font-weight:bold;">PATROL</span></div>
+    <div>PLAYER HP: <span id="dbgPlayerHp" style="color:#ff4444; font-weight:bold;">100</span> / 100</div>
+    <div>DIST TO PLAYER: <span id="dbgDist">0.00</span>m</div>
+    <div>LINE OF SIGHT: <span id="dbgLos">false</span></div>
+    <div>IN ATTACK RANGE: <span id="dbgInAtkRange">false</span></div>
+    <div>ATTACK COOLDOWN: <span id="dbgAtkCooldown">0.0s</span></div>
+    <div>TARGET POS: <span id="dbgTargetPos">(0, 0, 0)</span></div>
+  </div>
 
   <!-- In-Game 3D HUD -->
   <div id="hud" style="display:none;">
@@ -437,6 +468,11 @@
 
     <div class="bottom-hud">
       <div class="meter-cluster">
+        <div class="meter-row" id="healthRow">
+          <span style="color:#ff4444; font-weight:bold;">HEALTH</span>
+          <div class="meter-bar"><div class="health-fill" id="healthFill"></div></div>
+          <span id="healthPercent" style="color:#ff6666; font-weight:bold; min-width:44px; text-align:right;">100 HP</span>
+        </div>
         <div class="meter-row">
           <span>STAMINA</span>
           <div class="meter-bar"><div class="stamina-fill" id="staminaFill"></div></div>
