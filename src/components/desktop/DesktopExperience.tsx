@@ -97,9 +97,9 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
     },
     {
       id: 'gameWin',
-      title: '⚔️ Pixel Quest: The Lost Crystal · 2D Adventure',
-      width: 820,
-      headerColor: 'bg-pastel-sky',
+      title: '☠️ Haunted House: The Escape · 3D Horror Game',
+      width: 860,
+      headerColor: 'bg-pastel-pink',
       defaultOpen: false,
       defaultPosition: (vw, vh) => ({
         x: Math.max(20, Math.floor((vw - 740) / 2)),

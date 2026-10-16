@@ -1319,15 +1319,16 @@ class Player {
   triggerNormalAttack() {
     if (this.attackCooldownTimer > 0 || this.isAttacking) return;
     this.isAttacking = true;
+    this.attackFacing = this.facing;
     this.attackTimer = this.attackDuration;
     this.attackCooldownTimer = this.attackCooldown;
     audio.slash();
 
     // Generous, reliable 16-bit sword hitbox covering body overlap, forward reach, and vertical clearance
-    const forwardReach = 36;
+    const forwardReach = 38;
     const bodyOverlap = 10;
     const totalW = forwardReach + bodyOverlap;
-    const startX = this.facing === 1 ? (this.x - bodyOverlap) : (this.x + this.width - forwardReach);
+    const startX = this.attackFacing === 1 ? (this.x - bodyOverlap) : (this.x + this.width + bodyOverlap - totalW);
 
     this.attackHitbox = {
       x: startX,
@@ -1341,7 +1342,7 @@ class Player {
     };
 
     game.particles.emit(
-      this.facing === 1 ? this.x + this.width + 12 : this.x - 12,
+      this.attackFacing === 1 ? this.x + this.width + 12 : this.x - 12,
       this.y + 10,
       '#70f3ff', 5, 2.0, 0
     );
@@ -1403,13 +1404,13 @@ class Player {
     if (this.specialTimer > 0) this.specialTimer = Math.max(0, this.specialTimer - dt);
     if (this.invulnerableTimer > 0) this.invulnerableTimer -= dt;
 
-    // Movement
+    // Movement: do not flip facing while actively swinging sword
     if (input.keys.left) {
       this.vx = -this.speed;
-      this.facing = -1;
+      if (!this.isAttacking) this.facing = -1;
     } else if (input.keys.right) {
       this.vx = this.speed;
-      this.facing = 1;
+      if (!this.isAttacking) this.facing = 1;
     } else {
       this.vx *= 0.68;
       if (Math.abs(this.vx) < 0.1) this.vx = 0;
@@ -1487,10 +1488,10 @@ class Player {
 
     // Update attack hitbox location
     if (this.attackHitbox && this.isAttacking) {
-      const forwardReach = 36;
+      const forwardReach = 38;
       const bodyOverlap = 10;
       const totalW = forwardReach + bodyOverlap;
-      this.attackHitbox.x = this.facing === 1 ? (this.x - bodyOverlap) : (this.x + this.width - forwardReach);
+      this.attackHitbox.x = this.attackFacing === 1 ? (this.x - bodyOverlap) : (this.x + this.width + bodyOverlap - totalW);
       this.attackHitbox.y = this.y - 6;
       this.attackHitbox.width = totalW;
       this.attackHitbox.height = this.height + 14;
@@ -1539,7 +1540,7 @@ class Player {
 
     ctx.save();
     ctx.translate(rx + this.width / 2, ry + this.height / 2);
-    ctx.scale(this.facing, 1);
+    ctx.scale(this.isAttacking ? this.attackFacing : this.facing, 1);
     ctx.drawImage(sprite, -12, -13);
 
     // Visible sword slash arc
