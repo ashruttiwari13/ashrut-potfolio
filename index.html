@@ -528,16 +528,29 @@
 class RetroAudio {
   constructor() {
     this.ctx = null;
-    this.muted = localStorage.getItem('pq_muted') === 'true';
+    this.muted = false;
+    try {
+      this.muted = localStorage.getItem('pq_muted') === 'true';
+    } catch(e) {
+      this.muted = false;
+    }
   }
 
   init() {
     if (!this.ctx) {
-      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-      this.ctx = new AudioContextClass();
+      try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          this.ctx = new AudioContextClass();
+        }
+      } catch(e) {
+        console.warn('AudioContext not available:', e);
+      }
     }
     if (this.ctx && this.ctx.state === 'suspended') {
-      this.ctx.resume();
+      try {
+        this.ctx.resume();
+      } catch(e) {}
     }
   }
 
@@ -636,7 +649,9 @@ class RetroAudio {
 
   toggleMute() {
     this.muted = !this.muted;
-    localStorage.setItem('pq_muted', this.muted);
+    try {
+      localStorage.setItem('pq_muted', this.muted);
+    } catch(e) {}
     return this.muted;
   }
 }
@@ -932,7 +947,7 @@ class SpriteAtlas {
     sk.ctx.fillStyle = '#4cc9f0';
     sk.ctx.fillRect(4, 8, 14, 16);
     // Skull
-    ctx = sk.ctx;
+    const ctx = sk.ctx;
     ctx.fillStyle = '#e0e1dd';
     ctx.fillRect(4, 2, 12, 9);
     ctx.fillStyle = '#7209b7';
@@ -1109,6 +1124,7 @@ class InputController {
 
     this.canvas.addEventListener('mousedown', (e) => {
       audio.init();
+      try { window.focus(); } catch(err) {}
       if (game.state !== 'playing' || !game.player) return;
 
       if (e.button === 0) {
@@ -1678,8 +1694,9 @@ class CrystalGuardianBoss {
   activate() {
     this.active = true;
     audio.bossRoar();
-    document.getElementById('bossBarContainer').style.display = 'flex';
-    game.showAlert('⚠️ THE CRYSTAL GUARDIAN AWAKENS!');
+    const bb = document.getElementById('bossBarContainer');
+    if (bb) bb.style.display = 'flex';
+    if (game && game.showAlert) game.showAlert('⚠️ THE CRYSTAL GUARDIAN AWAKENS!');
   }
 
   update(dt, player, level) {
@@ -1939,7 +1956,8 @@ class LevelExit {
     const ry = Math.round(this.y - camera.y);
     ctx.fillStyle = '#1c142c';
     ctx.fillRect(rx, ry, this.width, this.height);
-    ctx.fillStyle = this.reqKey && !game.player.hasKey ? '#ff7b90' : '#7effa0';
+    const isLocked = this.reqKey && (!game || !game.player || !game.player.hasKey);
+    ctx.fillStyle = isLocked ? '#ff7b90' : '#7effa0';
     ctx.fillRect(rx + 4, ry + 4, this.width - 8, this.height - 4);
   }
 }
@@ -2137,6 +2155,8 @@ class Camera {
 // --- 13. MAIN GAME CONTROLLER ---
 class Game {
   constructor() {
+    game = this;
+    if (typeof window !== 'undefined') window.game = this;
     this.canvas = document.getElementById('gameCanvas');
     this.ctx = this.canvas.getContext('2d');
     this.ctx.imageSmoothingEnabled = false;

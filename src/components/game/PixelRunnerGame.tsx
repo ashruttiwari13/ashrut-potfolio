@@ -5,6 +5,11 @@ import { Maximize2, Sparkles, Trophy, Gamepad2, Sword } from 'lucide-react';
 
 export const PixelRunnerGame: React.FC = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const iframeRef = React.useRef<HTMLIFrameElement>(null);
+
+  const focusGame = () => {
+    iframeRef.current?.focus();
+  };
 
   return (
     <div className="space-y-3 select-none">
@@ -39,8 +44,12 @@ export const PixelRunnerGame: React.FC = () => {
       </div>
 
       {/* Embedded 2D Adventure Viewport */}
-      <div className="relative border-4 border-pastel-dark rounded-2xl overflow-hidden shadow-retro bg-[#110d1f] aspect-[16/9] w-full min-h-[380px] sm:min-h-[440px]">
+      <div
+        onClick={focusGame}
+        className="relative border-4 border-pastel-dark rounded-2xl overflow-hidden shadow-retro bg-[#110d1f] aspect-[16/9] w-full min-h-[380px] sm:min-h-[440px] cursor-pointer"
+      >
         <iframe
+          ref={iframeRef}
           src="/pixel-quest.html"
           title="Pixel Quest: The Lost Crystal"
           className="w-full h-full border-0 block"
