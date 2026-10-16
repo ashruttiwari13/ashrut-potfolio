@@ -97,8 +97,8 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
     },
     {
       id: 'gameWin',
-      title: '⚡ Pixel Playground · Mini Runner Game',
-      width: 740,
+      title: '⚔️ Pixel Quest: The Lost Crystal · 2D Adventure',
+      width: 820,
       headerColor: 'bg-pastel-sky',
       defaultOpen: false,
       defaultPosition: (vw, vh) => ({
@@ -363,11 +363,11 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       {/* 6. Pixel Game Window */}
       <Window
         id="gameWin"
-        title="⚡ Pixel Playground · Mini Runner Game"
+        title="⚔️ Pixel Quest: The Lost Crystal · 2D Adventure"
         isOpen={windowsState.gameWin.isOpen}
         isMinimized={windowsState.gameWin.isMinimized}
         zIndex={windowsState.gameWin.zIndex}
-        width={720}
+        width={820}
         headerColor="bg-pastel-sky"
         onClose={() => closeWindow('gameWin')}
         onFocus={() => bringToFront('gameWin')}
