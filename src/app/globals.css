@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-light: #fef9e7;
+  --bg-card: #ffffffea;
+  --text-dark: #3d3d3d;
+  --text-soft: #6b5e4a;
+  --accent-pink: #ffb6c1;
+  --accent-peach: #ffdab9;
+  --accent-mint: #c0f0dd;
+  --accent-lavender: #e2d1ff;
+  --accent-sky: #a0d4ff;
+  --accent-yellow: #ffd966;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-quicksand), 'Quicksand', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom retro desktop scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0e4d0;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-pink);
+  border: 1px solid var(--text-dark);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ff9fb0;
+}
+
+/* Retro UI Components */
+.retro-window {
+  background: var(--bg-card);
+  border: 3px solid var(--text-dark);
+  border-radius: 24px 8px 24px 8px;
+  box-shadow: 6px 6px 0 rgba(61, 61, 61, 0.18);
+}
+
+.retro-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  border: 2px solid var(--text-dark);
+  background: white;
+  box-shadow: 3px 3px 0 var(--text-dark);
+  cursor: pointer;
+  transition: all 0.08s ease-in-out;
+  user-select: none;
+}
+
+.retro-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--text-dark);
+}
+
+.retro-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--text-dark);
+}
+
+.retro-btn-primary {
+  background: var(--accent-pink);
+}
+
+.retro-btn-mint {
+  background: var(--accent-mint);
+}
+
+.retro-btn-lavender {
+  background: var(--accent-lavender);
+}
+
+.retro-card {
+  background: white;
+  border: 2px solid var(--text-dark);
+  border-radius: 18px 6px 18px 6px;
+  padding: 12px;
+  box-shadow: 3px 3px 0 var(--accent-mint);
+  transition: transform 0.12s ease;
+}
+
+.retro-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0 var(--accent-mint);
+}
+
+.pixel-pattern {
+  background-image: 
+    linear-gradient(45deg, #ffe5d9 6%, transparent 6%), 
+    linear-gradient(-45deg, #d9e5ff 6%, transparent 6%);
+  background-size: 32px 32px;
+}

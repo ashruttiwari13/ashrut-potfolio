@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="echo-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#311042"/>
+    </linearGradient>
+    <radialGradient id="anamorphic" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.7"/>
+      <stop offset="50%" stop-color="#a855f7" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#echo-bg)"/>
+  <!-- Anamorphic lens flare stripe -->
+  <rect x="0" y="210" width="800" height="6" fill="#38bdf8" opacity="0.8"/>
+  <ellipse cx="400" cy="213" rx="280" ry="40" fill="url(#anamorphic)"/>
+  <!-- Cinematic Letterbox bars -->
+  <rect x="0" y="0" width="800" height="45" fill="#000000"/>
+  <rect x="0" y="405" width="800" height="45" fill="#000000"/>
+  <!-- Creature Eyes glowing -->
+  <circle cx="370" cy="180" r="10" fill="#38bdf8" filter="drop-shadow(0 0 8px #38bdf8)"/>
+  <circle cx="430" cy="180" r="10" fill="#38bdf8" filter="drop-shadow(0 0 8px #38bdf8)"/>
+  <circle cx="372" cy="178" r="3" fill="#ffffff"/>
+  <circle cx="432" cy="178" r="3" fill="#ffffff"/>
+  <!-- Title Badge -->
+  <rect x="230" y="340" width="340" height="46" rx="23" fill="#fef9e7" stroke="#3d3d3d" stroke-width="3"/>
+  <text x="400" y="369" font-family="'Quicksand', sans-serif" font-weight="bold" font-size="18" fill="#3d3d3d" text-anchor="middle">ECHOES · CINEMATOGRAPHY &amp; VFX</text>
+</svg>

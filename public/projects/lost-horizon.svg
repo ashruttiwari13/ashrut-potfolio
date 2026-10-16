@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="lh-sky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffdab9"/>
+      <stop offset="45%" stop-color="#ffd1dc"/>
+      <stop offset="85%" stop-color="#c0f0dd"/>
+      <stop offset="100%" stop-color="#80cbb0"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#lh-sky)"/>
+  <!-- Sun -->
+  <circle cx="400" cy="230" r="80" fill="#ffffff" opacity="0.8"/>
+  <!-- Distant dunes / hills -->
+  <path d="M0,320 Q200,260 400,310 T800,290 L800,450 L0,450 Z" fill="#9ad4be"/>
+  <path d="M0,360 Q300,320 600,370 T800,350 L800,450 L0,450 Z" fill="#67ad93"/>
+  <!-- Monolith -->
+  <polygon points="380,180 420,180 430,340 370,340" fill="#2d3748" stroke="#1a202c" stroke-width="2"/>
+  <rect x="395" y="210" width="10" height="30" fill="#ffd966"/>
+  <!-- Title Badge -->
+  <rect x="230" y="380" width="340" height="46" rx="23" fill="#fef9e7" stroke="#3d3d3d" stroke-width="3"/>
+  <text x="400" y="409" font-family="'Quicksand', sans-serif" font-weight="bold" font-size="18" fill="#3d3d3d" text-anchor="middle">LOST HORIZON · GODOT 4</text>
+</svg>

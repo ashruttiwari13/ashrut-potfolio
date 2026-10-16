@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2b213a"/>
+      <stop offset="50%" stop-color="#4a2840"/>
+      <stop offset="100%" stop-color="#7a3b53"/>
+    </linearGradient>
+    <radialGradient id="celestial" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#ffd966" stop-opacity="0.8"/>
+      <stop offset="60%" stop-color="#ff7b72" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <circle cx="400" cy="180" r="160" fill="url(#celestial)"/>
+  <!-- Constellation lines -->
+  <g stroke="#ffffff" stroke-width="2" stroke-dasharray="4,4" opacity="0.6">
+    <line x1="240" y1="120" x2="310" y2="80"/>
+    <line x1="310" y1="80" x2="400" y2="100"/>
+    <line x1="400" y1="100" x2="480" y2="70"/>
+    <line x1="480" y1="70" x2="560" y2="130"/>
+    <line x1="400" y1="100" x2="380" y2="220"/>
+  </g>
+  <!-- Constellation stars -->
+  <circle cx="240" cy="120" r="5" fill="#ffd966"/>
+  <circle cx="310" cy="80" r="6" fill="#ffffff"/>
+  <circle cx="400" cy="100" r="8" fill="#ffd966"/>
+  <circle cx="480" cy="70" r="5" fill="#ffffff"/>
+  <circle cx="560" cy="130" r="6" fill="#ffd966"/>
+  <circle cx="380" cy="220" r="7" fill="#c0f0dd"/>
+  <!-- Mountain / Temple silhouette -->
+  <polygon points="120,450 320,240 520,450" fill="#1b1526"/>
+  <polygon points="360,450 500,280 640,450" fill="#150f20"/>
+  <polygon points="260,450 400,210 540,450" fill="#20172e"/>
+  <!-- Stylized Character Silhouette -->
+  <g transform="translate(380, 260) scale(0.7)">
+    <circle cx="28" cy="20" r="18" fill="#c0f0dd"/>
+    <path d="M10,40 L46,40 L52,100 L4,100 Z" fill="#ffdab9"/>
+    <!-- Blade glow -->
+    <line x1="50" y1="30" x2="90" y2="-20" stroke="#ffd966" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <!-- Title Badge -->
+  <rect x="250" y="370" width="300" height="50" rx="25" fill="#fef9e7" stroke="#3d3d3d" stroke-width="3"/>
+  <text x="400" y="402" font-family="'Quicksand', sans-serif" font-weight="bold" font-size="20" fill="#3d3d3d" text-anchor="middle">ZODIACX · UNREAL 5</text>
+</svg>

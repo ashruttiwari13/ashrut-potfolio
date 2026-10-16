@@ -1,0 +1,114 @@
+'use client';
+
+import React, { useState } from 'react';
+import { Skill, SkillCategory } from '@/types';
+import { 
+  Flame, 
+  Box, 
+  BoxSelect, 
+  Sparkles, 
+  Palette, 
+  Code, 
+  Terminal, 
+  Video, 
+  Zap, 
+  Layers, 
+  Wrench,
+  CheckCircle2
+} from 'lucide-react';
+
+interface SkillsWindowProps {
+  skills: Skill[];
+}
+
+const iconMap: Record<string, React.ReactNode> = {
+  Flame: <Flame className="w-5 h-5 text-amber-600" />,
+  Box: <Box className="w-5 h-5 text-blue-600" />,
+  BoxSelect: <BoxSelect className="w-5 h-5 text-orange-600" />,
+  Sparkles: <Sparkles className="w-5 h-5 text-purple-600" />,
+  Palette: <Palette className="w-5 h-5 text-pink-600" />,
+  Code: <Code className="w-5 h-5 text-emerald-600" />,
+  Terminal: <Terminal className="w-5 h-5 text-teal-600" />,
+  Video: <Video className="w-5 h-5 text-rose-600" />,
+  Zap: <Zap className="w-5 h-5 text-yellow-600" />,
+  Layers: <Layers className="w-5 h-5 text-indigo-600" />,
+  Wrench: <Wrench className="w-5 h-5 text-gray-600" />,
+};
+
+export const SkillsWindow: React.FC<SkillsWindowProps> = ({ skills }) => {
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+
+  const categories: { label: string; value: string }[] = [
+    { label: 'All Tools', value: 'all' },
+    { label: '🎮 Engines', value: 'engine' },
+    { label: '🎨 3D & Sculpting', value: '3d' },
+    { label: '💻 Code', value: 'programming' },
+    { label: '🎥 Cine & Post', value: 'cinematography' },
+  ];
+
+  const filteredSkills = selectedCategory === 'all'
+    ? skills
+    : skills.filter((s) => s.category === selectedCategory);
+
+  return (
+    <div className="space-y-4">
+      {/* Category Filter Pills */}
+      <div className="flex flex-wrap gap-1.5 pb-1 border-b border-pastel-dark/10">
+        {categories.map((cat) => (
+          <button
+            key={cat.value}
+            type="button"
+            onClick={() => setSelectedCategory(cat.value)}
+            className={`retro-btn text-xs px-2.5 py-1 ${
+              selectedCategory === cat.value
+                ? 'bg-pastel-pink shadow-[2px_2px_0_#3d3d3d] -translate-y-0.5'
+                : 'bg-white hover:bg-pastel-peach/50'
+            }`}
+          >
+            {cat.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Skills Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        {filteredSkills.map((skill) => {
+          const icon = iconMap[skill.icon_name] || <Wrench className="w-5 h-5 text-gray-600" />;
+          return (
+            <div
+              key={skill.id}
+              className="retro-card flex items-start gap-3 p-3 bg-white"
+            >
+              <div className="p-2 rounded-xl bg-pastel-warm border border-pastel-dark/30 shrink-0 shadow-sm">
+                {icon}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-1">
+                  <h4 className="font-extrabold text-sm text-pastel-dark truncate">
+                    {skill.name}
+                  </h4>
+                  {skill.is_highlight && (
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-pastel-mint border border-pastel-dark shrink-0">
+                      Primary
+                    </span>
+                  )}
+                </div>
+                <p className="text-[11px] font-semibold text-pastel-soft mt-0.5 line-clamp-2">
+                  {skill.proficiency_level}
+                </p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Production Pipeline Note */}
+      <div className="p-3 bg-pastel-lavender/40 border border-pastel-dark rounded-retro-sm text-[11px] text-pastel-dark flex items-center gap-2">
+        <CheckCircle2 size={16} className="text-pastel-dark shrink-0" />
+        <span>
+          End-to-end pipeline: Concept ➔ ZBrush Sculpt ➔ Blender Retopology & Rigging ➔ Substance PBR Texturing ➔ Unreal/Godot Integration & Shaders.
+        </span>
+      </div>
+    </div>
+  );
+};
