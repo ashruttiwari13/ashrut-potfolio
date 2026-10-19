@@ -34,8 +34,7 @@ yarn-error.log*
 next-env.d.ts
 
 # original backup folder
-_backup_original/
+# (can be preserved in git or workspace, keeping it in git checkpoint)
 
 # tunnel binaries
 cloudflared.exe
-
