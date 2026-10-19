@@ -5,6 +5,8 @@ import { FloatingOrbs } from './FloatingOrbs';
 import { IconDock } from './IconDock';
 import { Taskbar } from './Taskbar';
 import { Window } from './Window';
+import { ResponsiveNavTabs } from './ResponsiveNavTabs';
+import { SettingsWindow } from './SettingsWindow';
 import { ProfileWindow } from '../windows/ProfileWindow';
 import { SkillsWindow } from '../windows/SkillsWindow';
 import { ProjectsWindow } from '../windows/ProjectsWindow';
@@ -13,7 +15,20 @@ import { HobbiesWindow } from '../windows/HobbiesWindow';
 import { PixelRunnerGame } from '../game/PixelRunnerGame';
 import { ResumeWindow } from '../windows/ResumeWindow';
 import { ContactWindow } from '../windows/ContactWindow';
-import { ProfileSettings, Skill, Project, Achievement, WindowId } from '@/types';
+import { 
+  ProfileSettings, 
+  Skill, 
+  Project, 
+  Achievement, 
+  WindowId, 
+  UISettings 
+} from '@/types';
+import { 
+  getInitialUISettings, 
+  saveUISettings, 
+  applyUISettingsToDOM, 
+  DEFAULT_UI_SETTINGS 
+} from '@/lib/settings';
 
 interface DesktopExperienceProps {
   initialProfile: ProfileSettings;
@@ -26,6 +41,7 @@ interface WindowConfig {
   id: WindowId;
   title: string;
   width: number;
+  height?: number;
   headerColor: string;
   defaultOpen: boolean;
 }
@@ -37,6 +53,24 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
   initialAchievements,
 }) => {
   const [zCounter, setZCounter] = useState(200);
+  const [activeWindowId, setActiveWindowId] = useState<WindowId | null>('profileWin');
+  const [uiSettings, setUiSettings] = useState<UISettings>(DEFAULT_UI_SETTINGS);
+
+  // Initialize and apply persistent UI settings
+  useEffect(() => {
+    const initial = getInitialUISettings();
+    setUiSettings(initial);
+    applyUISettingsToDOM(initial);
+  }, []);
+
+  const handleUpdateSettings = useCallback((newSettings: Partial<UISettings>) => {
+    setUiSettings((prev) => {
+      const updated = { ...prev, ...newSettings };
+      saveUISettings(updated);
+      applyUISettingsToDOM(updated);
+      return updated;
+    });
+  }, []);
 
   const windowConfigs: WindowConfig[] = [
     {
@@ -91,8 +125,15 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
     {
       id: 'contactWin',
       title: '💌 Let’s Connect · Freelance & Commissions',
-      width: 480,
+      width: 520,
       headerColor: 'bg-pastel-pink',
+      defaultOpen: false,
+    },
+    {
+      id: 'settingsWin',
+      title: '⚙️ System Preferences & Layout Settings',
+      width: 480,
+      headerColor: 'bg-pastel-peach',
       defaultOpen: false,
     },
   ];
@@ -113,6 +154,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
   });
 
   const bringToFront = useCallback((id: WindowId) => {
+    setActiveWindowId(id);
     setZCounter((prev) => {
       const nextZ = prev + 1;
       setWindowsState((state) => ({
@@ -132,7 +174,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
     bringToFront(id);
   }, [bringToFront]);
 
-  const handleDockClick = useCallback((id: WindowId) => {
+  const handleTabOrDockClick = useCallback((id: WindowId) => {
     setWindowsState((state) => {
       const current = state[id];
       if (!current) return state;
@@ -148,6 +190,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
 
       // If already open, not minimized, and topmost, toggle minimize
       if (topWinId === id) {
+        setActiveWindowId(null);
         return {
           ...state,
           [id]: {
@@ -157,9 +200,10 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         };
       }
 
-      // Otherwise bring to front
+      // Otherwise bring to front and set active
       const nextZ = Math.max(zCounter, maxZ) + 1;
       setZCounter(nextZ);
+      setActiveWindowId(id);
       return {
         ...state,
         [id]: {
@@ -173,23 +217,52 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
   }, [zCounter]);
 
   const closeWindow = useCallback((id: WindowId) => {
-    setWindowsState((prev) => ({
-      ...prev,
-      [id]: {
-        ...prev[id],
-        isOpen: false,
-      },
-    }));
+    setWindowsState((prev) => {
+      const updated = {
+        ...prev,
+        [id]: {
+          ...prev[id],
+          isOpen: false,
+        },
+      };
+
+      // Recalculate new topmost active window
+      let maxZ = -1;
+      let nextActive: WindowId | null = null;
+      Object.entries(updated).forEach(([k, st]) => {
+        if (st.isOpen && !st.isMinimized && st.zIndex > maxZ) {
+          maxZ = st.zIndex;
+          nextActive = k as WindowId;
+        }
+      });
+      setActiveWindowId(nextActive);
+
+      return updated;
+    });
   }, []);
 
   const minimizeWindow = useCallback((id: WindowId) => {
-    setWindowsState((prev) => ({
-      ...prev,
-      [id]: {
-        ...prev[id],
-        isMinimized: true,
-      },
-    }));
+    setWindowsState((prev) => {
+      const updated = {
+        ...prev,
+        [id]: {
+          ...prev[id],
+          isMinimized: true,
+        },
+      };
+
+      let maxZ = -1;
+      let nextActive: WindowId | null = null;
+      Object.entries(updated).forEach(([k, st]) => {
+        if (st.isOpen && !st.isMinimized && st.zIndex > maxZ) {
+          maxZ = st.zIndex;
+          nextActive = k as WindowId;
+        }
+      });
+      setActiveWindowId(nextActive);
+
+      return updated;
+    });
   }, []);
 
   const resetWindows = useCallback(() => {
@@ -206,6 +279,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         });
         return reset as Record<WindowId, { isOpen: boolean; isMinimized: boolean; zIndex: number }>;
       });
+      setActiveWindowId('profileWin');
       return currentZ;
     });
   }, []);
@@ -215,9 +289,11 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       let currentZ = prev + 1;
       setWindowsState((state) => {
         const updated = { ...state };
+        let highestId: WindowId | null = null;
         Object.keys(updated).forEach((key) => {
           const winId = key as WindowId;
           if (updated[winId].isOpen) {
+            highestId = winId;
             updated[winId] = {
               ...updated[winId],
               isMinimized: false,
@@ -225,6 +301,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
             };
           }
         });
+        if (highestId) setActiveWindowId(highestId);
         return updated;
       });
       return currentZ;
@@ -243,13 +320,13 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       });
       return updated;
     });
+    setActiveWindowId(null);
   }, []);
 
   // Keyboard shortcut: ESC minimizes topmost window
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        // Find topmost open window
         let topWin: WindowId | null = null;
         let maxZ = -1;
         Object.entries(windowsState).forEach(([id, st]) => {
@@ -272,18 +349,26 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
   ) as Record<WindowId, boolean>;
 
   return (
-    <main className="relative w-screen h-screen overflow-hidden select-none">
+    <main className="relative w-full h-full min-h-[100dvh] max-w-full overflow-hidden select-none">
       {/* Dynamic Background */}
       <FloatingOrbs />
 
+      {/* Responsive Navigation Tabs (Header / Strip) */}
+      <ResponsiveNavTabs
+        activeWindowId={activeWindowId}
+        windowsState={windowsState}
+        onSelectTab={handleTabOrDockClick}
+      />
+
       {/* Desktop App Icon Dock */}
-      <IconDock onOpenWindow={handleDockClick} activeWindows={activeWindowsMap} />
+      <IconDock onOpenWindow={handleTabOrDockClick} activeWindows={activeWindowsMap} />
 
       {/* Taskbar Controls */}
       <Taskbar
         onResetWindows={resetWindows}
         onBringAllFront={bringAllFront}
         onMinimizeAll={minimizeAll}
+        onOpenSettings={() => openWindow('settingsWin')}
       />
 
       {/* Desktop Windows */}
@@ -370,11 +455,11 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       {/* 6. Pixel Game Window */}
       <Window
         id="gameWin"
-        title="⚔️ Pixel Quest: The Lost Crystal · 2D Adventure"
+        title="⚔️ Pixel Quest & 3D Horror · Playable Games"
         isOpen={windowsState.gameWin.isOpen}
         isMinimized={windowsState.gameWin.isMinimized}
         zIndex={windowsState.gameWin.zIndex}
-        width={820}
+        width={840}
         headerColor="bg-pastel-sky"
         onClose={() => closeWindow('gameWin')}
         onFocus={() => bringToFront('gameWin')}
@@ -406,13 +491,33 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isOpen={windowsState.contactWin.isOpen}
         isMinimized={windowsState.contactWin.isMinimized}
         zIndex={windowsState.contactWin.zIndex}
-        width={560}
+        width={540}
         headerColor="bg-pastel-pink"
         onClose={() => closeWindow('contactWin')}
         onFocus={() => bringToFront('contactWin')}
         onMinimize={() => minimizeWindow('contactWin')}
       >
         <ContactWindow />
+      </Window>
+
+      {/* 9. Settings Window */}
+      <Window
+        id="settingsWin"
+        title="⚙️ Appearance & Layout Settings"
+        isOpen={windowsState.settingsWin.isOpen}
+        isMinimized={windowsState.settingsWin.isMinimized}
+        zIndex={windowsState.settingsWin.zIndex}
+        width={480}
+        headerColor="bg-pastel-peach"
+        onClose={() => closeWindow('settingsWin')}
+        onFocus={() => bringToFront('settingsWin')}
+        onMinimize={() => minimizeWindow('settingsWin')}
+      >
+        <SettingsWindow
+          settings={uiSettings}
+          onUpdateSettings={handleUpdateSettings}
+          onResetLayout={resetWindows}
+        />
       </Window>
     </main>
   );

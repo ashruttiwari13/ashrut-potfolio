@@ -5,28 +5,120 @@
 :root {
   --bg-light: #fef9e7;
   --bg-card: #ffffffea;
+  --bg-window-body: #fffcf3;
   --text-dark: #3d3d3d;
   --text-soft: #6b5e4a;
+  --border-dark: #3d3d3d;
+  --shadow-dark: #3d3d3d;
   --accent-pink: #ffb6c1;
   --accent-peach: #ffdab9;
   --accent-mint: #c0f0dd;
   --accent-lavender: #e2d1ff;
   --accent-sky: #a0d4ff;
   --accent-yellow: #ffd966;
+  --accent-coral: #ff7b72;
+
+  --density-scale: 1;
+  --space-scale: 1;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
+}
+
+/* 1. Theme: Cyber Pastel Dark */
+[data-theme='dark'] {
+  --bg-light: #16151f;
+  --bg-card: #201e2dea;
+  --bg-window-body: #1a1926;
+  --text-dark: #f6f3ff;
+  --text-soft: #b8b1cb;
+  --border-dark: #4b4666;
+  --shadow-dark: #0d0b16;
+  --accent-pink: #ff6584;
+  --accent-peach: #ff9a76;
+  --accent-mint: #3ddc97;
+  --accent-lavender: #b185ff;
+  --accent-sky: #64b5f6;
+  --accent-yellow: #ffd166;
+  --accent-coral: #ff5370;
+}
+
+/* 2. Theme: Sunset Glow */
+[data-theme='sunset'] {
+  --bg-light: #fff3e8;
+  --bg-card: #ffffffea;
+  --bg-window-body: #fff8f2;
+  --text-dark: #42291d;
+  --text-soft: #7a5443;
+  --border-dark: #42291d;
+  --shadow-dark: #42291d;
+  --accent-pink: #ff9aa2;
+  --accent-peach: #ffb7b2;
+  --accent-mint: #dcedc1;
+  --accent-lavender: #e0bbe4;
+  --accent-sky: #bce6eb;
+  --accent-yellow: #fed766;
+  --accent-coral: #f95d6a;
+}
+
+/* Density scaling */
+[data-density='small'] {
+  --density-scale: 0.9;
+}
+[data-density='medium'] {
+  --density-scale: 1;
+}
+[data-density='large'] {
+  --density-scale: 1.1;
+}
+
+/* Spacing scaling */
+[data-spacing='compact'] {
+  --space-scale: 0.85;
+}
+[data-spacing='comfortable'] {
+  --space-scale: 1.15;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+[data-reduced-motion='true'] *,
+[data-reduced-motion='true'] *::before,
+[data-reduced-motion='true'] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
 }
 
 * {
   box-sizing: border-box;
 }
 
-body {
-  font-family: var(--font-quicksand), 'Quicksand', system-ui, -apple-system, sans-serif;
-  background-color: var(--bg-light);
-  color: var(--text-dark);
+html, body {
+  width: 100%;
+  max-width: 100vw;
   overflow-x: hidden;
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-quicksand), 'Quicksand', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* Custom retro desktop scrollbar */
@@ -36,26 +128,33 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f0e4d0;
+  background: rgba(0, 0, 0, 0.05);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--accent-pink);
-  border: 1px solid var(--text-dark);
+  border: 1px solid var(--border-dark);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff9fb0;
+  background: var(--accent-peach);
+}
+
+/* High visibility focus ring */
+:focus-visible {
+  outline: 2px solid var(--border-dark);
+  outline-offset: 2px;
 }
 
 /* Retro UI Components */
 .retro-window {
   background: var(--bg-card);
-  border: 3px solid var(--text-dark);
+  border: 3px solid var(--border-dark);
   border-radius: 24px 8px 24px 8px;
-  box-shadow: 6px 6px 0 rgba(61, 61, 61, 0.18);
+  box-shadow: 6px 6px 0 var(--shadow-dark);
+  transition: box-shadow 0.15s ease, opacity 0.15s ease;
 }
 
 .retro-btn {
@@ -63,26 +162,33 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
+  min-height: 38px;
   padding: 6px 14px;
   border-radius: 9999px;
   font-weight: 700;
-  font-size: 0.82rem;
-  border: 2px solid var(--text-dark);
+  font-size: calc(0.82rem * var(--density-scale));
+  border: 2px solid var(--border-dark);
   background: white;
-  box-shadow: 3px 3px 0 var(--text-dark);
+  color: var(--text-dark);
+  box-shadow: 3px 3px 0 var(--shadow-dark);
   cursor: pointer;
   transition: all 0.08s ease-in-out;
   user-select: none;
+  touch-action: manipulation;
+}
+
+[data-theme='dark'] .retro-btn {
+  background: #252233;
 }
 
 .retro-btn:hover {
   transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--text-dark);
+  box-shadow: 4px 4px 0 var(--shadow-dark);
 }
 
 .retro-btn:active {
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--text-dark);
+  box-shadow: 1px 1px 0 var(--shadow-dark);
 }
 
 .retro-btn-primary {
@@ -97,13 +203,22 @@ body {
   background: var(--accent-lavender);
 }
 
+.retro-btn-peach {
+  background: var(--accent-peach);
+}
+
 .retro-card {
   background: white;
-  border: 2px solid var(--text-dark);
+  color: var(--text-dark);
+  border: 2px solid var(--border-dark);
   border-radius: 18px 6px 18px 6px;
-  padding: 12px;
+  padding: calc(12px * var(--space-scale));
   box-shadow: 3px 3px 0 var(--accent-mint);
-  transition: transform 0.12s ease;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+[data-theme='dark'] .retro-card {
+  background: #232030;
 }
 
 .retro-card:hover {
@@ -113,7 +228,37 @@ body {
 
 .pixel-pattern {
   background-image: 
-    linear-gradient(45deg, #ffe5d9 6%, transparent 6%), 
-    linear-gradient(-45deg, #d9e5ff 6%, transparent 6%);
+    linear-gradient(45deg, rgba(255, 229, 217, 0.4) 6%, transparent 6%), 
+    linear-gradient(-45deg, rgba(217, 229, 255, 0.4) 6%, transparent 6%);
   background-size: 32px 32px;
+}
+
+/* Window resize corner indicator */
+.retro-resize-grip {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 18px;
+  height: 18px;
+  cursor: nwse-resize;
+  z-index: 40;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 2px;
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+
+.retro-resize-grip:hover {
+  opacity: 1;
+}
+
+/* Horizontal scroll bar hiding with smooth momentum */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

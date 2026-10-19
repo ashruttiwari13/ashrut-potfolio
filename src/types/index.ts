@@ -86,7 +86,24 @@ export type WindowId =
   | 'hobbiesWin'
   | 'gameWin'
   | 'resumeWin'
-  | 'contactWin';
+  | 'contactWin'
+  | 'settingsWin';
+
+export interface WindowDimensions {
+  width: number;
+  height?: number;
+}
+
+export type ThemeMode = 'pastel' | 'dark' | 'sunset';
+export type DensityMode = 'small' | 'medium' | 'large';
+export type SpacingMode = 'compact' | 'comfortable';
+
+export interface UISettings {
+  theme: ThemeMode;
+  density: DensityMode;
+  spacing: SpacingMode;
+  reducedMotion: boolean;
+}
 
 export interface WindowState {
   id: WindowId;
@@ -95,5 +112,6 @@ export interface WindowState {
   isMinimized: boolean;
   zIndex: number;
   position: { x: number; y: number };
-  size?: { width: number; height?: number };
+  size?: WindowDimensions;
 }
+

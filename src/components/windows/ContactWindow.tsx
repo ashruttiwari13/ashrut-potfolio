@@ -393,13 +393,13 @@ export const ContactWindow: React.FC = () => {
           )}
 
           {/* Section 1: Client & Studio Details */}
-          <div className="p-3 bg-white border-2 border-pastel-dark rounded-retro-sm space-y-2.5">
+          <div className="p-3.5 bg-white dark:bg-[#201e2d] border-2 border-pastel-dark rounded-retro-sm space-y-2.5 shadow-sm">
             <div className="flex items-center gap-1.5 text-xs font-extrabold text-pastel-dark border-b border-pastel-dark/15 pb-1">
               <Building size={14} className="text-pastel-dark" />
-              <span>1. Client & Studio Details</span>
+              <span>1. Client &amp; Studio Details</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label htmlFor="client-name" className="block text-xs font-bold text-pastel-dark mb-1">
                   Your Full Name <span className="text-rose-500">*</span>
@@ -408,13 +408,16 @@ export const ContactWindow: React.FC = () => {
                   id="client-name"
                   type="text"
                   required
+                  aria-required="true"
+                  aria-invalid={!!fieldErrors.name}
+                  aria-describedby={fieldErrors.name ? "client-name-error" : undefined}
                   placeholder="e.g. Maya Lin"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all"
+                  className="w-full px-3.5 py-2 text-sm sm:text-xs bg-white dark:bg-[#1a1926] text-pastel-dark border-2 border-pastel-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all min-h-[40px]"
                 />
                 {fieldErrors.name && (
-                  <p className="text-[10px] text-rose-600 font-bold mt-0.5">{fieldErrors.name[0]}</p>
+                  <p id="client-name-error" className="text-[11px] text-rose-600 font-bold mt-1">{fieldErrors.name[0]}</p>
                 )}
               </div>
 
@@ -426,18 +429,21 @@ export const ContactWindow: React.FC = () => {
                   id="client-email"
                   type="email"
                   required
+                  aria-required="true"
+                  aria-invalid={!!fieldErrors.email}
+                  aria-describedby={fieldErrors.email ? "client-email-error" : undefined}
                   placeholder="maya@gamestudio.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all"
+                  className="w-full px-3.5 py-2 text-sm sm:text-xs bg-white dark:bg-[#1a1926] text-pastel-dark border-2 border-pastel-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all min-h-[40px]"
                 />
                 {fieldErrors.email && (
-                  <p className="text-[10px] text-rose-600 font-bold mt-0.5">{fieldErrors.email[0]}</p>
+                  <p id="client-email-error" className="text-[11px] text-rose-600 font-bold mt-1">{fieldErrors.email[0]}</p>
                 )}
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-0.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-0.5">
               <div>
                 <label htmlFor="client-company" className="block text-xs font-bold text-pastel-dark mb-1">
                   Studio / Team / Company (Optional)
@@ -448,7 +454,7 @@ export const ContactWindow: React.FC = () => {
                   placeholder="e.g. Neon Horizon Studios / Indie"
                   value={formData.company || ''}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  className="w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all"
+                  className="w-full px-3.5 py-2 text-sm sm:text-xs bg-white dark:bg-[#1a1926] text-pastel-dark border-2 border-pastel-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all min-h-[40px]"
                 />
               </div>
 
@@ -463,28 +469,29 @@ export const ContactWindow: React.FC = () => {
                     placeholder="e.g. discord: maya#1234 or +1 (555)..."
                     value={formData.contact_handle || ''}
                     onChange={(e) => setFormData({ ...formData, contact_handle: e.target.value })}
-                    className="w-full pl-7 pr-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all"
+                    className="w-full pl-8 pr-3.5 py-2 text-sm sm:text-xs bg-white dark:bg-[#1a1926] text-pastel-dark border-2 border-pastel-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all min-h-[40px]"
                   />
-                  <AtSign size={12} className="absolute left-2.5 top-2.5 text-pastel-soft" />
+                  <AtSign size={13} className="absolute left-2.5 top-3 text-pastel-soft" />
                 </div>
               </div>
             </div>
           </div>
 
           {/* Section 2: Project Classification & Scope */}
-          <div className="p-3 bg-white border-2 border-pastel-dark rounded-retro-sm space-y-2.5">
+          <div className="p-3.5 bg-white dark:bg-[#201e2d] border-2 border-pastel-dark rounded-retro-sm space-y-2.5 shadow-sm">
             <div className="flex items-center gap-1.5 text-xs font-extrabold text-pastel-dark border-b border-pastel-dark/15 pb-1">
               <Briefcase size={14} className="text-pastel-dark" />
-              <span>2. Project Classification & Scope</span>
+              <span>2. Project Classification &amp; Scope</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label htmlFor="project-type" className="block text-xs font-bold text-pastel-dark mb-1">
                   Project Category <span className="text-rose-500">*</span>
                 </label>
                 <select
                   id="project-type"
+                  aria-required="true"
                   value={formData.project_type}
                   onChange={(e) =>
                     setFormData({
@@ -492,7 +499,7 @@ export const ContactWindow: React.FC = () => {
                       project_type: e.target.value as ContactFormData['project_type'],
                     })
                   }
-                  className="w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink"
+                  className="w-full px-3.5 py-2 text-sm sm:text-xs bg-white dark:bg-[#1a1926] text-pastel-dark border-2 border-pastel-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-pastel-pink min-h-[40px]"
                 >
                   {projectTypes.map((type) => (
                     <option key={type} value={type}>
@@ -510,7 +517,7 @@ export const ContactWindow: React.FC = () => {
                   id="target-platform"
                   value={formData.target_platform || 'Unreal Engine 5'}
                   onChange={(e) => setFormData({ ...formData, target_platform: e.target.value })}
-                  className="w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink"
+                  className="w-full px-3.5 py-2 text-sm sm:text-xs bg-white dark:bg-[#1a1926] text-pastel-dark border-2 border-pastel-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-pastel-pink min-h-[40px]"
                 >
                   {platformOptions.map((opt) => (
                     <option key={opt} value={opt}>
@@ -521,7 +528,7 @@ export const ContactWindow: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label htmlFor="budget-range" className="block text-xs font-bold text-pastel-dark mb-1">
                   Estimated Budget
@@ -530,7 +537,7 @@ export const ContactWindow: React.FC = () => {
                   id="budget-range"
                   value={formData.budget_range}
                   onChange={(e) => setFormData({ ...formData, budget_range: e.target.value })}
-                  className="w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink"
+                  className="w-full px-3.5 py-2 text-sm sm:text-xs bg-white dark:bg-[#1a1926] text-pastel-dark border-2 border-pastel-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-pastel-pink min-h-[40px]"
                 >
                   {budgetOptions.map((opt) => (
                     <option key={opt} value={opt}>
@@ -548,7 +555,7 @@ export const ContactWindow: React.FC = () => {
                   id="timeline"
                   value={formData.timeline}
                   onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                  className="w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink"
+                  className="w-full px-3.5 py-2 text-sm sm:text-xs bg-white dark:bg-[#1a1926] text-pastel-dark border-2 border-pastel-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-pastel-pink min-h-[40px]"
                 >
                   {timelineOptions.map((opt) => (
                     <option key={opt} value={opt}>
@@ -561,11 +568,11 @@ export const ContactWindow: React.FC = () => {
           </div>
 
           {/* Section 3: Project Brief & Vision */}
-          <div className="p-3 bg-white border-2 border-pastel-dark rounded-retro-sm space-y-2">
+          <div className="p-3.5 bg-white dark:bg-[#201e2d] border-2 border-pastel-dark rounded-retro-sm space-y-2 shadow-sm">
             <div className="flex items-center justify-between border-b border-pastel-dark/15 pb-1">
               <span className="text-xs font-extrabold text-pastel-dark flex items-center gap-1.5">
                 <FileText size={14} className="text-pastel-dark" />
-                <span>3. Project Description & Freelance Needs <span className="text-rose-500">*</span></span>
+                <span>3. Project Description &amp; Freelance Needs <span className="text-rose-500">*</span></span>
               </span>
               <span className="text-[10px] text-pastel-soft font-semibold">
                 {formData.message.length} / 5000 chars
@@ -575,22 +582,22 @@ export const ContactWindow: React.FC = () => {
             <textarea
               id="message-desc"
               required
+              aria-required="true"
+              aria-invalid={!!fieldErrors.message}
+              aria-describedby={fieldErrors.message ? "message-error" : undefined}
               rows={4}
-              placeholder="Tell Ashrut all about your project needs:
-- Gameplay mechanics or 3D art style requirements
-- Deliverables list (rigged models, level blockout, VFX shaders, modular assets)
-- References, target engine version, or any key deadlines..."
+              placeholder="Tell Ashrut all about your project needs:&#10;- Gameplay mechanics or 3D art style requirements&#10;- Deliverables list (rigged models, level blockout, VFX shaders, modular assets)&#10;- References, target engine version, or any key deadlines..."
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-              className="w-full p-2.5 text-xs bg-white border-2 border-pastel-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-pastel-pink resize-none leading-relaxed shadow-sm"
+              className="w-full p-3 text-sm sm:text-xs bg-white dark:bg-[#1a1926] text-pastel-dark border-2 border-pastel-dark rounded-xl focus:outline-none focus:ring-2 focus:ring-pastel-pink resize-y min-h-[110px] leading-relaxed shadow-sm"
             />
             {fieldErrors.message && (
-              <p className="text-[10px] text-rose-600 font-bold mt-0.5">{fieldErrors.message[0]}</p>
+              <p id="message-error" className="text-[11px] text-rose-600 font-bold mt-1">{fieldErrors.message[0]}</p>
             )}
           </div>
 
           {/* Section 4: Attach PDF Brief / GDD */}
-          <div className="p-3 bg-white border-2 border-pastel-dark rounded-retro-sm space-y-2">
+          <div className="p-3.5 bg-white dark:bg-[#201e2d] border-2 border-pastel-dark rounded-retro-sm space-y-2 shadow-sm">
             <div className="flex items-center justify-between border-b border-pastel-dark/15 pb-1">
               <span className="text-xs font-extrabold text-pastel-dark flex items-center gap-1.5">
                 <Paperclip size={14} className="text-pastel-dark" />
@@ -603,9 +610,9 @@ export const ContactWindow: React.FC = () => {
 
             {formData.attachment ? (
               /* Attached file chip */
-              <div className="p-3 bg-pastel-mint/30 border-2 border-pastel-dark rounded-xl flex items-center justify-between gap-2 shadow-[2px_2px_0_#3d3d3d]">
+              <div className="p-3 bg-pastel-mint/30 dark:bg-pastel-mint/10 border-2 border-pastel-dark rounded-xl flex items-center justify-between gap-2 shadow-[2px_2px_0_#3d3d3d]">
                 <div className="flex items-center gap-2.5 overflow-hidden">
-                  <div className="w-9 h-9 rounded-lg bg-white border-2 border-pastel-dark flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 rounded-lg bg-white dark:bg-[#252233] border-2 border-pastel-dark flex items-center justify-center shrink-0">
                     <FileText size={18} className="text-rose-600" />
                   </div>
                   <div className="truncate">
@@ -614,7 +621,7 @@ export const ContactWindow: React.FC = () => {
                     </p>
                     <p className="text-[10px] text-pastel-soft flex items-center gap-2">
                       <span>{(formData.attachment.fileSize / (1024 * 1024)).toFixed(2)} MB</span>
-                      <span className="text-emerald-700 font-bold">✓ Ready to send to ashrut.tiwari2004@gmail.com</span>
+                      <span className="text-emerald-700 dark:text-emerald-400 font-bold">✓ Ready to send to ashrut.tiwari2004@gmail.com</span>
                     </p>
                   </div>
                 </div>
@@ -622,8 +629,9 @@ export const ContactWindow: React.FC = () => {
                 <button
                   type="button"
                   onClick={removeAttachment}
-                  className="p-1 rounded-full bg-white hover:bg-rose-100 border border-pastel-dark text-pastel-dark hover:text-rose-600 transition-colors shrink-0"
+                  className="p-1 rounded-full bg-white dark:bg-[#252233] hover:bg-rose-100 dark:hover:bg-rose-900/40 border border-pastel-dark text-pastel-dark hover:text-rose-600 transition-colors shrink-0"
                   title="Remove attachment"
+                  aria-label="Remove attachment"
                 >
                   <X size={14} />
                 </button>
@@ -641,7 +649,7 @@ export const ContactWindow: React.FC = () => {
                 className={`p-4 border-2 border-dashed rounded-xl text-center cursor-pointer transition-all ${
                   isDragging
                     ? 'border-pastel-pink bg-pastel-pink/20 scale-[0.99]'
-                    : 'border-pastel-dark/40 bg-pastel-warm/20 hover:bg-pastel-warm/40 hover:border-pastel-dark'
+                    : 'border-pastel-dark/40 bg-pastel-warm/20 dark:bg-[#1a1926]/40 hover:bg-pastel-warm/40 hover:border-pastel-dark'
                 }`}
               >
                 <input
@@ -663,11 +671,11 @@ export const ContactWindow: React.FC = () => {
                   </div>
                 ) : (
                   <div className="space-y-1">
-                    <div className="w-8 h-8 rounded-full bg-white border-2 border-pastel-dark mx-auto flex items-center justify-center text-pastel-dark shadow-[1px_1px_0_#3d3d3d]">
+                    <div className="w-8 h-8 rounded-full bg-white dark:bg-[#252233] border-2 border-pastel-dark mx-auto flex items-center justify-center text-pastel-dark shadow-[1px_1px_0_#3d3d3d]">
                       <UploadCloud size={16} />
                     </div>
                     <p className="text-xs font-bold text-pastel-dark">
-                      Click to upload or drag & drop your PDF Brief / GDD here
+                      Click to upload or drag &amp; drop your PDF Brief / GDD here
                     </p>
                     <p className="text-[10px] text-pastel-soft">
                       Attach Game Design Documents, style guides, reference sheets, or RFP specifications
@@ -688,19 +696,19 @@ export const ContactWindow: React.FC = () => {
           {/* Action Row: Privacy & Transmit Button */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1">
             <div className="flex items-center gap-1.5 text-[11px] text-pastel-soft">
-              <ShieldCheck size={14} className="text-emerald-700 shrink-0" />
+              <ShieldCheck size={14} className="text-emerald-700 dark:text-emerald-400 shrink-0" />
               <span>Transmitted directly to <strong>ashrut.tiwari2004@gmail.com</strong></span>
             </div>
 
             <button
               type="submit"
               disabled={isSubmitting || fileUploading}
-              className="retro-btn retro-btn-primary w-full sm:w-auto px-6 py-2.5 text-xs flex items-center justify-center gap-2"
+              className="retro-btn retro-btn-primary w-full sm:w-auto px-6 py-2.5 text-xs flex items-center justify-center gap-2 min-h-[44px]"
             >
               {isSubmitting ? (
                 <>
                   <Loader2 size={14} className="animate-spin" />
-                  <span>Transmitting Brief & Attachments...</span>
+                  <span>Transmitting Brief &amp; Attachments...</span>
                 </>
               ) : (
                 <>

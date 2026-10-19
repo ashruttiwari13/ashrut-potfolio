@@ -8,11 +8,11 @@ import {
   Gamepad2, 
   Trophy, 
   Camera, 
-  Play, 
   FileText, 
   Mail, 
   ShieldCheck,
-  Skull 
+  Skull,
+  Sliders
 } from 'lucide-react';
 import { WindowId } from '@/types';
 
@@ -40,13 +40,14 @@ export const IconDock: React.FC<IconDockProps> = ({ onOpenWindow, activeWindows 
     { id: 'gameWin', label: '3D Horror', icon: <Skull className="w-6 h-6 sm:w-7 sm:h-7" />, badge: '3D' },
     { id: 'resumeWin', label: 'Resume', icon: <FileText className="w-6 h-6 sm:w-7 sm:h-7" /> },
     { id: 'contactWin', label: 'Hire Me', icon: <Mail className="w-6 h-6 sm:w-7 sm:h-7" /> },
+    { id: 'settingsWin', label: 'Settings', icon: <Sliders className="w-6 h-6 sm:w-7 sm:h-7" /> },
     { id: 'admin', label: 'Admin', icon: <ShieldCheck className="w-6 h-6 sm:w-7 sm:h-7" />, isLink: true, href: '/admin' },
   ];
 
   return (
     <nav 
-      aria-label="Desktop icons"
-      className="fixed z-[300] top-4 left-4 flex flex-col gap-3 p-3 rounded-[32px] bg-[rgba(255,250,240,0.95)] backdrop-blur-md border-[3px] border-pastel-peach shadow-retro max-h-[92vh] overflow-y-auto no-scrollbar pointer-events-auto max-md:top-auto max-md:bottom-20 max-md:left-3 max-md:right-3 max-md:flex-row max-md:justify-around max-md:p-2 max-md:rounded-full max-md:max-h-none"
+      aria-label="Desktop application dock"
+      className="fixed z-[280] top-16 left-3.5 flex flex-col gap-2.5 p-2.5 rounded-[30px] bg-[rgba(255,250,240,0.92)] dark:bg-[rgba(24,22,34,0.92)] backdrop-blur-md border-[3px] border-pastel-dark shadow-retro max-h-[82vh] overflow-y-auto no-scrollbar pointer-events-auto max-md:hidden select-none"
     >
       {items.map((item) => {
         const isActive = item.id !== 'admin' && activeWindows[item.id as WindowId];
@@ -57,12 +58,12 @@ export const IconDock: React.FC<IconDockProps> = ({ onOpenWindow, activeWindows 
               key={item.id}
               href={item.href}
               title={item.label}
-              className="group relative flex flex-col items-center justify-center p-1.5 cursor-pointer transition-transform active:scale-95 focus:outline-none"
+              className="group relative flex flex-col items-center justify-center p-1 cursor-pointer transition-transform active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark rounded-2xl"
             >
-              <div className="relative p-2.5 sm:p-3 bg-white rounded-2xl border-[3px] border-pastel-dark shadow-[3px_3px_0_#ffb6c1] group-hover:scale-105 group-hover:shadow-[4px_4px_0_#c0f0dd] transition-all">
+              <div className="relative p-2.5 bg-white dark:bg-[#252233] rounded-2xl border-[2.5px] border-pastel-dark shadow-[2px_2px_0_#ffb6c1] group-hover:scale-105 group-hover:shadow-[3px_3px_0_#c0f0dd] transition-all">
                 {item.icon}
               </div>
-              <span className="text-[10px] sm:text-[11px] font-bold mt-1 text-pastel-dark px-2 py-0.5 rounded-full bg-white/90 border border-pastel-dark/20 max-md:hidden">
+              <span className="text-[10px] font-bold mt-1 text-pastel-dark px-2 py-0.5 rounded-full bg-white/90 dark:bg-[#252233]/90 border border-pastel-dark/20">
                 {item.label}
               </span>
             </Link>
@@ -75,7 +76,7 @@ export const IconDock: React.FC<IconDockProps> = ({ onOpenWindow, activeWindows 
             type="button"
             onClick={() => onOpenWindow(item.id as WindowId)}
             title={item.label}
-            className="group relative flex flex-col items-center justify-center p-1.5 cursor-pointer transition-transform active:scale-95 focus:outline-none"
+            className="group relative flex flex-col items-center justify-center p-1 cursor-pointer transition-transform active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark rounded-2xl"
           >
             {item.badge && (
               <span className="absolute -top-1 -right-1 z-10 px-1.5 py-0.2 text-[9px] font-extrabold uppercase bg-pastel-pink text-pastel-dark border border-pastel-dark rounded-full shadow-sm animate-bounce">
@@ -83,17 +84,17 @@ export const IconDock: React.FC<IconDockProps> = ({ onOpenWindow, activeWindows 
               </span>
             )}
             <div
-              className={`relative p-2.5 sm:p-3 bg-white rounded-2xl border-[3px] border-pastel-dark transition-all ${
+              className={`relative p-2.5 rounded-2xl border-[2.5px] border-pastel-dark transition-all ${
                 isActive
-                  ? 'bg-pastel-mint shadow-[3px_3px_0_#3d3d3d] scale-105 ring-2 ring-pastel-dark'
-                  : 'shadow-[3px_3px_0_#c0f0dd] group-hover:scale-105 group-hover:shadow-[4px_4px_0_#ffb6c1]'
+                  ? 'bg-pastel-mint shadow-[2px_2px_0_#3d3d3d] scale-105 ring-2 ring-pastel-dark'
+                  : 'bg-white dark:bg-[#252233] shadow-[2px_2px_0_#c0f0dd] group-hover:scale-105 group-hover:shadow-[3px_3px_0_#ffb6c1]'
               }`}
             >
               {item.icon}
             </div>
             <span
-              className={`text-[10px] sm:text-[11px] font-bold mt-1 text-pastel-dark px-2 py-0.5 rounded-full transition-colors max-md:hidden ${
-                isActive ? 'bg-pastel-peach border border-pastel-dark' : 'bg-white/90 border border-pastel-dark/20'
+              className={`text-[10px] font-bold mt-1 text-pastel-dark px-2 py-0.5 rounded-full transition-colors ${
+                isActive ? 'bg-pastel-peach border border-pastel-dark' : 'bg-white/90 dark:bg-[#252233]/90 border border-pastel-dark/20'
               }`}
             >
               {item.label}
