@@ -35,3 +35,6 @@ next-env.d.ts
 
 # original backup folder
 # (can be preserved in git or workspace, keeping it in git checkpoint)
+
+# tunnel binaries
+cloudflared.exe

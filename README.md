@@ -127,7 +127,7 @@ To receive real-time emails when clients submit inquiries:
    ```env
    RESEND_API_KEY=re_your_api_key_here
    CONTACT_FROM_EMAIL=onboarding@resend.dev
-   CONTACT_TO_EMAIL=ashrut.tiwari.work@gmail.com
+   CONTACT_TO_EMAIL=ashrut.tiwari2004@gmail.com
    ```
 4. In production, verify your custom domain in Resend (e.g. `inquiries@ashrut.dev`) for white-label delivery.
 

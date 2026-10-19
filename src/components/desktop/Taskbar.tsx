@@ -33,7 +33,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
     <footer 
       role="region"
       aria-label="Desktop taskbar"
-      className="fixed bottom-3 right-4 z-40 flex items-center gap-2 p-1.5 sm:p-2 bg-[rgba(255,250,240,0.92)] backdrop-blur-md rounded-full border-[2.5px] border-pastel-dark shadow-retro text-xs font-bold max-md:hidden"
+      className="fixed bottom-3 right-4 z-[300] flex items-center gap-2 p-1.5 sm:p-2 bg-[rgba(255,250,240,0.95)] backdrop-blur-md rounded-full border-[2.5px] border-pastel-dark shadow-retro text-xs font-bold max-md:hidden pointer-events-auto"
     >
       {/* Live Status Pill */}
       <div className="flex items-center gap-1.5 px-3 py-1 bg-pastel-mint/80 rounded-full border border-pastel-dark text-pastel-dark">

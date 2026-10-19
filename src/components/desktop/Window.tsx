@@ -33,7 +33,10 @@ export const Window: React.FC<WindowProps> = ({
   children,
 }) => {
   const windowRef = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState<{ x: number; y: number }>({ x: 40, y: 40 });
+  const [position, setPosition] = useState<{ x: number; y: number }>(() => {
+    if (initialPosition) return initialPosition;
+    return { x: 120, y: 24 };
+  });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isMaximized, setIsMaximized] = useState(false);
@@ -44,8 +47,9 @@ export const Window: React.FC<WindowProps> = ({
       setPosition(initialPosition);
     } else if (typeof window !== 'undefined') {
       const numericWidth = typeof width === 'number' ? width : 480;
-      const x = Math.max(20, Math.floor((window.innerWidth - numericWidth) / 2));
-      const y = Math.max(30, Math.floor((window.innerHeight - 500) / 2));
+      const isMobile = window.innerWidth < 768;
+      const x = isMobile ? 10 : Math.max(115, Math.floor((window.innerWidth + 90 - numericWidth) / 2));
+      const y = isMobile ? 12 : Math.max(18, Math.floor((window.innerHeight - 560) / 2));
       setPosition({ x, y });
     }
   }, [initialPosition, width]);
@@ -77,7 +81,8 @@ export const Window: React.FC<WindowProps> = ({
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!isDragging || isMaximized) return;
-      const newX = Math.max(10, Math.min(window.innerWidth - 100, e.clientX - dragOffset.x));
+      const minX = window.innerWidth < 768 ? 5 : 85;
+      const newX = Math.max(minX, Math.min(window.innerWidth - 100, e.clientX - dragOffset.x));
       const newY = Math.max(10, Math.min(window.innerHeight - 80, e.clientY - dragOffset.y));
       setPosition({ x: newX, y: newY });
     };
@@ -85,7 +90,8 @@ export const Window: React.FC<WindowProps> = ({
     const handleTouchMove = (e: TouchEvent) => {
       if (!isDragging || isMaximized || e.touches.length !== 1) return;
       const touch = e.touches[0];
-      const newX = Math.max(10, Math.min(window.innerWidth - 100, touch.clientX - dragOffset.x));
+      const minX = window.innerWidth < 768 ? 5 : 85;
+      const newX = Math.max(minX, Math.min(window.innerWidth - 100, touch.clientX - dragOffset.x));
       const newY = Math.max(10, Math.min(window.innerHeight - 80, touch.clientY - dragOffset.y));
       setPosition({ x: newX, y: newY });
     };
@@ -186,7 +192,7 @@ export const Window: React.FC<WindowProps> = ({
       </div>
 
       {/* Window Body */}
-      <div className="p-4 sm:p-5 overflow-y-auto bg-[#fffcf3] text-pastel-dark max-h-[68vh] md:max-h-[72vh] flex-1">
+      <div className="p-4 sm:p-5 overflow-y-auto bg-[#fffcf3] text-pastel-dark max-h-[calc(100vh-140px)] md:max-h-[calc(100vh-160px)] flex-1">
         {children}
       </div>
     </div>

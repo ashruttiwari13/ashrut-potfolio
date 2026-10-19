@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS public.profile_settings (
     specialties TEXT[] NOT NULL DEFAULT ARRAY['Game Development', '3D Modeling', 'Character Art', 'Cinematography & VFX'],
     location TEXT NOT NULL DEFAULT 'India · Open to Remote Opportunities Worldwide',
     freelance_status TEXT NOT NULL DEFAULT 'Open for Freelance & Commissions',
-    email TEXT NOT NULL DEFAULT 'ashrut.tiwari.work@gmail.com',
+    email TEXT NOT NULL DEFAULT 'ashrut.tiwari2004@gmail.com',
     social_links JSONB NOT NULL DEFAULT '{
         "github": "https://github.com",
         "linkedin": "https://linkedin.com",
@@ -237,7 +237,7 @@ INSERT INTO public.profile_settings (
     ARRAY['Unreal Engine 5 & Godot', '3D Character Art & Rigging', 'C++ & Python Systems', 'Cinematography & Color Grading'],
     'India · Available for Remote Collaborations Worldwide',
     'Open for Freelance & Custom Commissions',
-    'ashrut.tiwari.work@gmail.com'
+    'ashrut.tiwari2004@gmail.com'
 ) ON CONFLICT DO NOTHING;
 
 -- Initial Skills

@@ -89,7 +89,7 @@ This guide walks you step-by-step through publishing your full-stack portfolio o
 | `ADMIN_SECRET_KEY` | Choose a strong custom secret | Protects `/admin` access |
 | `RESEND_API_KEY` | `re_...` (optional) | Enables direct email delivery |
 | `CONTACT_FROM_EMAIL` | `onboarding@resend.dev` (or verified domain) | Sending address |
-| `CONTACT_TO_EMAIL` | `ashrut.tiwari.work@gmail.com` | Where client inquiries go |
+| `CONTACT_TO_EMAIL` | `ashrut.tiwari2004@gmail.com` | Where client inquiries go |
 
 6. Click **Deploy**. Vercel will install dependencies, build the Next.js bundle, and launch your site live across global edge servers!
 

@@ -165,6 +165,46 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
     bringToFront(id);
   }, [bringToFront]);
 
+  const handleDockClick = useCallback((id: WindowId) => {
+    setWindowsState((state) => {
+      const current = state[id];
+      if (!current) return state;
+
+      let maxZ = -1;
+      let topWinId: WindowId | null = null;
+      Object.entries(state).forEach(([k, st]) => {
+        if (st.isOpen && !st.isMinimized && st.zIndex > maxZ) {
+          maxZ = st.zIndex;
+          topWinId = k as WindowId;
+        }
+      });
+
+      // If already open, not minimized, and topmost, toggle minimize
+      if (topWinId === id) {
+        return {
+          ...state,
+          [id]: {
+            ...current,
+            isMinimized: true,
+          },
+        };
+      }
+
+      // Otherwise bring to front
+      const nextZ = Math.max(zCounter, maxZ) + 1;
+      setZCounter(nextZ);
+      return {
+        ...state,
+        [id]: {
+          ...current,
+          isOpen: true,
+          isMinimized: false,
+          zIndex: nextZ,
+        },
+      };
+    });
+  }, [zCounter]);
+
   const closeWindow = useCallback((id: WindowId) => {
     setWindowsState((prev) => ({
       ...prev,
@@ -270,7 +310,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       <FloatingOrbs />
 
       {/* Desktop App Icon Dock */}
-      <IconDock onOpenWindow={openWindow} activeWindows={activeWindowsMap} />
+      <IconDock onOpenWindow={handleDockClick} activeWindows={activeWindowsMap} />
 
       {/* Taskbar Controls */}
       <Taskbar
@@ -287,6 +327,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isOpen={windowsState.profileWin.isOpen}
         isMinimized={windowsState.profileWin.isMinimized}
         zIndex={windowsState.profileWin.zIndex}
+        initialPosition={{ x: 125, y: 24 }}
         width={520}
         headerColor="bg-pastel-pink"
         onClose={() => closeWindow('profileWin')}
@@ -303,6 +344,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isOpen={windowsState.projectsWin.isOpen}
         isMinimized={windowsState.projectsWin.isMinimized}
         zIndex={windowsState.projectsWin.zIndex}
+        initialPosition={{ x: 135, y: 30 }}
         width={720}
         headerColor="bg-pastel-peach"
         onClose={() => closeWindow('projectsWin')}
@@ -319,6 +361,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isOpen={windowsState.skillsWin.isOpen}
         isMinimized={windowsState.skillsWin.isMinimized}
         zIndex={windowsState.skillsWin.zIndex}
+        initialPosition={{ x: 145, y: 36 }}
         width={560}
         headerColor="bg-pastel-mint"
         onClose={() => closeWindow('skillsWin')}
@@ -335,6 +378,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isOpen={windowsState.achievementsWin.isOpen}
         isMinimized={windowsState.achievementsWin.isMinimized}
         zIndex={windowsState.achievementsWin.zIndex}
+        initialPosition={{ x: 155, y: 42 }}
         width={500}
         headerColor="bg-pastel-lavender"
         onClose={() => closeWindow('achievementsWin')}
@@ -351,6 +395,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isOpen={windowsState.hobbiesWin.isOpen}
         isMinimized={windowsState.hobbiesWin.isMinimized}
         zIndex={windowsState.hobbiesWin.zIndex}
+        initialPosition={{ x: 165, y: 48 }}
         width={480}
         headerColor="bg-pastel-peach"
         onClose={() => closeWindow('hobbiesWin')}
@@ -367,6 +412,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isOpen={windowsState.gameWin.isOpen}
         isMinimized={windowsState.gameWin.isMinimized}
         zIndex={windowsState.gameWin.zIndex}
+        initialPosition={{ x: 120, y: 20 }}
         width={820}
         headerColor="bg-pastel-sky"
         onClose={() => closeWindow('gameWin')}
@@ -383,6 +429,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isOpen={windowsState.resumeWin.isOpen}
         isMinimized={windowsState.resumeWin.isMinimized}
         zIndex={windowsState.resumeWin.zIndex}
+        initialPosition={{ x: 140, y: 28 }}
         width={580}
         headerColor="bg-pastel-lavender"
         onClose={() => closeWindow('resumeWin')}
@@ -395,11 +442,12 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       {/* 8. Contact Window */}
       <Window
         id="contactWin"
-        title="💌 Let’s Connect · Freelance & Commissions"
+        title="💼 Freelance Studio & Commissions · Ashrut Tiwari"
         isOpen={windowsState.contactWin.isOpen}
         isMinimized={windowsState.contactWin.isMinimized}
         zIndex={windowsState.contactWin.zIndex}
-        width={500}
+        initialPosition={{ x: 150, y: 34 }}
+        width={560}
         headerColor="bg-pastel-pink"
         onClose={() => closeWindow('contactWin')}
         onFocus={() => bringToFront('contactWin')}

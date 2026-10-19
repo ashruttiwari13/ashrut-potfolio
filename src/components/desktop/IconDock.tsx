@@ -46,7 +46,7 @@ export const IconDock: React.FC<IconDockProps> = ({ onOpenWindow, activeWindows 
   return (
     <nav 
       aria-label="Desktop icons"
-      className="fixed z-40 top-4 left-4 flex flex-col gap-3 p-3 rounded-[32px] bg-[rgba(255,250,240,0.92)] backdrop-blur-md border-[3px] border-pastel-peach shadow-retro max-h-[92vh] overflow-y-auto no-scrollbar max-md:top-auto max-md:bottom-20 max-md:left-3 max-md:right-3 max-md:flex-row max-md:justify-around max-md:p-2 max-md:rounded-full max-md:max-h-none"
+      className="fixed z-[300] top-4 left-4 flex flex-col gap-3 p-3 rounded-[32px] bg-[rgba(255,250,240,0.95)] backdrop-blur-md border-[3px] border-pastel-peach shadow-retro max-h-[92vh] overflow-y-auto no-scrollbar pointer-events-auto max-md:top-auto max-md:bottom-20 max-md:left-3 max-md:right-3 max-md:flex-row max-md:justify-around max-md:p-2 max-md:rounded-full max-md:max-h-none"
     >
       {items.map((item) => {
         const isActive = item.id !== 'admin' && activeWindows[item.id as WindowId];

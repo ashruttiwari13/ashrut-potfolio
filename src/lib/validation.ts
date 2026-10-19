@@ -1,8 +1,17 @@
 import { z } from 'zod';
 
+export const attachmentSchema = z.object({
+  fileName: z.string().max(255),
+  fileSize: z.number().max(15 * 1024 * 1024, 'File size must be under 15MB'),
+  fileType: z.string().max(100),
+  base64: z.string(),
+}).optional();
+
 export const contactSchema = z.object({
   name: z.string().trim().min(2, 'Name must be at least 2 characters').max(80, 'Name must be under 80 characters'),
   email: z.string().trim().email('Please enter a valid email address').max(120, 'Email must be under 120 characters'),
+  company: z.string().trim().max(100).optional(),
+  contact_handle: z.string().trim().max(100).optional(),
   project_type: z.enum([
     'Game Development',
     '3D Character Art',
@@ -13,9 +22,11 @@ export const contactSchema = z.object({
   ], {
     errorMap: () => ({ message: 'Please select a valid project category' }),
   }),
-  budget_range: z.string().max(50).optional(),
-  timeline: z.string().max(50).optional(),
-  message: z.string().trim().min(10, 'Message must be at least 10 characters').max(3000, 'Message must be under 3000 characters'),
+  target_platform: z.string().max(80).optional(),
+  budget_range: z.string().max(60).optional(),
+  timeline: z.string().max(60).optional(),
+  message: z.string().trim().min(10, 'Message must be at least 10 characters').max(5000, 'Message must be under 5000 characters'),
+  attachment: attachmentSchema,
 });
 
 export type ContactFormData = z.infer<typeof contactSchema>;

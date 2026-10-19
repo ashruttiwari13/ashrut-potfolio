@@ -88,7 +88,7 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
       </div>
 
       {/* Fast Action Buttons */}
-      <div className="grid grid-cols-3 gap-2 pt-1">
+      <div className="grid grid-cols-3 gap-2 pt-1 pb-1">
         <button
           type="button"
           onClick={() => onNavigate('contactWin')}
@@ -118,9 +118,9 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
       </div>
 
       {/* Social Links */}
-      <div className="flex items-center justify-between pt-2 border-t border-pastel-dark/15 text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 pb-3 border-t border-pastel-dark/15 text-xs">
         <span className="font-bold text-pastel-soft">Social Profiles:</span>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-1.5">
           {Object.entries(profile.social_links).map(([key, url]) => {
             if (!url) return null;
             return (

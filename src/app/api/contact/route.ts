@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
+import fs from 'fs';
+import path from 'path';
 import { contactSchema } from '@/lib/validation';
-import { sendContactNotification } from '@/lib/email';
+import { sendContactNotification, toEmail } from '@/lib/email';
 import { createAdminClient } from '@/lib/supabase/admin';
 
 // Simple in-memory rate limiter to prevent spam submissions
@@ -45,7 +47,41 @@ export async function POST(req: NextRequest) {
 
     const validData = parseResult.data;
 
-    // 1. Try to record in Supabase database if configured
+    // 1. Process and save attachment locally if provided
+    let savedAttachmentUrl: string | null = null;
+    if (validData.attachment?.base64) {
+      try {
+        const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'inquiries');
+        if (!fs.existsSync(uploadDir)) {
+          fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        const cleanName = (validData.attachment.fileName || 'brief.pdf').replace(/[^a-zA-Z0-9.-]/g, '_');
+        const diskName = `${Date.now()}_${cleanName}`;
+        const targetPath = path.join(uploadDir, diskName);
+
+        const rawBase64 = validData.attachment.base64.includes(',')
+          ? validData.attachment.base64.split(',')[1]
+          : validData.attachment.base64;
+        fs.writeFileSync(targetPath, Buffer.from(rawBase64, 'base64'));
+        savedAttachmentUrl = `/uploads/inquiries/${diskName}`;
+        console.info(`[Contact API] PDF attachment saved to: ${savedAttachmentUrl}`);
+      } catch (fileErr) {
+        console.error('[Contact API] Failed to write attachment to disk:', fileErr);
+      }
+    }
+
+    // 2. Prepare message with metadata for database storage
+    const metadataNotes: string[] = [];
+    if (validData.company) metadataNotes.push(`Company / Studio: ${validData.company}`);
+    if (validData.contact_handle) metadataNotes.push(`Direct Contact: ${validData.contact_handle}`);
+    if (validData.target_platform) metadataNotes.push(`Target Engine/Platform: ${validData.target_platform}`);
+    if (savedAttachmentUrl) metadataNotes.push(`Attachment Saved: ${savedAttachmentUrl} (${validData.attachment?.fileName})`);
+
+    const enrichedMessage = metadataNotes.length > 0
+      ? `--- CLIENT & BRIEF DETAILS ---\n${metadataNotes.join('\n')}\n\n--- PROJECT REQUIREMENTS ---\n${validData.message}`
+      : validData.message;
+
+    // 3. Try to record in Supabase database if configured
     const adminSupabase = createAdminClient();
     let dbSaved = false;
 
@@ -57,7 +93,7 @@ export async function POST(req: NextRequest) {
           project_type: validData.project_type,
           budget_range: validData.budget_range || null,
           timeline: validData.timeline || null,
-          message: validData.message,
+          message: enrichedMessage,
           ip_hash: ip.slice(0, 8), // anonymized
         });
 
@@ -71,17 +107,20 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // 2. Dispatch email notification via Resend
+    // 4. Dispatch email notification via Resend directly to ashrut.tiwari2004@gmail.com
     const emailResult = await sendContactNotification(validData);
 
     return NextResponse.json({
       success: true,
-      message: 'Thank you! Your message has been received.',
+      message: 'Thank you! Your freelance project inquiry has been received.',
       dbSaved,
       emailDelivered: emailResult.delivered,
+      targetEmail: toEmail,
+      attachmentSaved: Boolean(savedAttachmentUrl),
+      attachmentUrl: savedAttachmentUrl,
       providerNote: emailResult.delivered 
-        ? 'Direct email notification dispatched to Ashrut.' 
-        : 'Saved securely to inquiries log.',
+        ? `Direct email notification dispatched to ${toEmail}.` 
+        : `Brief received and logged securely. Delivery queued for ${toEmail}.`,
     });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Internal server error';

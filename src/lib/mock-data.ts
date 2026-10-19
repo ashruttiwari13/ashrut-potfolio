@@ -14,7 +14,7 @@ export const initialProfile: ProfileSettings = {
   ],
   location: 'India · Open to Remote Opportunities Worldwide',
   freelance_status: 'Available for Freelance, Contracts & Commissions',
-  email: 'ashrut.tiwari.work@gmail.com',
+  email: 'ashrut.tiwari2004@gmail.com',
   social_links: {
     github: 'https://github.com',
     linkedin: 'https://linkedin.com',
