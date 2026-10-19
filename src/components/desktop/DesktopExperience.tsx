@@ -267,6 +267,15 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [windowsState, closeWindow]);
 
+  let topActiveId: WindowId | null = null;
+  let maxZ = -1;
+  Object.entries(windowsState).forEach(([id, st]) => {
+    if (st.isOpen && !st.isMinimized && st.zIndex > maxZ) {
+      maxZ = st.zIndex;
+      topActiveId = id as WindowId;
+    }
+  });
+
   const activeWindowsMap = Object.fromEntries(
     Object.entries(windowsState).map(([id, st]) => [id, st.isOpen && !st.isMinimized])
   ) as Record<WindowId, boolean>;
@@ -277,7 +286,11 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       <FloatingOrbs />
 
       {/* Desktop App Icon Dock */}
-      <IconDock onOpenWindow={handleDockClick} activeWindows={activeWindowsMap} />
+      <IconDock
+        onOpenWindow={handleDockClick}
+        activeWindows={activeWindowsMap}
+        activeWindowId={topActiveId}
+      />
 
       {/* Taskbar Controls */}
       <Taskbar
