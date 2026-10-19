@@ -164,7 +164,13 @@ export const Window: React.FC<WindowProps> = ({
     };
   }, [isDragging, dragOffset, isMaximized]);
 
-  if (!isOpen) return null;
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted || !isOpen) return null;
 
   return (
     <div
@@ -172,6 +178,7 @@ export const Window: React.FC<WindowProps> = ({
       id={id}
       tabIndex={0}
       onMouseDown={onFocus}
+      suppressHydrationWarning
       style={{
         zIndex,
         display: isMinimized ? 'none' : 'flex',
