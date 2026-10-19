@@ -28,7 +28,6 @@ interface WindowConfig {
   width: number;
   headerColor: string;
   defaultOpen: boolean;
-  defaultPosition: (vw: number, vh: number) => { x: number; y: number };
 }
 
 export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
@@ -46,10 +45,6 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       width: 520,
       headerColor: 'bg-pastel-pink',
       defaultOpen: true,
-      defaultPosition: (vw, vh) => ({
-        x: Math.max(20, Math.floor((vw - 520) / 2) - 80),
-        y: Math.max(30, Math.floor((vh - 560) / 2) - 20),
-      }),
     },
     {
       id: 'projectsWin',
@@ -57,10 +52,6 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       width: 680,
       headerColor: 'bg-pastel-peach',
       defaultOpen: false,
-      defaultPosition: (vw, vh) => ({
-        x: Math.max(20, Math.floor((vw - 680) / 2) + 60),
-        y: Math.max(30, Math.floor((vh - 580) / 2) + 30),
-      }),
     },
     {
       id: 'skillsWin',
@@ -68,10 +59,6 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       width: 540,
       headerColor: 'bg-pastel-mint',
       defaultOpen: false,
-      defaultPosition: (vw, vh) => ({
-        x: Math.max(20, Math.floor((vw - 540) / 2)),
-        y: Math.max(30, Math.floor((vh - 500) / 2)),
-      }),
     },
     {
       id: 'achievementsWin',
@@ -79,10 +66,6 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       width: 500,
       headerColor: 'bg-pastel-lavender',
       defaultOpen: false,
-      defaultPosition: (vw, vh) => ({
-        x: Math.max(20, Math.floor((vw - 500) / 2) + 40),
-        y: Math.max(30, Math.floor((vh - 420) / 2)),
-      }),
     },
     {
       id: 'hobbiesWin',
@@ -90,10 +73,6 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       width: 480,
       headerColor: 'bg-pastel-peach',
       defaultOpen: false,
-      defaultPosition: (vw, vh) => ({
-        x: Math.max(20, Math.floor((vw - 480) / 2) - 40),
-        y: Math.max(30, Math.floor((vh - 380) / 2)),
-      }),
     },
     {
       id: 'gameWin',
@@ -101,10 +80,6 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       width: 860,
       headerColor: 'bg-pastel-pink',
       defaultOpen: false,
-      defaultPosition: (vw, vh) => ({
-        x: Math.max(20, Math.floor((vw - 740) / 2)),
-        y: Math.max(20, Math.floor((vh - 600) / 2)),
-      }),
     },
     {
       id: 'resumeWin',
@@ -112,10 +87,6 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       width: 580,
       headerColor: 'bg-pastel-lavender',
       defaultOpen: false,
-      defaultPosition: (vw, vh) => ({
-        x: Math.max(20, Math.floor((vw - 580) / 2)),
-        y: Math.max(20, Math.floor((vh - 620) / 2)),
-      }),
     },
     {
       id: 'contactWin',
@@ -123,10 +94,6 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       width: 480,
       headerColor: 'bg-pastel-pink',
       defaultOpen: false,
-      defaultPosition: (vw, vh) => ({
-        x: Math.max(20, Math.floor((vw - 480) / 2) + 50),
-        y: Math.max(30, Math.floor((vh - 540) / 2)),
-      }),
     },
   ];
 
@@ -327,7 +294,6 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isOpen={windowsState.profileWin.isOpen}
         isMinimized={windowsState.profileWin.isMinimized}
         zIndex={windowsState.profileWin.zIndex}
-        initialPosition={{ x: 125, y: 24 }}
         width={520}
         headerColor="bg-pastel-pink"
         onClose={() => closeWindow('profileWin')}
@@ -344,7 +310,6 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isOpen={windowsState.projectsWin.isOpen}
         isMinimized={windowsState.projectsWin.isMinimized}
         zIndex={windowsState.projectsWin.zIndex}
-        initialPosition={{ x: 135, y: 30 }}
         width={720}
         headerColor="bg-pastel-peach"
         onClose={() => closeWindow('projectsWin')}
@@ -361,7 +326,6 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isOpen={windowsState.skillsWin.isOpen}
         isMinimized={windowsState.skillsWin.isMinimized}
         zIndex={windowsState.skillsWin.zIndex}
-        initialPosition={{ x: 145, y: 36 }}
         width={560}
         headerColor="bg-pastel-mint"
         onClose={() => closeWindow('skillsWin')}
@@ -378,7 +342,6 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isOpen={windowsState.achievementsWin.isOpen}
         isMinimized={windowsState.achievementsWin.isMinimized}
         zIndex={windowsState.achievementsWin.zIndex}
-        initialPosition={{ x: 155, y: 42 }}
         width={500}
         headerColor="bg-pastel-lavender"
         onClose={() => closeWindow('achievementsWin')}
@@ -395,7 +358,6 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isOpen={windowsState.hobbiesWin.isOpen}
         isMinimized={windowsState.hobbiesWin.isMinimized}
         zIndex={windowsState.hobbiesWin.zIndex}
-        initialPosition={{ x: 165, y: 48 }}
         width={480}
         headerColor="bg-pastel-peach"
         onClose={() => closeWindow('hobbiesWin')}
@@ -412,7 +374,6 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isOpen={windowsState.gameWin.isOpen}
         isMinimized={windowsState.gameWin.isMinimized}
         zIndex={windowsState.gameWin.zIndex}
-        initialPosition={{ x: 120, y: 20 }}
         width={820}
         headerColor="bg-pastel-sky"
         onClose={() => closeWindow('gameWin')}
@@ -429,7 +390,6 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isOpen={windowsState.resumeWin.isOpen}
         isMinimized={windowsState.resumeWin.isMinimized}
         zIndex={windowsState.resumeWin.zIndex}
-        initialPosition={{ x: 140, y: 28 }}
         width={580}
         headerColor="bg-pastel-lavender"
         onClose={() => closeWindow('resumeWin')}
@@ -446,7 +406,6 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isOpen={windowsState.contactWin.isOpen}
         isMinimized={windowsState.contactWin.isMinimized}
         zIndex={windowsState.contactWin.zIndex}
-        initialPosition={{ x: 150, y: 34 }}
         width={560}
         headerColor="bg-pastel-pink"
         onClose={() => closeWindow('contactWin')}

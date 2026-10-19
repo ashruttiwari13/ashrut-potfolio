@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { X, Minus, Square } from 'lucide-react';
 
 interface WindowProps {
@@ -33,31 +33,79 @@ export const Window: React.FC<WindowProps> = ({
   children,
 }) => {
   const windowRef = useRef<HTMLDivElement>(null);
+  const numericWidth = typeof width === 'number' ? width : 480;
+  const hasUserDragged = useRef(false);
+
+  // Responsive center position calculation
+  const calculateCenter = useCallback(() => {
+    if (typeof window === 'undefined') {
+      return { x: 300, y: 30 };
+    }
+
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const isMobile = vw < 768;
+
+    if (isMobile) {
+      const winW = Math.min(numericWidth, vw - 16);
+      const x = Math.max(8, Math.floor((vw - winW) / 2));
+      const y = 12;
+      return { x, y };
+    }
+
+    // Desktop dock sits on left side (~92px wide)
+    const dockWidth = 92;
+    const availableWidth = Math.max(numericWidth, vw - dockWidth);
+    const rawX = dockWidth + Math.floor((availableWidth - numericWidth) / 2);
+    const x = Math.max(dockWidth + 16, Math.min(vw - numericWidth - 20, rawX));
+
+    // Vertical positioning: centered in upper-middle of screen clear of taskbar
+    const availableHeight = vh - 75;
+    const estimatedHeight = 580;
+    const rawY = Math.floor((availableHeight - estimatedHeight) / 2);
+    const y = Math.max(24, Math.min(60, rawY));
+
+    return { x, y };
+  }, [numericWidth]);
+
   const [position, setPosition] = useState<{ x: number; y: number }>(() => {
     if (initialPosition) return initialPosition;
-    return { x: 120, y: 24 };
+    return calculateCenter();
   });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isMaximized, setIsMaximized] = useState(false);
 
-  // Position setup on initial open
+  // When window opens or initialPosition changes, position it
+  const prevIsOpen = useRef(isOpen);
   useEffect(() => {
-    if (initialPosition) {
-      setPosition(initialPosition);
-    } else if (typeof window !== 'undefined') {
-      const numericWidth = typeof width === 'number' ? width : 480;
-      const isMobile = window.innerWidth < 768;
-      const x = isMobile ? 10 : Math.max(115, Math.floor((window.innerWidth + 90 - numericWidth) / 2));
-      const y = isMobile ? 12 : Math.max(18, Math.floor((window.innerHeight - 560) / 2));
-      setPosition({ x, y });
+    if (isOpen && !prevIsOpen.current) {
+      if (initialPosition) {
+        setPosition(initialPosition);
+      } else {
+        hasUserDragged.current = false;
+        setPosition(calculateCenter());
+      }
     }
-  }, [initialPosition, width]);
+    prevIsOpen.current = isOpen;
+  }, [isOpen, initialPosition, calculateCenter]);
+
+  // Keep centered on window resize unless user has manually dragged it
+  useEffect(() => {
+    const handleResize = () => {
+      if (!hasUserDragged.current && !isMaximized) {
+        setPosition(calculateCenter());
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [calculateCenter, isMaximized]);
 
   // Mouse drag handling
   const handleMouseDown = (e: React.MouseEvent) => {
     if (isMaximized) return;
     onFocus();
+    hasUserDragged.current = true;
     setIsDragging(true);
     setDragOffset({
       x: e.clientX - position.x,
@@ -70,6 +118,7 @@ export const Window: React.FC<WindowProps> = ({
     if (isMaximized) return;
     onFocus();
     if (e.touches.length === 1) {
+      hasUserDragged.current = true;
       setIsDragging(true);
       setDragOffset({
         x: e.touches[0].clientX - position.x,
@@ -115,7 +164,7 @@ export const Window: React.FC<WindowProps> = ({
     };
   }, [isDragging, dragOffset, isMaximized]);
 
-  if (!isOpen || isMinimized) return null;
+  if (!isOpen) return null;
 
   return (
     <div
@@ -125,6 +174,7 @@ export const Window: React.FC<WindowProps> = ({
       onMouseDown={onFocus}
       style={{
         zIndex,
+        display: isMinimized ? 'none' : 'flex',
         ...(isMaximized
           ? { top: '15px', left: '15px', right: '15px', bottom: '70px', width: 'auto' }
           : {
