@@ -121,12 +121,12 @@ export const IconDock: React.FC<IconDockProps> = ({
               title={item.label}
               aria-label={item.label}
               onKeyDown={(e) => handleKeyDown(e, idx)}
-              className="group relative shrink-0 snap-center flex flex-col items-center justify-center p-1 cursor-pointer transition-transform active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark rounded-xl sm:rounded-2xl min-w-[46px] sm:min-w-[52px] md:min-w-[58px]"
+              className="group relative shrink-0 snap-center flex flex-col items-center justify-center p-0.5 sm:p-1 cursor-pointer transition-transform active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark rounded-xl sm:rounded-2xl min-w-[40px] sm:min-w-[46px] md:min-w-[52px]"
             >
-              <div className="relative p-1.5 sm:p-2 md:p-2.5 bg-white rounded-xl sm:rounded-2xl border-2 sm:border-[2.5px] border-pastel-dark shadow-[2px_2px_0_#ffb6c1] group-hover:scale-105 md:group-hover:translate-x-1.5 group-hover:shadow-[3px_3px_0_#c0f0dd] transition-all duration-200">
+              <div className="relative p-1 sm:p-1.5 md:p-2 bg-white rounded-xl sm:rounded-2xl border-2 sm:border-[2.5px] border-pastel-dark shadow-[1.5px_1.5px_0_#ffb6c1] sm:shadow-[2px_2px_0_#ffb6c1] group-hover:scale-105 md:group-hover:translate-x-1.5 group-hover:shadow-[3px_3px_0_#c0f0dd] transition-all duration-200">
                 {item.icon}
               </div>
-              <span className="text-[9px] sm:text-[10px] md:text-[10.5px] font-bold mt-1 text-pastel-dark px-1.5 py-0.5 rounded-full bg-white/95 border border-pastel-dark/20 whitespace-nowrap shadow-xs">
+              <span className="text-[8px] sm:text-[9px] md:text-[9.5px] font-bold mt-0.5 text-pastel-dark px-1.5 py-0.2 rounded-full bg-white/95 border border-pastel-dark/20 whitespace-nowrap shadow-xs">
                 {item.label}
               </span>
             </Link>
@@ -145,20 +145,20 @@ export const IconDock: React.FC<IconDockProps> = ({
             onKeyDown={(e) => handleKeyDown(e, idx)}
             title={item.label}
             aria-label={item.label}
-            className="group relative shrink-0 snap-center flex flex-col items-center justify-center p-1 cursor-pointer transition-transform active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark rounded-xl sm:rounded-2xl min-w-[46px] sm:min-w-[52px] md:min-w-[58px]"
+            className="group relative shrink-0 snap-center flex flex-col items-center justify-center p-0.5 sm:p-1 cursor-pointer transition-transform active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark rounded-xl sm:rounded-2xl min-w-[40px] sm:min-w-[46px] md:min-w-[52px]"
           >
             {item.badge && (
-              <span className="absolute -top-1 -right-0.5 z-10 px-1.5 py-0.5 text-[8px] sm:text-[9px] font-extrabold uppercase bg-pastel-pink text-pastel-dark border border-pastel-dark rounded-full shadow-xs animate-bounce pointer-events-none">
+              <span className="absolute -top-1 -right-0.5 z-10 px-1 py-0.2 text-[7.5px] sm:text-[8.5px] font-extrabold uppercase bg-pastel-pink text-pastel-dark border border-pastel-dark rounded-full shadow-xs animate-bounce pointer-events-none">
                 {item.badge}
               </span>
             )}
             <div
-              className={`relative p-1.5 sm:p-2 md:p-2.5 rounded-xl sm:rounded-2xl border-2 sm:border-[2.5px] border-pastel-dark transition-all duration-200 ${
+              className={`relative p-1 sm:p-1.5 md:p-2 rounded-xl sm:rounded-2xl border-2 sm:border-[2.5px] border-pastel-dark transition-all duration-200 ${
                 isTopmost
-                  ? 'bg-pastel-mint shadow-[2.5px_2.5px_0_#3d3d3d] md:translate-x-1.5 scale-105 ring-2 ring-pastel-dark'
+                  ? 'bg-pastel-mint shadow-[2px_2px_0_#3d3d3d] md:translate-x-1.5 scale-105 ring-2 ring-pastel-dark'
                   : isOpen
-                  ? 'bg-pastel-peach/90 shadow-[2px_2px_0_#3d3d3d] md:translate-x-0.5'
-                  : 'bg-white shadow-[2px_2px_0_#c0f0dd] group-hover:scale-105 md:group-hover:translate-x-1.5 group-hover:shadow-[3px_3px_0_#ffb6c1]'
+                  ? 'bg-pastel-peach/90 shadow-[1.5px_1.5px_0_#3d3d3d] md:translate-x-0.5'
+                  : 'bg-white shadow-[1.5px_1.5px_0_#c0f0dd] group-hover:scale-105 md:group-hover:translate-x-1.5 group-hover:shadow-[3px_3px_0_#ffb6c1]'
               }`}
             >
               {item.icon}
@@ -171,7 +171,7 @@ export const IconDock: React.FC<IconDockProps> = ({
               )}
             </div>
             <span
-              className={`text-[9px] sm:text-[10px] md:text-[10.5px] font-bold mt-1 text-pastel-dark px-1.5 py-0.5 rounded-full transition-colors whitespace-nowrap shadow-xs ${
+              className={`text-[8px] sm:text-[9px] md:text-[9.5px] font-bold mt-0.5 text-pastel-dark px-1.5 py-0.2 rounded-full transition-colors whitespace-nowrap shadow-xs ${
                 isTopmost
                   ? 'bg-pastel-peach border border-pastel-dark'
                   : isOpen

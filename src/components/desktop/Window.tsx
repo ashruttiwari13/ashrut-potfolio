@@ -51,9 +51,9 @@ export const Window: React.FC<WindowProps> = ({
     const isMobile = vw < 768;
 
     if (isMobile) {
-      const winW = Math.min(numericWidth, vw - 20);
-      const x = Math.max(10, Math.floor((vw - winW) / 2));
-      const y = 60; // Cleanly below the singing cat
+      const winW = Math.min(320, vw - 36);
+      const x = Math.max(16, Math.floor((vw - winW) / 2));
+      const y = 62; // Cleanly below the singing cat
       return { x, y };
     }
 
@@ -65,7 +65,7 @@ export const Window: React.FC<WindowProps> = ({
 
     // Vertical positioning: centered in upper-middle of screen clear of taskbar
     const availableHeight = vh - 75;
-    const estimatedHeight = 580;
+    const estimatedHeight = 520;
     const rawY = Math.floor((availableHeight - estimatedHeight) / 2);
     const y = Math.max(16, Math.min(50, rawY));
 
@@ -247,12 +247,12 @@ export const Window: React.FC<WindowProps> = ({
               top: `${position.y}px`,
               left: `${position.x}px`,
               width: isMobile
-                ? `min(${numericWidth}px, calc(100vw - 20px))`
+                ? `min(320px, calc(100vw - 36px))`
                 : typeof width === 'number'
                 ? `${width}px`
                 : width,
-              maxWidth: isMobile ? 'calc(100vw - 20px)' : '92vw',
-              maxHeight: isMobile ? 'calc(100dvh - 140px)' : 'calc(100vh - 80px)',
+              maxWidth: isMobile ? 'calc(100vw - 32px)' : '92vw',
+              maxHeight: isMobile ? 'calc(100dvh - 190px)' : 'calc(100vh - 80px)',
             }),
       }}
       className={`fixed select-none retro-window overflow-hidden flex flex-col focus:outline-none ${
@@ -266,21 +266,21 @@ export const Window: React.FC<WindowProps> = ({
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchStart}
         onDoubleClick={toggleMaximize}
-        className={`${headerColor} px-3 sm:px-4 py-2 sm:py-2.5 border-b-[2.5px] sm:border-b-[3px] border-pastel-dark flex items-center justify-between cursor-grab active:cursor-grabbing select-none touch-none`}
+        className={`${headerColor} px-2.5 sm:px-4 py-1.5 sm:py-2 border-b-2 sm:border-b-[2.5px] border-pastel-dark flex items-center justify-between cursor-grab active:cursor-grabbing select-none touch-none`}
         title="Drag to move · Double click to maximize"
       >
         <div className="flex items-center gap-1.5 sm:gap-2 font-bold text-xs sm:text-sm text-pastel-dark tracking-wide truncate">
-          <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-pastel-dark/30 animate-pulse shrink-0" />
+          <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-pastel-dark/30 animate-pulse shrink-0" />
           <span className="truncate">{title}</span>
           {isMaximized && (
-            <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-white/90 border border-pastel-dark text-pastel-dark shrink-0 hidden sm:inline-flex shadow-2xs">
+            <span className="text-[9px] sm:text-[10px] font-extrabold px-1.5 py-0.2 rounded-full bg-white/90 border border-pastel-dark text-pastel-dark shrink-0 hidden sm:inline-flex shadow-2xs">
               Maximized
             </span>
           )}
         </div>
 
         {/* Window Chrome Buttons */}
-        <div className="flex items-center gap-1.5 ml-2 shrink-0">
+        <div className="flex items-center gap-1 ml-1.5 shrink-0">
           {onMinimize && (
             <button
               type="button"
@@ -291,9 +291,9 @@ export const Window: React.FC<WindowProps> = ({
               }}
               title="Minimize to Dock"
               aria-label="Minimize"
-              className="w-7 h-7 rounded-full bg-white border-2 border-pastel-dark flex items-center justify-center hover:bg-pastel-peach active:scale-90 transition-all text-pastel-dark shadow-xs cursor-pointer"
+              className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5 rounded-full bg-white border-[1.5px] sm:border-2 border-pastel-dark flex items-center justify-center hover:bg-pastel-peach active:scale-90 transition-all text-pastel-dark shadow-xs cursor-pointer"
             >
-              <Minus size={13} strokeWidth={3} />
+              <Minus size={11} strokeWidth={3} />
             </button>
           )}
 
@@ -306,9 +306,9 @@ export const Window: React.FC<WindowProps> = ({
             }}
             title={isMaximized ? 'Restore down' : 'Maximize window'}
             aria-label={isMaximized ? 'Restore down' : 'Maximize window'}
-            className="w-7 h-7 rounded-full bg-white border-2 border-pastel-dark flex items-center justify-center hover:bg-pastel-mint active:scale-90 transition-all text-pastel-dark hidden sm:flex shadow-xs cursor-pointer"
+            className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5 rounded-full bg-white border-[1.5px] sm:border-2 border-pastel-dark flex items-center justify-center hover:bg-pastel-mint active:scale-90 transition-all text-pastel-dark hidden sm:flex shadow-xs cursor-pointer"
           >
-            <Square size={11} strokeWidth={3} />
+            <Square size={10} strokeWidth={3} />
           </button>
 
           <button
@@ -320,20 +320,20 @@ export const Window: React.FC<WindowProps> = ({
             }}
             title="Close Tab (X)"
             aria-label="Close"
-            className="w-7 h-7 rounded-full bg-white border-2 border-pastel-dark flex items-center justify-center hover:bg-rose-500 hover:text-white active:scale-90 transition-all text-pastel-dark font-bold shadow-xs cursor-pointer"
+            className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5 rounded-full bg-white border-[1.5px] sm:border-2 border-pastel-dark flex items-center justify-center hover:bg-rose-500 hover:text-white active:scale-90 transition-all text-pastel-dark font-bold shadow-xs cursor-pointer"
           >
-            <X size={14} strokeWidth={3} />
+            <X size={12} strokeWidth={3} />
           </button>
         </div>
       </div>
 
       {/* Window Body */}
       <div
-        className={`p-3.5 sm:p-5 overflow-y-auto bg-[#fffcf3] text-pastel-dark flex-1 ${
+        className={`p-2.5 sm:p-4 overflow-y-auto bg-[#fffcf3] text-pastel-dark flex-1 ${
           isDragging ? 'pointer-events-none select-none' : ''
         } ${
           isMobile || isMaximized
-            ? 'h-full max-h-none pb-12'
+            ? 'h-full max-h-none pb-8 sm:pb-12'
             : 'max-h-[calc(100vh-140px)] md:max-h-[calc(100vh-160px)]'
         }`}
       >
