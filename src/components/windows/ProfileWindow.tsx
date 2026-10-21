@@ -50,10 +50,18 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
             </h2>
             <span className="text-lg">👾</span>
           </div>
-          <p className="text-xs sm:text-sm font-bold text-pastel-soft line-clamp-1">
+          <p className="text-xs sm:text-sm font-extrabold text-pastel-dark line-clamp-1">
             {profile.headline}
           </p>
-          <div className="flex items-center gap-2 mt-1 text-[11px] text-pastel-soft">
+          <div className="flex flex-wrap gap-1.5 mt-1">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-pastel-mint border border-pastel-dark text-[10px] font-extrabold text-pastel-dark shadow-sm">
+              💼 Primary Profession
+            </span>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-pastel-lavender border border-pastel-dark text-[10px] font-bold text-pastel-dark shadow-sm">
+              🎬 Filmmaking (Creative Hobby)
+            </span>
+          </div>
+          <div className="flex items-center gap-2 mt-1.5 text-[11px] text-pastel-soft">
             <MapPin size={12} className="shrink-0 text-pastel-dark" />
             <span className="truncate">{profile.location}</span>
           </div>
@@ -69,21 +77,46 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
         </p>
       </div>
 
+      {/* Creative Hobby Demarcation Banner */}
+      <div className="p-2.5 bg-pastel-lavender/40 border border-pastel-dark rounded-retro-sm text-[11px] text-pastel-dark flex items-center justify-between gap-2 shadow-sm">
+        <div className="flex items-center gap-1.5">
+          <span className="text-base shrink-0">🎬</span>
+          <span>
+            <strong>Note on Filmmaking:</strong> Pursued purely as a creative personal hobby to enrich game lighting and camera directing.
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={() => onNavigate('hobbiesWin')}
+          className="text-[10px] font-extrabold px-2 py-1 bg-white border border-pastel-dark rounded-md hover:bg-pastel-peach shrink-0 shadow-xs"
+        >
+          View Hobby ➔
+        </button>
+      </div>
+
       {/* Specialties Badges */}
       <div>
         <h3 className="text-xs font-bold text-pastel-soft uppercase tracking-wider mb-2 flex items-center gap-1">
           <Sparkles size={12} />
-          <span>Core Disciplines</span>
+          <span>Disciplines & Focus</span>
         </h3>
         <div className="flex flex-wrap gap-1.5">
-          {profile.specialties.map((spec, i) => (
-            <span
-              key={i}
-              className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-pastel-mint/70 border border-pastel-dark text-pastel-dark shadow-sm"
-            >
-              {spec}
-            </span>
-          ))}
+          {profile.specialties.map((spec, i) => {
+            const isHobby = spec.toLowerCase().includes('hobby');
+            return (
+              <span
+                key={i}
+                className={`text-[11px] font-bold px-2.5 py-1 rounded-full border border-pastel-dark shadow-sm flex items-center gap-1 ${
+                  isHobby
+                    ? 'bg-pastel-lavender text-pastel-dark'
+                    : 'bg-pastel-mint/80 text-pastel-dark'
+                }`}
+              >
+                <span>{isHobby ? '🎬' : '💼'}</span>
+                <span>{spec}</span>
+              </span>
+            );
+          })}
         </div>
       </div>
 

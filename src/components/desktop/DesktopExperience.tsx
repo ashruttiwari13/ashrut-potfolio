@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { FloatingOrbs } from './FloatingOrbs';
 import { IconDock } from './IconDock';
 import { Taskbar } from './Taskbar';
+import { BackgroundMusic } from './BackgroundMusic';
 import { Window } from './Window';
 import { ProfileWindow } from '../windows/ProfileWindow';
 import { SkillsWindow } from '../windows/SkillsWindow';
@@ -41,7 +42,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
   const windowConfigs: WindowConfig[] = [
     {
       id: 'profileWin',
-      title: '👾 Ashrut Tiwari · Game Dev & Cinematographer',
+      title: '👾 Ashrut Tiwari · Unreal 5 Game Dev & 3D Artist',
       width: 520,
       headerColor: 'bg-pastel-pink',
       defaultOpen: true,
@@ -69,7 +70,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
     },
     {
       id: 'hobbiesWin',
-      title: '🎬 Cinematography & Storytelling',
+      title: '🎬 Filmmaking & Creative Hobbies (Personal Pursuits)',
       width: 480,
       headerColor: 'bg-pastel-peach',
       defaultOpen: false,
@@ -299,11 +300,16 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         onMinimizeAll={minimizeAll}
       />
 
+      {/* Floating Ambient Background Music Controls */}
+      <BackgroundMusic
+        isGameActive={windowsState.gameWin.isOpen && !windowsState.gameWin.isMinimized}
+      />
+
       {/* Desktop Windows */}
       {/* 1. Profile Window */}
       <Window
         id="profileWin"
-        title="👾 Ashrut Tiwari · Game Dev & Cinematographer"
+        title="👾 Ashrut Tiwari · Unreal 5 Game Dev & 3D Artist"
         isOpen={windowsState.profileWin.isOpen}
         isMinimized={windowsState.profileWin.isMinimized}
         zIndex={windowsState.profileWin.zIndex}

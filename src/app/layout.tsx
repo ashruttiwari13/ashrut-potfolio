@@ -10,17 +10,17 @@ const quicksand = Quicksand({
 });
 
 export const metadata: Metadata = {
-  title: 'Ashrut Tiwari · Game Developer, 3D Artist & Cinematographer',
-  description: 'Full-stack portfolio of Ashrut Tiwari — crafting immersive 3D games in Unreal Engine 5 & Godot, character sculpting in Blender & ZBrush, and cinematic visual effects.',
+  title: 'Ashrut Tiwari · Unreal Engine 5 Game Developer & 3D Artist',
+  description: 'Full-stack portfolio of Ashrut Tiwari — professional Unreal Engine 5 Game Developer & 3D Artist crafting immersive games and stylized 3D characters (filmmaking as a creative hobby).',
   keywords: [
     'Ashrut Tiwari',
+    'Unreal Engine 5 Game Developer',
+    '3D Artist',
     'Game Developer',
     'Unreal Engine 5',
-    'Godot',
     'Blender 3D',
     'Character Design',
-    'Cinematography',
-    'VFX',
+    'Godot',
     'Freelance Game Dev',
   ],
   authors: [{ name: 'Ashrut Tiwari' }],
@@ -29,8 +29,8 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://ashrut.dev',
-    title: 'Ashrut Tiwari · Game Developer & Cinematographer',
-    description: 'Explore games, 3D character art, and cinematic productions by Ashrut Tiwari.',
+    title: 'Ashrut Tiwari · Unreal Engine 5 Game Developer & 3D Artist',
+    description: 'Explore games and 3D character art by Unreal Engine 5 Game Developer & 3D Artist Ashrut Tiwari.',
     siteName: 'Ashrut Tiwari Portfolio',
   },
   twitter: {

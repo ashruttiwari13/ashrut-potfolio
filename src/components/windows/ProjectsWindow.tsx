@@ -26,10 +26,10 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
 
   const categories = [
     { label: 'All Projects', value: 'all' },
-    { label: '🎮 Games', value: 'game-dev' },
-    { label: '🗿 3D Art', value: '3d-art' },
-    { label: '🦊 Characters', value: 'character-design' },
-    { label: '🎬 Cine & VFX', value: 'cinematography' },
+    { label: '🎮 Games (Core Work)', value: 'game-dev' },
+    { label: '🗿 3D Art (Core Work)', value: '3d-art' },
+    { label: '🦊 Characters (Core Work)', value: 'character-design' },
+    { label: '🎬 Filmmaking (Creative Hobby)', value: 'cinematography' },
   ];
 
   const filteredProjects = projects.filter((p) => {
@@ -44,6 +44,18 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
 
   return (
     <div className="space-y-4">
+      {/* Professional Scope Banner */}
+      <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 bg-pastel-mint/30 border border-pastel-dark rounded-retro-sm text-[11px] text-pastel-dark shadow-xs">
+        <div className="flex items-center gap-1.5">
+          <span className="text-base shrink-0">💼</span>
+          <span>
+            <strong>Primary Career Focus:</strong> Unreal Engine 5 Game Development & 3D Character/Asset Art.
+          </span>
+        </div>
+        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-pastel-lavender border border-pastel-dark shrink-0">
+          🎬 Filmmaking = Personal Hobby
+        </span>
+      </div>
       {/* Search and Filters Bar */}
       <div className="flex flex-col sm:flex-row gap-2">
         <div className="relative flex-1">
@@ -129,6 +141,17 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                       <span>Featured</span>
                     </span>
                   )}
+
+                  {/* Distinct Category Nature Badge */}
+                  <span
+                    className={`absolute top-2 right-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-pastel-dark shadow-sm ${
+                      project.category === 'cinematography'
+                        ? 'bg-pastel-lavender text-pastel-dark'
+                        : 'bg-pastel-mint text-pastel-dark'
+                    }`}
+                  >
+                    {project.category === 'cinematography' ? '🎬 Creative Hobby' : '💼 Core Work'}
+                  </span>
 
                   <span className="absolute bottom-2 right-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/90 border border-pastel-dark text-pastel-dark">
                     {project.status}
@@ -235,11 +258,23 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
             {/* Content */}
             <div className="p-4 sm:p-5 space-y-3 max-h-[70vh] overflow-y-auto">
               <div className="p-3 bg-white border-2 border-pastel-dark rounded-retro-sm">
-                <span className="text-xs font-bold text-pastel-soft uppercase">Role & Responsibilities:</span>
+                <span className="text-xs font-bold text-pastel-soft uppercase">Role & Focus:</span>
                 <p className="font-bold text-sm text-pastel-dark mt-0.5">{activeProject.role}</p>
-                <div className="mt-2 flex items-center gap-2 text-xs">
-                  <span className="font-semibold text-pastel-soft">Status:</span>
-                  <span className="px-2 py-0.5 rounded-full bg-pastel-mint border border-pastel-dark font-bold text-[11px]">
+                <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+                  <span className="font-semibold text-pastel-soft">Nature:</span>
+                  <span
+                    className={`px-2 py-0.5 rounded-full border border-pastel-dark font-extrabold text-[11px] ${
+                      activeProject.category === 'cinematography'
+                        ? 'bg-pastel-lavender text-pastel-dark'
+                        : 'bg-pastel-mint text-pastel-dark'
+                    }`}
+                  >
+                    {activeProject.category === 'cinematography'
+                      ? '🎬 Personal Creative Hobby'
+                      : '💼 Professional Game Dev / 3D Art'}
+                  </span>
+                  <span className="font-semibold text-pastel-soft ml-1">Status:</span>
+                  <span className="px-2 py-0.5 rounded-full bg-pastel-warm border border-pastel-dark font-bold text-[11px]">
                     {activeProject.status}
                   </span>
                 </div>

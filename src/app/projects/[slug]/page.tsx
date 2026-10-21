@@ -57,8 +57,10 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           {/* Header */}
           <div className="border-b-2 border-pastel-dark/20 pb-5 space-y-2">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-pastel-lavender border border-pastel-dark">
-                {project.category}
+              <span className={`text-xs font-extrabold tracking-wider px-2.5 py-0.5 rounded-full border border-pastel-dark ${
+                project.category === 'cinematography' ? 'bg-pastel-lavender text-pastel-dark' : 'bg-pastel-mint text-pastel-dark'
+              }`}>
+                {project.category === 'cinematography' ? '🎬 Personal Creative Hobby' : '💼 Professional Work'}
               </span>
               {project.is_featured && (
                 <span className="text-xs font-bold flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-pastel-yellow border border-pastel-dark text-pastel-dark">

@@ -22,18 +22,18 @@ export const ResumeWindow: React.FC<ResumeWindowProps> = ({ profile }) => {
       organization: 'Independent / ZodiacX Production',
       highlights: [
         'Architecting core C++ gameplay mechanics and state machines in Unreal Engine 5.',
-        'Sculpting stylized high-poly and low-poly characters in ZBrush and Blender.',
+        'Sculpting stylized high-poly and low-poly characters in Blender.',
         'Developing custom PBR textures in Substance 3D Painter with real-time Lumen lighting.',
       ],
     },
     {
       period: '2022 – 2024',
-      role: 'Freelance 3D Artist & Cinematographer',
+      role: 'Freelance Unreal Game Developer & 3D Artist',
       organization: 'Commercial & Indie Studio Collaborations',
       highlights: [
-        'Directed visual effects and ACES color grading for hybrid CGI short film "Echoes".',
         'Built environment assets, modular architecture, and stylized props for indie Godot/UE5 titles.',
-        'Constructed custom procedural shaders and particle systems in Godot 4.',
+        'Constructed custom procedural shaders and particle systems in Godot 4 and Unreal Engine 5.',
+        'Directed personal creative hobby CGI short "Echoes" testing cinematic lighting and ACES color workflows.',
       ],
     },
     {
@@ -147,18 +147,33 @@ export const ResumeWindow: React.FC<ResumeWindowProps> = ({ profile }) => {
             <GraduationCap size={13} className="text-indigo-500" />
             <span>Core Technical Competencies</span>
           </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-[11px]">
-            <div className="p-2 bg-pastel-warm/60 rounded-lg border border-pastel-dark/20">
-              <strong className="block text-pastel-dark">Engines & Code</strong>
-              <span className="text-pastel-soft">Unreal Engine 5, Godot 4, C++, Python, HLSL</span>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
+            <div className="p-2.5 bg-pastel-mint/30 rounded-lg border border-pastel-dark/30">
+              <div className="flex items-center justify-between mb-0.5">
+                <strong className="block text-pastel-dark font-extrabold">Engines & Code</strong>
+                <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded bg-pastel-mint border border-pastel-dark text-pastel-dark">
+                  Primary Job
+                </span>
+              </div>
+              <span className="text-pastel-dark/80 font-medium">Unreal Engine 5, Godot 4, C++, Python, HLSL</span>
             </div>
-            <div className="p-2 bg-pastel-warm/60 rounded-lg border border-pastel-dark/20">
-              <strong className="block text-pastel-dark">3D & Sculpting</strong>
-              <span className="text-pastel-soft">Blender, ZBrush, Substance 3D, Rigging, Retopology</span>
+            <div className="p-2.5 bg-pastel-mint/30 rounded-lg border border-pastel-dark/30">
+              <div className="flex items-center justify-between mb-0.5">
+                <strong className="block text-pastel-dark font-extrabold">3D & Sculpting</strong>
+                <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded bg-pastel-mint border border-pastel-dark text-pastel-dark">
+                  Primary Job
+                </span>
+              </div>
+              <span className="text-pastel-dark/80 font-medium">Blender 4, Substance 3D, Rigging, Retopology</span>
             </div>
-            <div className="p-2 bg-pastel-warm/60 rounded-lg border border-pastel-dark/20">
-              <strong className="block text-pastel-dark">Cinematography</strong>
-              <span className="text-pastel-soft">DaVinci Resolve, ACES, Lighting, Camera Tracking</span>
+            <div className="p-2.5 bg-pastel-lavender/40 rounded-lg border border-pastel-dark/30">
+              <div className="flex items-center justify-between mb-0.5">
+                <strong className="block text-pastel-dark font-extrabold">Filmmaking & Cine</strong>
+                <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-pastel-lavender border border-pastel-dark text-pastel-dark">
+                  Creative Hobby
+                </span>
+              </div>
+              <span className="text-pastel-dark/80 font-medium">DaVinci Resolve, ACES, Lighting & Framing</span>
             </div>
           </div>
         </div>

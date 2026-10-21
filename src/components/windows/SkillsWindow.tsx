@@ -40,10 +40,10 @@ export const SkillsWindow: React.FC<SkillsWindowProps> = ({ skills }) => {
 
   const categories: { label: string; value: string }[] = [
     { label: 'All Tools', value: 'all' },
-    { label: '🎮 Engines', value: 'engine' },
-    { label: '🎨 3D & Sculpting', value: '3d' },
-    { label: '💻 Code', value: 'programming' },
-    { label: '🎥 Cine & Post', value: 'cinematography' },
+    { label: '🎮 Engines (Core Job)', value: 'engine' },
+    { label: '🎨 3D & Sculpting (Core Job)', value: '3d' },
+    { label: '💻 Code (Core Job)', value: 'programming' },
+    { label: '🎬 Filmmaking (Creative Hobby)', value: 'cinematography' },
   ];
 
   const filteredSkills = selectedCategory === 'all'
@@ -52,6 +52,17 @@ export const SkillsWindow: React.FC<SkillsWindowProps> = ({ skills }) => {
 
   return (
     <div className="space-y-4">
+      {/* Scope banner */}
+      <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-pastel-mint/30 border border-pastel-dark rounded-retro-sm text-[11px] text-pastel-dark shadow-xs">
+        <div className="flex items-center gap-1.5">
+          <span className="font-extrabold text-xs">💼 Career Focus:</span>
+          <span>Unreal Engine 5 Game Developer & 3D Character/Asset Artist</span>
+        </div>
+        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-pastel-lavender border border-pastel-dark shrink-0">
+          🎬 Filmmaking = Personal Creative Hobby
+        </span>
+      </div>
+
       {/* Category Filter Pills */}
       <div className="flex flex-wrap gap-1.5 pb-1 border-b border-pastel-dark/10">
         {categories.map((cat) => (
@@ -74,6 +85,7 @@ export const SkillsWindow: React.FC<SkillsWindowProps> = ({ skills }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         {filteredSkills.map((skill) => {
           const icon = iconMap[skill.icon_name] || <Wrench className="w-5 h-5 text-gray-600" />;
+          const isHobby = skill.category === 'cinematography';
           return (
             <div
               key={skill.id}
@@ -87,11 +99,15 @@ export const SkillsWindow: React.FC<SkillsWindowProps> = ({ skills }) => {
                   <h4 className="font-extrabold text-sm text-pastel-dark truncate">
                     {skill.name}
                   </h4>
-                  {skill.is_highlight && (
-                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-pastel-mint border border-pastel-dark shrink-0">
-                      Primary
+                  {isHobby ? (
+                    <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded-full bg-pastel-lavender border border-pastel-dark text-pastel-dark shrink-0">
+                      🎬 Hobby
                     </span>
-                  )}
+                  ) : skill.is_highlight ? (
+                    <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded-full bg-pastel-mint border border-pastel-dark text-pastel-dark shrink-0">
+                      💼 Core Work
+                    </span>
+                  ) : null}
                 </div>
                 <p className="text-[11px] font-semibold text-pastel-soft mt-0.5 line-clamp-2">
                   {skill.proficiency_level}
@@ -106,7 +122,7 @@ export const SkillsWindow: React.FC<SkillsWindowProps> = ({ skills }) => {
       <div className="p-3 bg-pastel-lavender/40 border border-pastel-dark rounded-retro-sm text-[11px] text-pastel-dark flex items-center gap-2">
         <CheckCircle2 size={16} className="text-pastel-dark shrink-0" />
         <span>
-          End-to-end pipeline: Concept ➔ ZBrush Sculpt ➔ Blender Retopology & Rigging ➔ Substance PBR Texturing ➔ Unreal/Godot Integration & Shaders.
+          End-to-end pipeline: Concept ➔ 3D Sculpt & Modeling ➔ Blender Retopology & Rigging ➔ Substance PBR Texturing ➔ Unreal/Godot Integration & Shaders.
         </span>
       </div>
     </div>

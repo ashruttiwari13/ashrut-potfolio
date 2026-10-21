@@ -13,6 +13,17 @@ const iconMap: Record<string, React.ReactNode> = {
 export const HobbiesWindow: React.FC = () => {
   return (
     <div className="space-y-3">
+      {/* Distinction Header */}
+      <div className="p-3 bg-pastel-lavender/40 border border-pastel-dark rounded-retro-sm text-xs text-pastel-dark space-y-1 shadow-xs">
+        <div className="flex items-center gap-1.5 font-extrabold text-[12px]">
+          <span>🎬</span>
+          <span>Creative Hobbies & Personal Pursuits</span>
+        </div>
+        <p className="text-[11px] leading-relaxed text-pastel-dark/90">
+          While my primary full-time job is <strong>Unreal Engine 5 Game Development & 3D Character/Asset Art</strong>, filmmaking and audio soundscapes are my beloved weekend hobbies that feed my visual eye for real-time game cinematics.
+        </p>
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
         {initialHobbies.map((hobby) => (
           <div

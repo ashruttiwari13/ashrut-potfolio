@@ -117,3 +117,71 @@ body {
     linear-gradient(-45deg, #d9e5ff 6%, transparent 6%);
   background-size: 32px 32px;
 }
+
+/* Singing Cat & Music Animations */
+@keyframes catIdleFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes catSingBounce {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-5px) rotate(-2deg);
+  }
+  75% {
+    transform: translateY(1px) rotate(2deg);
+  }
+}
+
+@keyframes floatNote1 {
+  0% {
+    opacity: 0;
+    transform: translateY(4px) scale(0.6) rotate(-10deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-12px) scale(1) rotate(-5deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-22px) scale(0.8) rotate(-15deg);
+  }
+}
+
+@keyframes floatNote2 {
+  0% {
+    opacity: 0;
+    transform: translateY(4px) scale(0.6) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-14px) scale(1.1) rotate(5deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-26px) scale(0.9) rotate(10deg);
+  }
+}
+
+@keyframes floatNote3 {
+  0% {
+    opacity: 0;
+    transform: translateY(4px) scale(0.6) rotate(10deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1) rotate(15deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.8) rotate(20deg);
+  }
+}
+
