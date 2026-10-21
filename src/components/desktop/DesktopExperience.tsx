@@ -38,6 +38,11 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
   initialAchievements,
 }) => {
   const [zCounter, setZCounter] = useState(200);
+  const [maximizedWindowId, setMaximizedWindowId] = useState<WindowId | null>(null);
+
+  const toggleMaximizeWindow = useCallback((id: WindowId) => {
+    setMaximizedWindowId((prev) => (prev === id ? null : id));
+  }, []);
 
   const windowConfigs: WindowConfig[] = [
     {
@@ -174,6 +179,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
   }, [zCounter]);
 
   const closeWindow = useCallback((id: WindowId) => {
+    setMaximizedWindowId((prev) => (prev === id ? null : prev));
     setWindowsState((prev) => ({
       ...prev,
       [id]: {
@@ -184,6 +190,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
   }, []);
 
   const minimizeWindow = useCallback((id: WindowId) => {
+    setMaximizedWindowId((prev) => (prev === id ? null : prev));
     setWindowsState((prev) => ({
       ...prev,
       [id]: {
@@ -194,6 +201,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
   }, []);
 
   const resetWindows = useCallback(() => {
+    setMaximizedWindowId(null);
     setZCounter((prev) => {
       let currentZ = prev + 1;
       setWindowsState(() => {
@@ -233,6 +241,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
   }, []);
 
   const minimizeAll = useCallback(() => {
+    setMaximizedWindowId(null);
     setWindowsState((state) => {
       const updated = { ...state };
       Object.keys(updated).forEach((key) => {
@@ -303,6 +312,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       {/* Floating Ambient Background Music Controls */}
       <BackgroundMusic
         isGameActive={windowsState.gameWin.isOpen && !windowsState.gameWin.isMinimized}
+        isAnyWindowMaximized={Boolean(maximizedWindowId)}
       />
 
       {/* Desktop Windows */}
@@ -312,6 +322,8 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         title="👾 Ashrut Tiwari · Unreal 5 Game Dev & 3D Artist"
         isOpen={windowsState.profileWin.isOpen}
         isMinimized={windowsState.profileWin.isMinimized}
+        isMaximized={maximizedWindowId === 'profileWin'}
+        onToggleMaximize={() => toggleMaximizeWindow('profileWin')}
         zIndex={windowsState.profileWin.zIndex}
         width={520}
         headerColor="bg-pastel-pink"
@@ -328,6 +340,8 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         title="🎮 Playable Dreams & 3D Portfolio"
         isOpen={windowsState.projectsWin.isOpen}
         isMinimized={windowsState.projectsWin.isMinimized}
+        isMaximized={maximizedWindowId === 'projectsWin'}
+        onToggleMaximize={() => toggleMaximizeWindow('projectsWin')}
         zIndex={windowsState.projectsWin.zIndex}
         width={720}
         headerColor="bg-pastel-peach"
@@ -344,6 +358,8 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         title="🧰 Technical & Creative Toolbox"
         isOpen={windowsState.skillsWin.isOpen}
         isMinimized={windowsState.skillsWin.isMinimized}
+        isMaximized={maximizedWindowId === 'skillsWin'}
+        onToggleMaximize={() => toggleMaximizeWindow('skillsWin')}
         zIndex={windowsState.skillsWin.zIndex}
         width={560}
         headerColor="bg-pastel-mint"
@@ -360,6 +376,8 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         title="🏆 Awards & Recognitions"
         isOpen={windowsState.achievementsWin.isOpen}
         isMinimized={windowsState.achievementsWin.isMinimized}
+        isMaximized={maximizedWindowId === 'achievementsWin'}
+        onToggleMaximize={() => toggleMaximizeWindow('achievementsWin')}
         zIndex={windowsState.achievementsWin.zIndex}
         width={500}
         headerColor="bg-pastel-lavender"
@@ -376,6 +394,8 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         title="🎬 Outside the Engine"
         isOpen={windowsState.hobbiesWin.isOpen}
         isMinimized={windowsState.hobbiesWin.isMinimized}
+        isMaximized={maximizedWindowId === 'hobbiesWin'}
+        onToggleMaximize={() => toggleMaximizeWindow('hobbiesWin')}
         zIndex={windowsState.hobbiesWin.zIndex}
         width={480}
         headerColor="bg-pastel-peach"
@@ -392,6 +412,8 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         title="⚔️ Pixel Quest: The Lost Crystal · 2D Adventure"
         isOpen={windowsState.gameWin.isOpen}
         isMinimized={windowsState.gameWin.isMinimized}
+        isMaximized={maximizedWindowId === 'gameWin'}
+        onToggleMaximize={() => toggleMaximizeWindow('gameWin')}
         zIndex={windowsState.gameWin.zIndex}
         width={820}
         headerColor="bg-pastel-sky"
@@ -408,6 +430,8 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         title="📄 Curriculum Vitae & Experience Timeline"
         isOpen={windowsState.resumeWin.isOpen}
         isMinimized={windowsState.resumeWin.isMinimized}
+        isMaximized={maximizedWindowId === 'resumeWin'}
+        onToggleMaximize={() => toggleMaximizeWindow('resumeWin')}
         zIndex={windowsState.resumeWin.zIndex}
         width={580}
         headerColor="bg-pastel-lavender"
@@ -424,6 +448,8 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         title="💼 Freelance Studio & Commissions · Ashrut Tiwari"
         isOpen={windowsState.contactWin.isOpen}
         isMinimized={windowsState.contactWin.isMinimized}
+        isMaximized={maximizedWindowId === 'contactWin'}
+        onToggleMaximize={() => toggleMaximizeWindow('contactWin')}
         zIndex={windowsState.contactWin.zIndex}
         width={560}
         headerColor="bg-pastel-pink"

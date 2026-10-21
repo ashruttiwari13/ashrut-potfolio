@@ -97,7 +97,7 @@ export const IconDock: React.FC<IconDockProps> = ({
         /* Desktop: Vertical left dock */
         top-4 left-4 flex flex-col gap-3 p-3 rounded-[32px] 
         bg-[rgba(255,250,240,0.95)] backdrop-blur-md border-[3px] border-pastel-peach shadow-retro 
-        max-h-[92vh] overflow-y-auto no-scrollbar 
+        max-h-[calc(100vh-140px)] overflow-y-auto no-scrollbar 
         /* Mobile: Horizontal scrollable tab strip docked comfortably at bottom */
         max-md:top-auto max-md:bottom-3 max-md:left-2.5 max-md:right-2.5
         max-md:flex-row max-md:justify-start sm:max-md:justify-around

@@ -6,12 +6,16 @@ import { X } from 'lucide-react';
 
 interface BackgroundMusicProps {
   isGameActive?: boolean;
+  isAnyWindowMaximized?: boolean;
 }
 
 const STORAGE_KEY_ENABLED = 'ashrut_bgm_enabled';
 const DEFAULT_VOLUME = 0.25; // 25% comfortable, cozy volume
 
-export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({ isGameActive = false }) => {
+export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
+  isGameActive = false,
+  isAnyWindowMaximized = false,
+}) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const fadeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -202,7 +206,17 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({ isGameActive =
       </audio>
 
       {/* Floating Singing Cat Music Widget Container */}
-      <div className="fixed top-2.5 right-3 sm:top-3.5 sm:right-4 z-[350] pointer-events-auto select-none flex flex-col items-end">
+      <div
+        className={`fixed z-[290] pointer-events-auto select-none flex flex-col transition-all duration-300 ${
+          /* Desktop: safely anchored at bottom-left in the dock column, completely clear of windows and close buttons */
+          'md:bottom-3 md:left-4 md:top-auto md:right-auto md:items-center'
+        } ${
+          /* Mobile: hide when window is maximized to keep 100% of mobile screen clear; otherwise bottom-left */
+          isAnyWindowMaximized
+            ? 'max-md:opacity-0 max-md:pointer-events-none'
+            : 'max-md:bottom-[72px] max-md:left-3 max-md:items-start'
+        }`}
+      >
         {/* Cute Speech Bubble / Tooltip (on hover or onboarding hint) */}
         {(showHint || isHovered) && (
           <div
