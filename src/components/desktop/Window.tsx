@@ -51,8 +51,8 @@ export const Window: React.FC<WindowProps> = ({
     const isMobile = vw < 768;
 
     if (isMobile) {
-      const winW = Math.min(320, vw - 36);
-      const x = Math.max(16, Math.floor((vw - winW) / 2));
+      const winW = Math.min(350, vw - 24);
+      const x = Math.max(12, Math.floor((vw - winW) / 2));
       const y = 62; // Cleanly below the singing cat
       return { x, y };
     }
@@ -247,11 +247,11 @@ export const Window: React.FC<WindowProps> = ({
               top: `${position.y}px`,
               left: `${position.x}px`,
               width: isMobile
-                ? `min(320px, calc(100vw - 36px))`
+                ? `min(350px, calc(100vw - 24px))`
                 : typeof width === 'number'
                 ? `${width}px`
                 : width,
-              maxWidth: isMobile ? 'calc(100vw - 32px)' : '92vw',
+              maxWidth: isMobile ? 'calc(100vw - 20px)' : '92vw',
               maxHeight: isMobile ? 'calc(100dvh - 190px)' : 'calc(100vh - 80px)',
             }),
       }}
@@ -329,7 +329,7 @@ export const Window: React.FC<WindowProps> = ({
 
       {/* Window Body */}
       <div
-        className={`p-2.5 sm:p-4 overflow-y-auto bg-[#fffcf3] text-pastel-dark flex-1 ${
+        className={`p-2.5 sm:p-4 overflow-y-auto overflow-x-hidden w-full max-w-full bg-[#fffcf3] text-pastel-dark flex-1 ${
           isDragging ? 'pointer-events-none select-none' : ''
         } ${
           isMobile || isMaximized

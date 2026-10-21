@@ -44,16 +44,16 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
         </div>
 
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-1.5">
-            <h2 className="text-lg sm:text-xl font-extrabold text-pastel-dark truncate">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <h2 className="text-base sm:text-xl font-extrabold text-pastel-dark break-words">
               {profile.full_name}
             </h2>
-            <span className="text-base">👾</span>
+            <span className="text-base shrink-0">👾</span>
           </div>
-          <p className="text-[11px] sm:text-xs font-extrabold text-pastel-dark line-clamp-1">
+          <p className="text-[11px] sm:text-xs font-bold text-pastel-dark leading-snug break-words mt-0.5">
             {profile.headline}
           </p>
-          <div className="flex flex-wrap gap-1 mt-1">
+          <div className="flex flex-wrap gap-1 mt-1.5">
             <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-full bg-pastel-mint border border-pastel-dark text-[9px] font-extrabold text-pastel-dark shadow-xs">
               💼 Primary Profession
             </span>
@@ -61,34 +61,34 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
               🎬 Filmmaking (Creative Hobby)
             </span>
           </div>
-          <div className="flex items-center gap-1.5 mt-1 text-[10px] sm:text-[11px] text-pastel-soft">
+          <div className="flex items-center gap-1.5 mt-1 text-[10px] sm:text-[11px] text-pastel-soft min-w-0">
             <MapPin size={11} className="shrink-0 text-pastel-dark" />
-            <span className="truncate">{profile.location}</span>
+            <span className="break-words">{profile.location}</span>
           </div>
         </div>
       </div>
 
       {/* Biography */}
-      <div className="text-xs sm:text-[12.5px] leading-relaxed text-pastel-dark space-y-1.5 bg-pastel-warm/60 p-2.5 sm:p-3 rounded-retro-sm border border-pastel-dark/20">
+      <div className="text-xs sm:text-[12.5px] leading-relaxed text-pastel-dark space-y-1.5 bg-pastel-warm/60 p-2.5 sm:p-3 rounded-retro-sm border border-pastel-dark/20 break-words">
         <p>{profile.bio}</p>
-        <p className="flex items-center gap-1.5 font-semibold text-emerald-800 text-[11px]">
+        <p className="flex items-center gap-1.5 font-semibold text-emerald-800 text-[11px] break-words">
           <Briefcase size={13} className="shrink-0" />
           <span>{profile.freelance_status}</span>
         </p>
       </div>
 
       {/* Creative Hobby Demarcation Banner */}
-      <div className="p-2 bg-pastel-lavender/40 border border-pastel-dark rounded-retro-sm text-[10.5px] text-pastel-dark flex items-center justify-between gap-2 shadow-xs">
-        <div className="flex items-center gap-1.5">
+      <div className="p-2 bg-pastel-lavender/40 border border-pastel-dark rounded-retro-sm text-[10.5px] text-pastel-dark flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 shadow-xs">
+        <div className="flex items-center gap-1.5 min-w-0 flex-1">
           <span className="text-sm shrink-0">🎬</span>
-          <span>
+          <span className="break-words">
             <strong>Filmmaking:</strong> Creative personal hobby to enrich game camera directing.
           </span>
         </div>
         <button
           type="button"
           onClick={() => onNavigate('hobbiesWin')}
-          className="text-[9.5px] font-extrabold px-1.5 py-0.5 bg-white border border-pastel-dark rounded hover:bg-pastel-peach shrink-0 shadow-xs"
+          className="text-[9.5px] font-extrabold px-2 py-0.5 bg-white border border-pastel-dark rounded hover:bg-pastel-peach shrink-0 shadow-xs cursor-pointer ml-auto"
         >
           View Hobby ➔
         </button>
@@ -125,28 +125,28 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
         <button
           type="button"
           onClick={() => onNavigate('contactWin')}
-          className="retro-btn retro-btn-primary py-1.5 text-[11px]"
+          className="retro-btn retro-btn-primary py-1.5 px-1 text-[11px] min-w-0 justify-center"
         >
-          <Mail size={12} strokeWidth={2.5} />
-          <span>Hire Me</span>
+          <Mail size={12} strokeWidth={2.5} className="shrink-0" />
+          <span className="truncate">Hire Me</span>
         </button>
 
         <button
           type="button"
           onClick={() => onNavigate('projectsWin')}
-          className="retro-btn retro-btn-mint py-2 text-xs"
+          className="retro-btn retro-btn-mint py-1.5 px-1 text-[11px] min-w-0 justify-center"
         >
-          <Gamepad2 size={13} strokeWidth={2.5} />
-          <span>Projects</span>
+          <Gamepad2 size={12} strokeWidth={2.5} className="shrink-0" />
+          <span className="truncate">Projects</span>
         </button>
 
         <button
           type="button"
           onClick={() => onNavigate('resumeWin')}
-          className="retro-btn retro-btn-lavender py-2 text-xs"
+          className="retro-btn retro-btn-lavender py-1.5 px-1 text-[11px] min-w-0 justify-center"
         >
-          <FileText size={13} strokeWidth={2.5} />
-          <span>Resume</span>
+          <FileText size={12} strokeWidth={2.5} className="shrink-0" />
+          <span className="truncate">Resume</span>
         </button>
       </div>
 

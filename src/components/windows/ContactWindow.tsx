@@ -222,43 +222,43 @@ export const ContactWindow: React.FC = () => {
   return (
     <div className="space-y-4">
       {/* Top Banner: Professional Freelance Header & Direct Email Badge */}
-      <div className="p-3.5 bg-gradient-to-r from-pastel-pink/20 via-white to-pastel-mint/30 border-2 border-pastel-dark rounded-retro-sm shadow-sm">
+      <div className="p-3.5 bg-gradient-to-r from-pastel-pink/20 via-white to-pastel-mint/30 border-2 border-pastel-dark rounded-retro-sm shadow-sm overflow-hidden">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div className="space-y-0.5">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 border border-emerald-400 rounded-full">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                Accepting Freelance & Commissions
+          <div className="space-y-1 min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-emerald-800 bg-emerald-100 border border-emerald-400 rounded-full max-w-full">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                <span>Accepting Freelance & Commissions</span>
               </span>
-              <span className="hidden md:inline-flex text-[11px] font-bold text-pastel-soft">
+              <span className="text-[11px] font-bold text-pastel-soft">
                 · Direct Pipeline
               </span>
             </div>
-            <h3 className="font-extrabold text-sm sm:text-base text-pastel-dark flex items-center gap-1.5 pt-1">
-              <Briefcase size={17} className="text-pastel-dark" />
+            <h3 className="font-extrabold text-sm sm:text-base text-pastel-dark flex items-center gap-1.5 pt-0.5 break-words">
+              <Briefcase size={17} className="text-pastel-dark shrink-0" />
               <span>Commission Ashrut Tiwari for Your Project</span>
             </h3>
-            <p className="text-xs text-pastel-soft">
+            <p className="text-xs text-pastel-soft break-words">
               Game development, 3D character modeling, environment art & cinematic VFX.
             </p>
           </div>
 
           {/* Quick Copy / Email Direct Pill */}
-          <div className="flex items-center gap-1.5 shrink-0">
+          <div className="flex flex-wrap items-center gap-2 pt-1 w-full sm:w-auto shrink-0">
             <button
               type="button"
               onClick={handleCopyEmail}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-bold text-pastel-dark bg-white hover:bg-pastel-warm border-2 border-pastel-dark rounded-full shadow-[2px_2px_0_#3d3d3d] active:translate-x-0.5 active:translate-y-0.5 transition-all"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-bold text-pastel-dark bg-white hover:bg-pastel-warm border-2 border-pastel-dark rounded-full shadow-[2px_2px_0_#3d3d3d] active:translate-x-0.5 active:translate-y-0.5 transition-all shrink-0 cursor-pointer"
               title="Copy Ashrut's Gmail address"
             >
               {copiedEmail ? (
                 <>
-                  <Check size={12} className="text-emerald-600" />
+                  <Check size={12} className="text-emerald-600 shrink-0" />
                   <span className="text-emerald-700">Copied!</span>
                 </>
               ) : (
                 <>
-                  <Copy size={12} />
+                  <Copy size={12} className="shrink-0" />
                   <span>Copy Gmail</span>
                 </>
               )}
@@ -267,28 +267,28 @@ export const ContactWindow: React.FC = () => {
               href="mailto:ashrut.tiwari2004@gmail.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-3 py-1 text-[11px] font-bold text-pastel-dark bg-pastel-mint hover:bg-pastel-mint/80 border-2 border-pastel-dark rounded-full shadow-[2px_2px_0_#3d3d3d] active:translate-x-0.5 active:translate-y-0.5 transition-all"
-              title="Compose direct in mail client"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-bold text-pastel-dark bg-pastel-mint hover:bg-pastel-mint/80 border-2 border-pastel-dark rounded-full shadow-[2px_2px_0_#3d3d3d] active:translate-x-0.5 active:translate-y-0.5 transition-all max-w-full min-w-0"
+              title="Compose direct to ashrut.tiwari2004@gmail.com"
             >
-              <span>ashrut.tiwari2004@gmail.com</span>
-              <ExternalLink size={11} />
+              <span className="truncate">ashrut.tiwari2004@gmail.com</span>
+              <ExternalLink size={11} className="shrink-0" />
             </a>
           </div>
         </div>
 
         {/* Professional Guarantees Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2.5 mt-2.5 border-t border-pastel-dark/20 text-[11px] font-semibold text-pastel-soft">
-          <div className="flex items-center gap-1.5">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-2 pt-2.5 mt-2.5 border-t border-pastel-dark/20 text-[11px] font-semibold text-pastel-soft">
+          <div className="flex items-center gap-1.5 flex-1 min-w-[130px]">
             <ShieldCheck size={14} className="text-emerald-700 shrink-0" />
             <span>NDA & IP Confidentiality Guaranteed</span>
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 flex-1 min-w-[130px]">
             <Sparkles size={14} className="text-amber-600 shrink-0" />
-            <span>Unreal Engine 5 & Godot 4 Pipelines</span>
+            <span>Unreal Engine 5 & Godot Pipelines</span>
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 flex-1 min-w-[130px]">
             <FileText size={14} className="text-sky-700 shrink-0" />
-            <span>PDF Brief & GDD Attachments Supported</span>
+            <span>PDF Brief & GDD Supported</span>
           </div>
         </div>
       </div>
@@ -393,14 +393,14 @@ export const ContactWindow: React.FC = () => {
           )}
 
           {/* Section 1: Client & Studio Details */}
-          <div className="p-3 bg-white border-2 border-pastel-dark rounded-retro-sm space-y-2.5">
+          <div className="p-3 bg-white border-2 border-pastel-dark rounded-retro-sm space-y-2.5 overflow-hidden">
             <div className="flex items-center gap-1.5 text-xs font-extrabold text-pastel-dark border-b border-pastel-dark/15 pb-1">
-              <Building size={14} className="text-pastel-dark" />
+              <Building size={14} className="text-pastel-dark shrink-0" />
               <span>1. Client & Studio Details</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+              <div className="min-w-0">
                 <label htmlFor="client-name" className="block text-xs font-bold text-pastel-dark mb-1">
                   Your Full Name <span className="text-rose-500">*</span>
                 </label>
@@ -411,14 +411,14 @@ export const ContactWindow: React.FC = () => {
                   placeholder="e.g. Maya Lin"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all"
+                  className="w-full min-w-0 max-w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all box-border"
                 />
                 {fieldErrors.name && (
                   <p className="text-[10px] text-rose-600 font-bold mt-0.5">{fieldErrors.name[0]}</p>
                 )}
               </div>
 
-              <div>
+              <div className="min-w-0">
                 <label htmlFor="client-email" className="block text-xs font-bold text-pastel-dark mb-1">
                   Work / Contact Email <span className="text-rose-500">*</span>
                 </label>
@@ -429,7 +429,7 @@ export const ContactWindow: React.FC = () => {
                   placeholder="maya@gamestudio.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all"
+                  className="w-full min-w-0 max-w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all box-border"
                 />
                 {fieldErrors.email && (
                   <p className="text-[10px] text-rose-600 font-bold mt-0.5">{fieldErrors.email[0]}</p>
@@ -437,33 +437,33 @@ export const ContactWindow: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-0.5">
-              <div>
-                <label htmlFor="client-company" className="block text-xs font-bold text-pastel-dark mb-1">
-                  Studio / Team / Company (Optional)
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-0.5">
+              <div className="min-w-0">
+                <label htmlFor="client-company" className="block text-xs font-bold text-pastel-dark mb-1 truncate">
+                  Studio / Company (Optional)
                 </label>
                 <input
                   id="client-company"
                   type="text"
-                  placeholder="e.g. Neon Horizon Studios / Indie"
+                  placeholder="e.g. Neon Horizon Studios"
                   value={formData.company || ''}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  className="w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all"
+                  className="w-full min-w-0 max-w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all box-border"
                 />
               </div>
 
-              <div>
-                <label htmlFor="client-handle" className="block text-xs font-bold text-pastel-dark mb-1">
-                  Direct Chat Handle (Discord / WhatsApp / Phone)
+              <div className="min-w-0">
+                <label htmlFor="client-handle" className="block text-xs font-bold text-pastel-dark mb-1 truncate">
+                  Direct Chat Handle (Discord / WhatsApp)
                 </label>
                 <div className="relative">
                   <input
                     id="client-handle"
                     type="text"
-                    placeholder="e.g. discord: maya#1234 or +1 (555)..."
+                    placeholder="e.g. discord: maya#1234"
                     value={formData.contact_handle || ''}
                     onChange={(e) => setFormData({ ...formData, contact_handle: e.target.value })}
-                    className="w-full pl-7 pr-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all"
+                    className="w-full min-w-0 max-w-full pl-7 pr-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all box-border"
                   />
                   <AtSign size={12} className="absolute left-2.5 top-2.5 text-pastel-soft" />
                 </div>
@@ -472,14 +472,14 @@ export const ContactWindow: React.FC = () => {
           </div>
 
           {/* Section 2: Project Classification & Scope */}
-          <div className="p-3 bg-white border-2 border-pastel-dark rounded-retro-sm space-y-2.5">
+          <div className="p-3 bg-white border-2 border-pastel-dark rounded-retro-sm space-y-2.5 overflow-hidden">
             <div className="flex items-center gap-1.5 text-xs font-extrabold text-pastel-dark border-b border-pastel-dark/15 pb-1">
-              <Briefcase size={14} className="text-pastel-dark" />
+              <Briefcase size={14} className="text-pastel-dark shrink-0" />
               <span>2. Project Classification & Scope</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+              <div className="min-w-0">
                 <label htmlFor="project-type" className="block text-xs font-bold text-pastel-dark mb-1">
                   Project Category <span className="text-rose-500">*</span>
                 </label>
@@ -492,7 +492,7 @@ export const ContactWindow: React.FC = () => {
                       project_type: e.target.value as ContactFormData['project_type'],
                     })
                   }
-                  className="w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink"
+                  className="w-full min-w-0 max-w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink box-border"
                 >
                   {projectTypes.map((type) => (
                     <option key={type} value={type}>
@@ -502,15 +502,15 @@ export const ContactWindow: React.FC = () => {
                 </select>
               </div>
 
-              <div>
-                <label htmlFor="target-platform" className="block text-xs font-bold text-pastel-dark mb-1">
-                  Target Engine / Platform (Optional)
+              <div className="min-w-0">
+                <label htmlFor="target-platform" className="block text-xs font-bold text-pastel-dark mb-1 truncate">
+                  Target Engine / Platform
                 </label>
                 <select
                   id="target-platform"
                   value={formData.target_platform || 'Unreal Engine 5'}
                   onChange={(e) => setFormData({ ...formData, target_platform: e.target.value })}
-                  className="w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink"
+                  className="w-full min-w-0 max-w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink box-border"
                 >
                   {platformOptions.map((opt) => (
                     <option key={opt} value={opt}>
@@ -521,8 +521,8 @@ export const ContactWindow: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+              <div className="min-w-0">
                 <label htmlFor="budget-range" className="block text-xs font-bold text-pastel-dark mb-1">
                   Estimated Budget
                 </label>
@@ -530,7 +530,7 @@ export const ContactWindow: React.FC = () => {
                   id="budget-range"
                   value={formData.budget_range}
                   onChange={(e) => setFormData({ ...formData, budget_range: e.target.value })}
-                  className="w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink"
+                  className="w-full min-w-0 max-w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink box-border"
                 >
                   {budgetOptions.map((opt) => (
                     <option key={opt} value={opt}>
@@ -540,7 +540,7 @@ export const ContactWindow: React.FC = () => {
                 </select>
               </div>
 
-              <div>
+              <div className="min-w-0">
                 <label htmlFor="timeline" className="block text-xs font-bold text-pastel-dark mb-1">
                   Target Timeline / Milestone
                 </label>
@@ -548,7 +548,7 @@ export const ContactWindow: React.FC = () => {
                   id="timeline"
                   value={formData.timeline}
                   onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                  className="w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink"
+                  className="w-full min-w-0 max-w-full px-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink box-border"
                 >
                   {timelineOptions.map((opt) => (
                     <option key={opt} value={opt}>
@@ -686,16 +686,16 @@ export const ContactWindow: React.FC = () => {
           </div>
 
           {/* Action Row: Privacy & Transmit Button */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1">
-            <div className="flex items-center gap-1.5 text-[11px] text-pastel-soft">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1 w-full">
+            <div className="flex items-center gap-1.5 text-[11px] text-pastel-soft min-w-0">
               <ShieldCheck size={14} className="text-emerald-700 shrink-0" />
-              <span>Transmitted directly to <strong>ashrut.tiwari2004@gmail.com</strong></span>
+              <span className="break-all">Transmitted directly to <strong>ashrut.tiwari2004@gmail.com</strong></span>
             </div>
 
             <button
               type="submit"
               disabled={isSubmitting || fileUploading}
-              className="retro-btn retro-btn-primary w-full sm:w-auto px-6 py-2.5 text-xs flex items-center justify-center gap-2"
+              className="retro-btn retro-btn-primary w-full sm:w-auto px-6 py-2.5 text-xs flex items-center justify-center gap-2 shrink-0"
             >
               {isSubmitting ? (
                 <>

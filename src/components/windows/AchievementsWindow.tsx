@@ -17,18 +17,18 @@ const iconMap: Record<string, React.ReactNode> = {
 export const AchievementsWindow: React.FC<AchievementsWindowProps> = ({ achievements }) => {
   return (
     <div className="space-y-3">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
         {achievements.map((item) => (
           <div
             key={item.id}
-            className="retro-card flex items-start gap-3 bg-white p-3"
+            className="retro-card flex items-start gap-3 bg-white p-3 min-w-0"
           >
             <div className="p-2 rounded-xl bg-pastel-warm border border-pastel-dark shrink-0">
               {iconMap[item.icon_name] || <Star className="w-5 h-5 text-amber-500" />}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between gap-1">
-                <h4 className="font-extrabold text-sm text-pastel-dark truncate">
+              <div className="flex items-center justify-between gap-1 flex-wrap">
+                <h4 className="font-extrabold text-sm text-pastel-dark break-words">
                   {item.title}
                 </h4>
                 {item.date_label && (
@@ -37,10 +37,10 @@ export const AchievementsWindow: React.FC<AchievementsWindowProps> = ({ achievem
                   </span>
                 )}
               </div>
-              <p className="text-xs font-bold text-amber-800 mt-0.5">
+              <p className="text-xs font-bold text-amber-800 mt-0.5 break-words">
                 {item.event_or_source}
               </p>
-              <p className="text-[11px] text-pastel-soft mt-1 leading-snug">
+              <p className="text-[11px] text-pastel-soft mt-1 leading-snug break-words">
                 {item.description}
               </p>
             </div>

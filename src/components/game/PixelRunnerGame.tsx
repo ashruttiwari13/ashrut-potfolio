@@ -15,15 +15,15 @@ export const PixelRunnerGame: React.FC = () => {
     <div className="space-y-3 select-none">
       {/* Top Bar with Mode Info & Fullscreen Action */}
       <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 bg-white border-2 border-pastel-dark rounded-retro-sm text-xs font-bold shadow-sm">
-        <div className="flex items-center gap-2">
-          <span className={`p-1.5 rounded-lg border border-pastel-dark ${activeGame === '3d' ? 'bg-[#ff7b90] text-white' : 'bg-pastel-pink text-pastel-dark'}`}>
+        <div className="flex items-center gap-2 min-w-0 flex-1">
+          <span className={`p-1.5 rounded-lg border border-pastel-dark shrink-0 ${activeGame === '3d' ? 'bg-[#ff7b90] text-white' : 'bg-pastel-pink text-pastel-dark'}`}>
             {activeGame === '3d' ? <Skull size={15} /> : <Sword size={15} />}
           </span>
-          <div>
-            <h4 className="font-extrabold text-xs text-pastel-dark">
+          <div className="min-w-0">
+            <h4 className="font-extrabold text-xs text-pastel-dark break-words">
               {activeGame === '3d' ? 'HAUNTED HOUSE: THE ESCAPE' : 'PIXEL QUEST: The Lost Crystal'}
             </h4>
-            <p className="text-[10px] text-pastel-soft">
+            <p className="text-[10px] text-pastel-soft break-words">
               {activeGame === '3d'
                 ? '3D First-Person Survival Horror · The Keeper AI · Puzzles & Hiding'
                 : '16-Bit Platformer · 3 Connected Stages · Crystal Guardian Boss'}
@@ -31,7 +31,7 @@ export const PixelRunnerGame: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setActiveGame(activeGame === '3d' ? '2d' : '3d')}
             className="retro-btn text-xs px-2.5 py-1.5 bg-[#f0e6d2] text-pastel-dark hover:bg-white"

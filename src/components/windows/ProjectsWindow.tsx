@@ -119,9 +119,9 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
           {filteredProjects.map((project) => (
             <div
               key={project.id}
-              className="retro-card flex flex-col justify-between bg-white overflow-hidden p-3 group"
+              className="retro-card flex flex-col justify-between bg-white overflow-hidden p-3 group min-w-0"
             >
-              <div>
+              <div className="min-w-0">
                 {/* Visual Header / Cover Art Mock */}
                 <div className="relative aspect-[16/9] w-full rounded-retro-sm bg-gradient-to-br from-pastel-peach via-pastel-lavender to-pastel-mint border-2 border-pastel-dark overflow-hidden flex items-center justify-center mb-2.5 shadow-sm">
                   {/* Decorative Project Graphic Preview */}
@@ -129,7 +129,7 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                     <span className="text-3xl filter drop-shadow">
                       {project.category === 'game-dev' ? '⚔️' : project.category === 'cinematography' ? '🎬' : '🦊'}
                     </span>
-                    <h5 className="font-extrabold text-sm text-pastel-dark mt-1 tracking-wide">
+                    <h5 className="font-extrabold text-sm text-pastel-dark mt-1 tracking-wide break-words">
                       {project.title}
                     </h5>
                   </div>
@@ -159,10 +159,10 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                 </div>
 
                 {/* Details */}
-                <h4 className="font-extrabold text-base text-pastel-dark group-hover:text-amber-800 transition-colors">
+                <h4 className="font-extrabold text-base text-pastel-dark group-hover:text-amber-800 transition-colors break-words">
                   {project.title}
                 </h4>
-                <p className="text-xs font-semibold text-pastel-soft mt-0.5 line-clamp-2">
+                <p className="text-xs font-semibold text-pastel-soft mt-0.5 break-words line-clamp-2">
                   {project.tagline}
                 </p>
 
@@ -185,11 +185,11 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center justify-between pt-3 mt-3 border-t border-pastel-dark/10">
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-3 mt-3 border-t border-pastel-dark/10">
                 <button
                   type="button"
                   onClick={() => setActiveProject(project)}
-                  className="retro-btn text-xs px-2.5 py-1 bg-pastel-mint"
+                  className="retro-btn text-xs px-2.5 py-1 bg-pastel-mint shrink-0"
                 >
                   <Eye size={12} strokeWidth={2.5} />
                   <span>Inspect</span>

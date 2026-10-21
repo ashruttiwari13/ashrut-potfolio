@@ -92,9 +92,9 @@ export const ResumeWindow: React.FC<ResumeWindowProps> = ({ profile }) => {
       <div className="p-4 sm:p-5 bg-white border-2 border-pastel-dark rounded-retro shadow-sm space-y-4 printable-resume">
         {/* Header */}
         <div className="border-b-2 border-pastel-dark/20 pb-3">
-          <h2 className="text-xl font-extrabold text-pastel-dark">{profile.full_name}</h2>
-          <p className="text-xs font-bold text-amber-800 mt-0.5">{profile.headline}</p>
-          <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-[11px] text-pastel-soft font-medium">
+          <h2 className="text-xl font-extrabold text-pastel-dark break-words">{profile.full_name}</h2>
+          <p className="text-xs font-bold text-amber-800 mt-0.5 break-words">{profile.headline}</p>
+          <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-[11px] text-pastel-soft font-medium break-all">
             <span>📍 {profile.location}</span>
             <span>✉️ {profile.email}</span>
             <span>💼 {profile.freelance_status}</span>
@@ -107,7 +107,7 @@ export const ResumeWindow: React.FC<ResumeWindowProps> = ({ profile }) => {
             <Sparkles size={13} className="text-amber-500" />
             <span>Professional Summary</span>
           </h3>
-          <p className="text-xs text-pastel-dark leading-relaxed">
+          <p className="text-xs text-pastel-dark leading-relaxed break-words">
             {profile.bio}
           </p>
         </div>
@@ -121,17 +121,17 @@ export const ResumeWindow: React.FC<ResumeWindowProps> = ({ profile }) => {
 
           <div className="space-y-3 relative before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-pastel-dark/20 pl-6">
             {timelineItems.map((item, idx) => (
-              <div key={idx} className="relative space-y-1">
+              <div key={idx} className="relative space-y-1 min-w-0">
                 {/* Dot */}
                 <div className="absolute -left-[27px] top-1 w-2.5 h-2.5 rounded-full bg-pastel-pink border-2 border-pastel-dark" />
                 <div className="flex flex-wrap items-baseline justify-between gap-1">
-                  <h4 className="font-bold text-xs text-pastel-dark">{item.role}</h4>
+                  <h4 className="font-bold text-xs text-pastel-dark break-words">{item.role}</h4>
                   <span className="text-[10px] font-semibold px-2 py-0.2 rounded-full bg-pastel-warm border border-pastel-dark/30 text-pastel-soft">
                     {item.period}
                   </span>
                 </div>
-                <p className="text-[11px] font-bold text-pastel-soft">{item.organization}</p>
-                <ul className="list-disc list-inside text-[11px] text-pastel-dark/90 space-y-0.5 pl-1">
+                <p className="text-[11px] font-bold text-pastel-soft break-words">{item.organization}</p>
+                <ul className="list-disc list-inside text-[11px] text-pastel-dark/90 space-y-0.5 pl-1 break-words">
                   {item.highlights.map((h, i) => (
                     <li key={i}>{h}</li>
                   ))}
@@ -147,33 +147,33 @@ export const ResumeWindow: React.FC<ResumeWindowProps> = ({ profile }) => {
             <GraduationCap size={13} className="text-indigo-500" />
             <span>Core Technical Competencies</span>
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
-            <div className="p-2.5 bg-pastel-mint/30 rounded-lg border border-pastel-dark/30">
-              <div className="flex items-center justify-between mb-0.5">
-                <strong className="block text-pastel-dark font-extrabold">Engines & Code</strong>
-                <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded bg-pastel-mint border border-pastel-dark text-pastel-dark">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-[11px]">
+            <div className="p-2.5 bg-pastel-mint/30 rounded-lg border border-pastel-dark/30 min-w-0">
+              <div className="flex items-center justify-between gap-1 flex-wrap mb-0.5">
+                <strong className="block text-pastel-dark font-extrabold break-words">Engines & Code</strong>
+                <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded bg-pastel-mint border border-pastel-dark text-pastel-dark shrink-0">
                   Primary Job
                 </span>
               </div>
-              <span className="text-pastel-dark/80 font-medium">Unreal Engine 5, Godot 4, C++, Python, HLSL</span>
+              <span className="text-pastel-dark/80 font-medium break-words">Unreal Engine 5, Godot 4, C++, Python, HLSL</span>
             </div>
-            <div className="p-2.5 bg-pastel-mint/30 rounded-lg border border-pastel-dark/30">
-              <div className="flex items-center justify-between mb-0.5">
-                <strong className="block text-pastel-dark font-extrabold">3D & Sculpting</strong>
-                <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded bg-pastel-mint border border-pastel-dark text-pastel-dark">
+            <div className="p-2.5 bg-pastel-mint/30 rounded-lg border border-pastel-dark/30 min-w-0">
+              <div className="flex items-center justify-between gap-1 flex-wrap mb-0.5">
+                <strong className="block text-pastel-dark font-extrabold break-words">3D & Sculpting</strong>
+                <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded bg-pastel-mint border border-pastel-dark text-pastel-dark shrink-0">
                   Primary Job
                 </span>
               </div>
-              <span className="text-pastel-dark/80 font-medium">Blender 4, Substance 3D, Rigging, Retopology</span>
+              <span className="text-pastel-dark/80 font-medium break-words">Blender 4, Substance 3D, Rigging, Retopology</span>
             </div>
-            <div className="p-2.5 bg-pastel-lavender/40 rounded-lg border border-pastel-dark/30">
-              <div className="flex items-center justify-between mb-0.5">
-                <strong className="block text-pastel-dark font-extrabold">Filmmaking & Cine</strong>
-                <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-pastel-lavender border border-pastel-dark text-pastel-dark">
+            <div className="p-2.5 bg-pastel-lavender/40 rounded-lg border border-pastel-dark/30 min-w-0">
+              <div className="flex items-center justify-between gap-1 flex-wrap mb-0.5">
+                <strong className="block text-pastel-dark font-extrabold break-words">Filmmaking & Cine</strong>
+                <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-pastel-lavender border border-pastel-dark text-pastel-dark shrink-0">
                   Creative Hobby
                 </span>
               </div>
-              <span className="text-pastel-dark/80 font-medium">DaVinci Resolve, ACES, Lighting & Framing</span>
+              <span className="text-pastel-dark/80 font-medium break-words">DaVinci Resolve, ACES, Lighting & Framing</span>
             </div>
           </div>
         </div>

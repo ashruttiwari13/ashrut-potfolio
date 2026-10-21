@@ -82,21 +82,21 @@ export const SkillsWindow: React.FC<SkillsWindowProps> = ({ skills }) => {
       </div>
 
       {/* Skills Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         {filteredSkills.map((skill) => {
           const icon = iconMap[skill.icon_name] || <Wrench className="w-4 h-4 text-gray-600" />;
           const isHobby = skill.category === 'cinematography';
           return (
             <div
               key={skill.id}
-              className="retro-card flex items-start gap-2.5 p-2 sm:p-2.5 bg-white"
+              className="retro-card flex items-start gap-2.5 p-2 sm:p-2.5 bg-white min-w-0"
             >
               <div className="p-1.5 rounded-lg bg-pastel-warm border border-pastel-dark/30 shrink-0 shadow-xs">
                 {icon}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between gap-1">
-                  <h4 className="font-extrabold text-xs sm:text-[13px] text-pastel-dark truncate">
+                <div className="flex items-center justify-between gap-1 flex-wrap">
+                  <h4 className="font-extrabold text-xs sm:text-[13px] text-pastel-dark break-words">
                     {skill.name}
                   </h4>
                   {isHobby ? (
@@ -109,7 +109,7 @@ export const SkillsWindow: React.FC<SkillsWindowProps> = ({ skills }) => {
                     </span>
                   ) : null}
                 </div>
-                <p className="text-[10px] sm:text-[11px] font-semibold text-pastel-soft mt-0.5 line-clamp-2">
+                <p className="text-[10px] sm:text-[11px] font-semibold text-pastel-soft mt-0.5 break-words">
                   {skill.proficiency_level}
                 </p>
               </div>
@@ -119,9 +119,9 @@ export const SkillsWindow: React.FC<SkillsWindowProps> = ({ skills }) => {
       </div>
 
       {/* Production Pipeline Note */}
-      <div className="p-2 sm:p-2.5 bg-pastel-lavender/40 border border-pastel-dark rounded-retro-sm text-[10.5px] text-pastel-dark flex items-center gap-2">
+      <div className="p-2 sm:p-2.5 bg-pastel-lavender/40 border border-pastel-dark rounded-retro-sm text-[10.5px] text-pastel-dark flex items-center gap-2 break-words">
         <CheckCircle2 size={14} className="text-pastel-dark shrink-0" />
-        <span>
+        <span className="break-words">
           End-to-end pipeline: Concept ➔ 3D Sculpt & Modeling ➔ Blender Retopology & Rigging ➔ Substance PBR Texturing ➔ Unreal/Godot Integration & Shaders.
         </span>
       </div>
