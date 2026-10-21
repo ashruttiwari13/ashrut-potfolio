@@ -139,44 +139,46 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
   }, [bringToFront]);
 
   const handleDockClick = useCallback((id: WindowId) => {
-    setWindowsState((state) => {
-      const current = state[id];
-      if (!current) return state;
+    setZCounter((prevZ) => {
+      const nextZ = prevZ + 1;
+      setWindowsState((state) => {
+        const current = state[id];
+        if (!current) return state;
 
-      let maxZ = -1;
-      let topWinId: WindowId | null = null;
-      Object.entries(state).forEach(([k, st]) => {
-        if (st.isOpen && !st.isMinimized && st.zIndex > maxZ) {
-          maxZ = st.zIndex;
-          topWinId = k as WindowId;
+        let maxZ = -1;
+        let topWinId: WindowId | null = null;
+        Object.entries(state).forEach(([k, st]) => {
+          if (st.isOpen && !st.isMinimized && st.zIndex > maxZ) {
+            maxZ = st.zIndex;
+            topWinId = k as WindowId;
+          }
+        });
+
+        // If already open, not minimized, and topmost, toggle minimize
+        if (topWinId === id) {
+          return {
+            ...state,
+            [id]: {
+              ...current,
+              isMinimized: true,
+            },
+          };
         }
-      });
 
-      // If already open, not minimized, and topmost, toggle minimize
-      if (topWinId === id) {
+        // Otherwise bring to front and unminimize/open
         return {
           ...state,
           [id]: {
             ...current,
-            isMinimized: true,
+            isOpen: true,
+            isMinimized: false,
+            zIndex: Math.max(nextZ, maxZ + 1),
           },
         };
-      }
-
-      // Otherwise bring to front
-      const nextZ = Math.max(zCounter, maxZ) + 1;
-      setZCounter(nextZ);
-      return {
-        ...state,
-        [id]: {
-          ...current,
-          isOpen: true,
-          isMinimized: false,
-          zIndex: nextZ,
-        },
-      };
+      });
+      return nextZ;
     });
-  }, [zCounter]);
+  }, []);
 
   const closeWindow = useCallback((id: WindowId) => {
     setMaximizedWindowId((prev) => (prev === id ? null : prev));
