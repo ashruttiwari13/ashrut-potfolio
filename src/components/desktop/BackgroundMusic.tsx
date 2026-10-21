@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import { X } from 'lucide-react';
 
 interface BackgroundMusicProps {
   isGameActive?: boolean;
@@ -207,54 +206,45 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
 
       {/* Floating Singing Cat Music Widget Container */}
       <div
-        className={`fixed z-[290] pointer-events-auto select-none flex flex-col transition-all duration-300 ${
+        className={`fixed z-[290] pointer-events-auto select-none w-[90px] flex flex-col items-center transition-opacity duration-200 ${
           /* Desktop: safely anchored at bottom-left in the dock column, completely clear of windows and close buttons */
-          'md:bottom-3 md:left-4 md:top-auto md:right-auto md:items-center'
+          'md:bottom-3 md:left-4 md:top-auto md:right-auto'
         } ${
           /* Mobile: hide when window is maximized to keep 100% of mobile screen clear; otherwise bottom-left */
           isAnyWindowMaximized
             ? 'max-md:opacity-0 max-md:pointer-events-none'
-            : 'max-md:bottom-[72px] max-md:left-3 max-md:items-start'
+            : 'max-md:bottom-[72px] max-md:left-3'
         }`}
       >
-        {/* Cute Speech Bubble / Tooltip (on hover or onboarding hint) */}
-        {(showHint || isHovered) && (
-          <div
-            role="status"
-            className="mb-1.5 px-3 py-1.5 bg-[rgba(255,250,240,0.98)] backdrop-blur-md rounded-2xl border-2 border-pastel-dark shadow-retro text-xs text-pastel-dark flex items-center gap-1.5 animate-bounce transition-all duration-300"
-          >
-            <span className="text-sm">{isPlaying ? '🎶' : '🌸'}</span>
-            <div className="flex flex-col">
-              <span className="font-bold text-[11px] leading-tight">
-                {hasError
-                  ? 'Singing Cat: Resting'
-                  : isPlaying
-                  ? 'Singing cheerfully! Click to turn off'
-                  : 'Music off. Click to play! 🎵'}
-              </span>
-              <span className="text-[9px] text-pastel-soft leading-none mt-0.5">
-                {isPlaying ? 'Click cat to pause music' : 'Tap to start music'}
-              </span>
+        <div
+          className="relative flex flex-col items-center"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {/* Cute Speech Bubble / Tooltip (Positioned ABSOLUTE so it NEVER shifts the cat) */}
+          {(showHint || isHovered) && (
+            <div
+              role="status"
+              className="absolute bottom-[calc(100%+8px)] left-0 whitespace-nowrap px-3 py-1.5 bg-[rgba(255,250,240,0.98)] backdrop-blur-md rounded-2xl border-2 border-pastel-dark shadow-retro text-xs text-pastel-dark flex items-center gap-2 pointer-events-none z-50 transition-opacity duration-150"
+            >
+              <span className="text-sm shrink-0">{isPlaying ? '🎶' : '🌸'}</span>
+              <div className="flex flex-col">
+                <span className="font-bold text-[11px] leading-tight">
+                  {hasError
+                    ? 'Singing Cat: Resting'
+                    : isPlaying
+                    ? 'Singing cheerfully! Click to mute'
+                    : 'Music off. Click to play! 🎵'}
+                </span>
+                <span className="text-[9px] text-pastel-soft leading-none mt-0.5">
+                  {isPlaying ? 'Click to turn off music' : 'Click to start music'}
+                </span>
+              </div>
+              {/* Cute speech bubble caret pointer pointing down to the cat */}
+              <div className="absolute -bottom-1.5 left-7 w-2.5 h-2.5 bg-[#fffaf0] border-r-2 border-b-2 border-pastel-dark rotate-45 pointer-events-none" />
             </div>
-            {showHint && !isHovered && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowHint(false);
-                }}
-                className="ml-1 p-0.5 hover:bg-pastel-peach/60 rounded-full text-pastel-dark"
-                title="Dismiss"
-                aria-label="Dismiss speech bubble"
-              >
-                <X size={11} />
-              </button>
-            )}
-          </div>
-        )}
+          )}
 
-        {/* THE SINGING CAT BUTTON: Clicking toggles music OFF / ON */}
-        <div className="relative group">
           {/* Floating Magical Musical Notes (when singing) */}
           {isPlaying && (
             <div className="absolute -top-3 left-0 right-0 h-6 pointer-events-none overflow-visible">
@@ -270,23 +260,25 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
             </div>
           )}
 
-          {/* Interactive Character Button */}
+          {/* Interactive Character Button (Stationary bounding box, no shifting or jitter on hover) */}
           <button
             type="button"
             id="bgm-toggle-button"
             onClick={togglePlay}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            className={`relative flex flex-col items-center justify-center p-1 rounded-2xl cursor-pointer transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark ${
-              isPlaying
-                ? 'animate-[catSingBounce_0.84s_ease-in-out_infinite] scale-105'
-                : 'hover:scale-105 active:scale-95 animate-[catIdleFloat_3s_ease-in-out_infinite]'
-            }`}
+            className="relative flex flex-col items-center justify-center p-1 rounded-2xl cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark select-none"
             aria-label={isPlaying ? 'Turn off music (cat singing)' : 'Turn on music'}
             title={isPlaying ? 'Click to turn off music' : 'Click to turn on music'}
           >
-            {/* Cat Sprite on Pastel Cloud (Idle & Dancing Frames) */}
-            <div className="relative w-[72px] h-[72px] sm:w-[84px] sm:h-[84px] drop-shadow-[2px_3px_0_rgba(61,61,61,0.22)]">
+            {/* Cat Sprite on Pastel Cloud */}
+            <div
+              className={`relative w-[72px] h-[72px] sm:w-[84px] sm:h-[84px] drop-shadow-[2px_3px_0_rgba(61,61,61,0.22)] ${
+                isPlaying
+                  ? 'animate-[catSingBounce_0.84s_ease-in-out_infinite]'
+                  : isHovered
+                  ? ''
+                  : 'animate-[catIdleFloat_3s_ease-in-out_infinite]'
+              }`}
+            >
               {/* Idle Frame */}
               <Image
                 src="/assets/cat_idle.png"
@@ -324,10 +316,12 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
 
             {/* Status Indicator Badge Under Cat */}
             <span
-              className={`text-[9px] font-bold px-2.5 py-0.5 rounded-full border border-pastel-dark shadow-retro-sm -mt-0.5 transition-all ${
+              className={`text-[9px] font-bold px-2.5 py-0.5 rounded-full border border-pastel-dark shadow-retro-sm -mt-0.5 transition-colors duration-150 ${
                 isPlaying
                   ? 'bg-pastel-mint text-pastel-dark'
-                  : 'bg-white/90 text-pastel-dark hover:bg-pastel-peach'
+                  : isHovered
+                  ? 'bg-pastel-peach text-pastel-dark'
+                  : 'bg-white/95 text-pastel-dark'
               }`}
             >
               {hasError ? 'Resting' : isPlaying ? 'Music ON 🎵' : 'Music OFF 🔇'}
