@@ -56,12 +56,16 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     }, stepInterval);
   }, []);
 
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const lastToggleRef = useRef<number>(0);
+
   // Start playback & cat singing
   const startPlayback = useCallback(() => {
-    const audio = audioRef.current;
     setIsPlaying(true);
+    isPlayingRef.current = true;
     setHasError(false);
 
+    const audio = audioRef.current;
     if (!audio) return;
     audio.volume = DEFAULT_VOLUME;
 
@@ -73,69 +77,103 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
           setShowHint(false);
         })
         .catch((err) => {
-          console.log('Audio playback waiting for first gesture:', err?.name);
+          console.log('Mobile audio playback waiting for interaction:', err?.name);
         });
     }
   }, []);
 
-  // Pause playback & stop cat singing when user clicks to stop
+  // Pause playback & stop cat singing when user clicks/taps to stop
   const pausePlayback = useCallback(() => {
     setIsPlaying(false);
+    isPlayingRef.current = false;
     const audio = audioRef.current;
     if (!audio) return;
 
-    rampVolume(0, 200, () => {
+    rampVolume(0, 150, () => {
       audio.pause();
     });
   }, [rampVolume]);
 
-  // Main toggle handler: Click on Cat to stop / start singing anytime
-  const togglePlay = () => {
+  // Main toggle handler: Click/Tap on Cat to stop / start singing anytime
+  const togglePlay = useCallback(() => {
     setShowHint(false);
-    if (isPlaying) {
+    if (isPlayingRef.current) {
       pausePlayback();
     } else {
       startPlayback();
     }
+  }, [pausePlayback, startPlayback]);
+
+  // Debounced tap handler for mobile & desktop to prevent double-toggle
+  const handleToggle = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+    const now = Date.now();
+    if (now - lastToggleRef.current < 350) return;
+    lastToggleRef.current = now;
+    togglePlay();
   };
 
-  // Automatic singing & music playback on website start
+  // Automatic singing & mobile-friendly audio unlock on website start
   useEffect(() => {
-    // 1. Cat is singing immediately on website load
+    // 1. Cat is singing immediately on website load!
     setIsPlaying(true);
+    isPlayingRef.current = true;
 
+    // 2. Direct autoplay attempt on page load
     const audio = audioRef.current;
     if (audio) {
       audio.volume = DEFAULT_VOLUME;
       audio.play().catch((err) => {
-        console.log('Browser waiting for first gesture before playing unmuted audio:', err?.name);
+        console.log('Mobile browser waiting for gesture to play audio:', err?.name);
       });
     }
 
-    // 2. In case browser blocks unmuted audio before user interaction,
-    // trigger audio playback on the very first touch/click/scroll anywhere
-    const handleFirstGesture = () => {
-      // Only unlock if the user hasn't explicitly stopped it
-      if (audioRef.current && isPlayingRef.current && audioRef.current.paused) {
-        audioRef.current.volume = DEFAULT_VOLUME;
-        audioRef.current.play().catch(() => {});
+    // 3. Robust touch/tap gesture unlock for mobile browsers (iOS & Android)
+    const tryUnlockAudio = () => {
+      // If user has intentionally stopped the cat, don't auto-resume
+      if (!isPlayingRef.current) return;
+
+      const aud = audioRef.current;
+      if (!aud) return;
+
+      // Unlock Web Audio API context if present
+      if (typeof window !== 'undefined') {
+        const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+        if (AudioCtx) {
+          if (!audioContextRef.current) {
+            audioContextRef.current = new AudioCtx();
+          }
+          if (audioContextRef.current.state === 'suspended') {
+            audioContextRef.current.resume().catch(() => {});
+          }
+        }
       }
-      cleanupGestureListeners();
+
+      aud.volume = DEFAULT_VOLUME;
+      const p = aud.play();
+      if (p !== undefined) {
+        p.then(() => {
+          // Successfully playing! Now we can safely remove all unlock listeners
+          cleanupGestureListeners();
+        }).catch(() => {
+          // Keep listeners active until genuine tap occurs
+        });
+      }
     };
 
     const cleanupGestureListeners = () => {
-      window.removeEventListener('pointerdown', handleFirstGesture);
-      window.removeEventListener('click', handleFirstGesture);
-      window.removeEventListener('touchstart', handleFirstGesture);
-      window.removeEventListener('keydown', handleFirstGesture);
-      window.removeEventListener('scroll', handleFirstGesture, { capture: true });
+      window.removeEventListener('pointerdown', tryUnlockAudio);
+      window.removeEventListener('click', tryUnlockAudio);
+      window.removeEventListener('touchstart', tryUnlockAudio);
+      window.removeEventListener('touchend', tryUnlockAudio);
+      window.removeEventListener('keydown', tryUnlockAudio);
     };
 
-    window.addEventListener('pointerdown', handleFirstGesture, { once: true });
-    window.addEventListener('click', handleFirstGesture, { once: true });
-    window.addEventListener('touchstart', handleFirstGesture, { once: true });
-    window.addEventListener('keydown', handleFirstGesture, { once: true });
-    window.addEventListener('scroll', handleFirstGesture, { once: true, capture: true });
+    window.addEventListener('pointerdown', tryUnlockAudio, { passive: true });
+    window.addEventListener('click', tryUnlockAudio, { passive: true });
+    window.addEventListener('touchstart', tryUnlockAudio, { passive: true });
+    window.addEventListener('touchend', tryUnlockAudio, { passive: true });
+    window.addEventListener('keydown', tryUnlockAudio, { passive: true });
 
     return () => {
       cleanupGestureListeners();
@@ -203,7 +241,8 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
 
       {/* Floating Singing Cat Music Widget Container: Positioned in Up-Right */}
       <div
-        className="fixed z-[350] pointer-events-auto select-none w-auto sm:w-[92px] flex flex-col items-center transition-all duration-200 top-1.5 right-2.5 sm:top-3 sm:right-4"
+        className="fixed z-[9999] pointer-events-auto select-none w-auto sm:w-[92px] flex flex-col items-center transition-all duration-200 top-1.5 right-2.5 sm:top-3 sm:right-4"
+        style={{ pointerEvents: 'auto' }}
       >
         <div
           className="relative flex flex-col items-center"
@@ -253,10 +292,11 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
           <button
             type="button"
             id="bgm-toggle-button"
-            onClick={togglePlay}
-            className="relative flex flex-col items-center justify-center p-0.5 sm:p-1 rounded-2xl cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark select-none"
-            aria-label={isPlaying ? 'Turn off music (cat singing)' : 'Turn on music'}
-            title={isPlaying ? 'Click to turn off music' : 'Click to turn on music'}
+            onClick={handleToggle}
+            onTouchEnd={handleToggle}
+            className="relative flex flex-col items-center justify-center p-1 sm:p-1.5 rounded-2xl cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark select-none touch-manipulation min-w-[54px] min-h-[54px]"
+            aria-label={isPlaying ? 'Stop music (cat singing)' : 'Start music (cat singing)'}
+            title={isPlaying ? 'Click to stop the cat from singing' : 'Click to make the cat sing'}
           >
             {/* Cat Sprite on Pastel Cloud */}
             <div
