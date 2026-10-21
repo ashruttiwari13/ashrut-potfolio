@@ -57,17 +57,15 @@ export const Window: React.FC<WindowProps> = ({
       return { x, y };
     }
 
-    // Desktop dock sits on left side (~92px wide)
-    const dockWidth = 92;
-    const availableWidth = Math.max(numericWidth, vw - dockWidth);
-    const rawX = dockWidth + Math.floor((availableWidth - numericWidth) / 2);
-    const x = Math.max(dockWidth + 16, Math.min(vw - numericWidth - 20, rawX));
+    // Desktop: Window is centered horizontally across the viewport
+    const rawX = Math.floor((vw - numericWidth) / 2);
+    const x = Math.max(16, Math.min(vw - numericWidth - 16, rawX));
 
-    // Vertical positioning: centered in upper-middle of screen clear of taskbar
-    const availableHeight = vh - 75;
-    const estimatedHeight = 580;
+    // Vertical positioning: centered in upper-middle of screen clear of bottom dock
+    const availableHeight = vh - 90;
+    const estimatedHeight = 560;
     const rawY = Math.floor((availableHeight - estimatedHeight) / 2);
-    const y = Math.max(24, Math.min(60, rawY));
+    const y = Math.max(16, Math.min(48, rawY));
 
     return { x, y };
   }, [numericWidth]);
@@ -151,7 +149,7 @@ export const Window: React.FC<WindowProps> = ({
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!isDragging || isMaximized) return;
-      const minX = isMobile ? 8 : 106;
+      const minX = isMobile ? 8 : 12;
       const newX = Math.max(minX, Math.min(window.innerWidth - 100, e.clientX - dragOffset.x));
       const newY = Math.max(10, Math.min(window.innerHeight - 80, e.clientY - dragOffset.y));
       setPosition({ x: newX, y: newY });
@@ -160,7 +158,7 @@ export const Window: React.FC<WindowProps> = ({
     const handleTouchMove = (e: TouchEvent) => {
       if (!isDragging || isMaximized || e.touches.length !== 1) return;
       const touch = e.touches[0];
-      const minX = isMobile ? 8 : 106;
+      const minX = isMobile ? 8 : 12;
       const newX = Math.max(minX, Math.min(window.innerWidth - 100, touch.clientX - dragOffset.x));
       const newY = Math.max(10, Math.min(window.innerHeight - 80, touch.clientY - dragOffset.y));
       setPosition({ x: newX, y: newY });
@@ -211,12 +209,12 @@ export const Window: React.FC<WindowProps> = ({
         ...(isMaximized
           ? {
               top: isMobile ? '8px' : '12px',
-              left: isMobile ? '8px' : '108px', // Leaves 12px gap clear of the left menu bar
+              left: isMobile ? '8px' : '16px',
               right: isMobile ? '8px' : '16px',
-              bottom: isMobile ? '74px' : '64px', // Leaves clear gap above bottom taskbar
+              bottom: isMobile ? '74px' : '86px', // Leaves clear gap above bottom dock
               width: 'auto',
               maxWidth: 'none',
-              height: isMobile ? 'calc(100vh - 82px)' : 'calc(100vh - 76px)',
+              height: isMobile ? 'calc(100vh - 82px)' : 'calc(100vh - 98px)',
             }
           : {
               top: `${position.y}px`,

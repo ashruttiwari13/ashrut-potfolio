@@ -36,9 +36,9 @@ export const Taskbar: React.FC<TaskbarProps> = ({
       className="fixed bottom-3 right-4 z-[300] flex items-center gap-2 p-1.5 sm:p-2 bg-[rgba(255,250,240,0.95)] backdrop-blur-md rounded-full border-[2.5px] border-pastel-dark shadow-retro text-xs font-bold max-md:hidden pointer-events-auto"
     >
       {/* Live Status Pill */}
-      <div className="flex items-center gap-1.5 px-3 py-1 bg-pastel-mint/80 rounded-full border border-pastel-dark text-pastel-dark">
-        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-        <span className="text-[11px] whitespace-nowrap hidden lg:inline">Open for Freelance</span>
+      <div className="flex items-center gap-1.5 px-2.5 py-1 bg-pastel-mint/80 rounded-full border border-pastel-dark text-pastel-dark" title="Open for Freelance Opportunities">
+        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
+        <span className="text-[11px] whitespace-nowrap hidden xl:inline">Open for Freelance</span>
       </div>
 
       {/* Taskbar Action Controls */}
@@ -59,7 +59,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
         title="Bring all open windows forward"
       >
         <Layers size={12} strokeWidth={2.5} />
-        <span>Bring Front</span>
+        <span className="hidden xl:inline">Bring Front</span>
       </button>
 
       <button
