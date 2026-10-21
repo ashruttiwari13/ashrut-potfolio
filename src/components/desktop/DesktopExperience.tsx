@@ -69,35 +69,35 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
     {
       id: 'achievementsWin',
       title: '🏆 Awards & Industry Recognitions',
-      width: 500,
+      width: 520,
       headerColor: 'bg-pastel-lavender',
       defaultOpen: false,
     },
     {
       id: 'hobbiesWin',
-      title: '🎬 Filmmaking & Creative Hobbies (Personal Pursuits)',
-      width: 480,
+      title: '🎬 Outside the Engine',
+      width: 540,
       headerColor: 'bg-pastel-peach',
       defaultOpen: false,
     },
     {
       id: 'gameWin',
-      title: '☠️ Haunted House: The Escape · 3D Horror Game',
-      width: 860,
-      headerColor: 'bg-pastel-pink',
+      title: '⚔️ Pixel Quest: The Lost Crystal · 2D Adventure',
+      width: 720,
+      headerColor: 'bg-pastel-sky',
       defaultOpen: false,
     },
     {
       id: 'resumeWin',
       title: '📄 Curriculum Vitae & Experience Timeline',
-      width: 580,
+      width: 560,
       headerColor: 'bg-pastel-lavender',
       defaultOpen: false,
     },
     {
       id: 'contactWin',
-      title: '💌 Let’s Connect · Freelance & Commissions',
-      width: 480,
+      title: '💼 Freelance Studio & Commissions · Ashrut Tiwari',
+      width: 560,
       headerColor: 'bg-pastel-pink',
       defaultOpen: false,
     },
@@ -330,7 +330,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isMaximized={maximizedWindowId === 'profileWin'}
         onToggleMaximize={() => toggleMaximizeWindow('profileWin')}
         zIndex={windowsState.profileWin.zIndex}
-        width={450}
+        width={520}
         headerColor="bg-pastel-pink"
         onClose={() => closeWindow('profileWin')}
         onFocus={() => bringToFront('profileWin')}
@@ -348,7 +348,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isMaximized={maximizedWindowId === 'projectsWin'}
         onToggleMaximize={() => toggleMaximizeWindow('projectsWin')}
         zIndex={windowsState.projectsWin.zIndex}
-        width={620}
+        width={680}
         headerColor="bg-pastel-peach"
         onClose={() => closeWindow('projectsWin')}
         onFocus={() => bringToFront('projectsWin')}
@@ -366,7 +366,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isMaximized={maximizedWindowId === 'skillsWin'}
         onToggleMaximize={() => toggleMaximizeWindow('skillsWin')}
         zIndex={windowsState.skillsWin.zIndex}
-        width={480}
+        width={540}
         headerColor="bg-pastel-mint"
         onClose={() => closeWindow('skillsWin')}
         onFocus={() => bringToFront('skillsWin')}
@@ -384,7 +384,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isMaximized={maximizedWindowId === 'achievementsWin'}
         onToggleMaximize={() => toggleMaximizeWindow('achievementsWin')}
         zIndex={windowsState.achievementsWin.zIndex}
-        width={450}
+        width={520}
         headerColor="bg-pastel-lavender"
         onClose={() => closeWindow('achievementsWin')}
         onFocus={() => bringToFront('achievementsWin')}
@@ -402,7 +402,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isMaximized={maximizedWindowId === 'hobbiesWin'}
         onToggleMaximize={() => toggleMaximizeWindow('hobbiesWin')}
         zIndex={windowsState.hobbiesWin.zIndex}
-        width={440}
+        width={540}
         headerColor="bg-pastel-peach"
         onClose={() => closeWindow('hobbiesWin')}
         onFocus={() => bringToFront('hobbiesWin')}
@@ -420,7 +420,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isMaximized={maximizedWindowId === 'gameWin'}
         onToggleMaximize={() => toggleMaximizeWindow('gameWin')}
         zIndex={windowsState.gameWin.zIndex}
-        width={680}
+        width={720}
         headerColor="bg-pastel-sky"
         onClose={() => closeWindow('gameWin')}
         onFocus={() => bringToFront('gameWin')}
@@ -438,7 +438,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isMaximized={maximizedWindowId === 'resumeWin'}
         onToggleMaximize={() => toggleMaximizeWindow('resumeWin')}
         zIndex={windowsState.resumeWin.zIndex}
-        width={500}
+        width={560}
         headerColor="bg-pastel-lavender"
         onClose={() => closeWindow('resumeWin')}
         onFocus={() => bringToFront('resumeWin')}
@@ -456,7 +456,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isMaximized={maximizedWindowId === 'contactWin'}
         onToggleMaximize={() => toggleMaximizeWindow('contactWin')}
         zIndex={windowsState.contactWin.zIndex}
-        width={520}
+        width={560}
         headerColor="bg-pastel-pink"
         onClose={() => closeWindow('contactWin')}
         onFocus={() => bringToFront('contactWin')}

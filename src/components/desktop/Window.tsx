@@ -51,8 +51,8 @@ export const Window: React.FC<WindowProps> = ({
     const isMobile = vw < 768;
 
     if (isMobile) {
-      const winW = Math.min(350, vw - 24);
-      const x = Math.max(12, Math.floor((vw - winW) / 2));
+      const winW = Math.min(360, vw - 20);
+      const x = Math.max(10, Math.floor((vw - winW) / 2));
       const y = 62; // Cleanly below the singing cat
       return { x, y };
     }
@@ -247,11 +247,11 @@ export const Window: React.FC<WindowProps> = ({
               top: `${position.y}px`,
               left: `${position.x}px`,
               width: isMobile
-                ? `min(350px, calc(100vw - 24px))`
+                ? `min(360px, calc(100vw - 20px))`
                 : typeof width === 'number'
                 ? `${width}px`
                 : width,
-              maxWidth: isMobile ? 'calc(100vw - 20px)' : '92vw',
+              maxWidth: isMobile ? 'calc(100vw - 16px)' : '94vw',
               maxHeight: isMobile ? 'calc(100dvh - 190px)' : 'calc(100vh - 80px)',
             }),
       }}
@@ -266,11 +266,11 @@ export const Window: React.FC<WindowProps> = ({
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchStart}
         onDoubleClick={toggleMaximize}
-        className={`${headerColor} px-2.5 sm:px-4 py-1.5 sm:py-2 border-b-2 sm:border-b-[2.5px] border-pastel-dark flex items-center justify-between cursor-grab active:cursor-grabbing select-none touch-none`}
+        className={`${headerColor} px-3 sm:px-4 py-2 sm:py-2.5 border-b-2 sm:border-b-[2.5px] border-pastel-dark flex items-center justify-between cursor-grab active:cursor-grabbing select-none touch-none min-h-[46px] sm:min-h-[52px]`}
         title="Drag to move · Double click to maximize"
       >
         <div className="flex items-center gap-1.5 sm:gap-2 font-bold text-xs sm:text-sm text-pastel-dark tracking-wide truncate">
-          <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-pastel-dark/30 animate-pulse shrink-0" />
+          <span className="w-2 h-2 rounded-full bg-pastel-dark/30 animate-pulse shrink-0" />
           <span className="truncate">{title}</span>
           {isMaximized && (
             <span className="text-[9px] sm:text-[10px] font-extrabold px-1.5 py-0.2 rounded-full bg-white/90 border border-pastel-dark text-pastel-dark shrink-0 hidden sm:inline-flex shadow-2xs">
@@ -279,8 +279,8 @@ export const Window: React.FC<WindowProps> = ({
           )}
         </div>
 
-        {/* Window Chrome Buttons */}
-        <div className="flex items-center gap-1 ml-1.5 shrink-0">
+        {/* Window Chrome Buttons: Minimize, Maximize, Close (Cut) */}
+        <div className="flex items-center gap-1.5 sm:gap-2 ml-2 shrink-0">
           {onMinimize && (
             <button
               type="button"
@@ -291,9 +291,9 @@ export const Window: React.FC<WindowProps> = ({
               }}
               title="Minimize to Dock"
               aria-label="Minimize"
-              className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5 rounded-full bg-white border-[1.5px] sm:border-2 border-pastel-dark flex items-center justify-center hover:bg-pastel-peach active:scale-90 transition-all text-pastel-dark shadow-xs cursor-pointer"
+              className="w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 rounded-full bg-white border-2 border-pastel-dark flex items-center justify-center hover:bg-pastel-peach active:scale-90 transition-all text-pastel-dark shadow-xs cursor-pointer"
             >
-              <Minus size={11} strokeWidth={3} />
+              <Minus className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={3.5} />
             </button>
           )}
 
@@ -306,9 +306,9 @@ export const Window: React.FC<WindowProps> = ({
             }}
             title={isMaximized ? 'Restore down' : 'Maximize window'}
             aria-label={isMaximized ? 'Restore down' : 'Maximize window'}
-            className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5 rounded-full bg-white border-[1.5px] sm:border-2 border-pastel-dark flex items-center justify-center hover:bg-pastel-mint active:scale-90 transition-all text-pastel-dark hidden sm:flex shadow-xs cursor-pointer"
+            className="w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 rounded-full bg-white border-2 border-pastel-dark flex items-center justify-center hover:bg-pastel-mint active:scale-90 transition-all text-pastel-dark shadow-xs cursor-pointer"
           >
-            <Square size={10} strokeWidth={3} />
+            <Square className="w-3 h-3 sm:w-3.5 sm:h-3.5" strokeWidth={3.5} />
           </button>
 
           <button
@@ -318,11 +318,11 @@ export const Window: React.FC<WindowProps> = ({
               e.stopPropagation();
               onClose();
             }}
-            title="Close Tab (X)"
+            title="Close Tab (Cut / X)"
             aria-label="Close"
-            className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5 rounded-full bg-white border-[1.5px] sm:border-2 border-pastel-dark flex items-center justify-center hover:bg-rose-500 hover:text-white active:scale-90 transition-all text-pastel-dark font-bold shadow-xs cursor-pointer"
+            className="w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 rounded-full bg-white border-2 border-pastel-dark flex items-center justify-center hover:bg-rose-500 hover:text-white active:scale-90 transition-all text-pastel-dark font-bold shadow-xs cursor-pointer"
           >
-            <X size={12} strokeWidth={3} />
+            <X className="w-4 h-4 sm:w-4.5 sm:h-4.5" strokeWidth={3.5} />
           </button>
         </div>
       </div>

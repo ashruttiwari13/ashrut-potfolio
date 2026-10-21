@@ -56,6 +56,8 @@ body {
   border: 3px solid var(--text-dark);
   border-radius: 24px 8px 24px 8px;
   box-shadow: 6px 6px 0 rgba(61, 61, 61, 0.18);
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .retro-btn {
@@ -104,11 +106,22 @@ body {
   padding: 12px;
   box-shadow: 3px 3px 0 var(--accent-mint);
   transition: transform 0.12s ease;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .retro-card:hover {
   transform: translateY(-2px);
   box-shadow: 4px 4px 0 var(--accent-mint);
+}
+
+/* Ensure images, svgs, and media never spill out of containers */
+.retro-window img,
+.retro-window video,
+.retro-window canvas,
+.retro-card img,
+.retro-card video {
+  max-width: 100%;
 }
 
 .pixel-pattern {

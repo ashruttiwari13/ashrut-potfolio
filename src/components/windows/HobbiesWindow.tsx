@@ -24,26 +24,29 @@ export const HobbiesWindow: React.FC = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+      {/* Hobby Cards: Generous horizontal layout so NO text or letters can ever spill out */}
+      <div className="space-y-2.5">
         {initialHobbies.map((hobby) => (
           <div
             key={hobby.id}
-            className="retro-card flex flex-col justify-between p-3.5 bg-white text-center items-center min-w-0"
+            className="retro-card flex items-start gap-3 p-3 bg-white min-w-0 shadow-sm"
           >
-            <div className="p-2.5 rounded-2xl bg-pastel-warm border-2 border-pastel-dark mb-2 shadow-sm shrink-0">
+            <div className="p-2.5 rounded-2xl bg-pastel-warm border-2 border-pastel-dark shadow-sm shrink-0 mt-0.5">
               {iconMap[hobby.icon] || <Sparkles className="w-5 h-5 text-pastel-dark" />}
             </div>
-            <h4 className="font-extrabold text-sm text-pastel-dark break-words">
-              {hobby.title}
-            </h4>
-            <p className="text-[11px] text-pastel-soft mt-1 leading-snug break-words">
-              {hobby.description}
-            </p>
+            <div className="min-w-0 flex-1">
+              <h4 className="font-extrabold text-sm text-pastel-dark break-words">
+                {hobby.title}
+              </h4>
+              <p className="text-xs text-pastel-soft mt-1 leading-relaxed break-words">
+                {hobby.description}
+              </p>
+            </div>
           </div>
         ))}
       </div>
 
-      <div className="p-3 bg-pastel-peach/40 border border-pastel-dark rounded-retro-sm text-xs text-center text-pastel-dark font-medium">
+      <div className="p-3 bg-pastel-peach/40 border-2 border-pastel-dark rounded-retro-sm text-xs text-center text-pastel-dark font-medium break-words">
         ✨ Creative philosophy: Strong storytelling, intentional audio, and cinematographic framing make games unforgettable.
       </div>
     </div>
