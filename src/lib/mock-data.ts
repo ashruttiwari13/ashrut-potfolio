@@ -4,6 +4,8 @@ export const initialProfile: ProfileSettings = {
   id: 'ashrut-profile-default',
   full_name: 'Ashrut Tiwari',
   headline: 'Unreal Engine 5 Game Developer & 3D Artist',
+  avatar_url: '/assets/ashrut-avatar.jpg',
+  avatar_real_url: '/assets/ashrut-real.jpg',
   bio: 'I build high-performance Unreal Engine 5 games (C++ & Blueprints) and craft stylized 3D character & environment art in Blender. Filmmaking and cinematography are my personal creative hobbies that inspire my game lighting, camera composition, and visual storytelling, while my professional career and client work are 100% focused on Game Development & 3D Art.',
   specialties: [
     'Unreal Engine 5 (C++ & Blueprints)',

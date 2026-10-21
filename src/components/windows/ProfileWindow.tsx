@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ProfileSettings, WindowId } from '@/types';
 import { 
   MapPin, 
@@ -9,7 +9,9 @@ import {
   ExternalLink, 
   Gamepad2, 
   Mail, 
-  FileText 
+  FileText,
+  Maximize2,
+  X
 } from 'lucide-react';
 
 interface ProfileWindowProps {
@@ -18,29 +20,63 @@ interface ProfileWindowProps {
 }
 
 export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigate }) => {
+  const [avatarMode, setAvatarMode] = useState<'3d' | 'real'>('3d');
+  const [showEnlargedPhoto, setShowEnlargedPhoto] = useState(false);
+
+  const activeAvatarSrc = avatarMode === '3d'
+    ? (profile.avatar_url || '/assets/ashrut-avatar.jpg')
+    : (profile.avatar_real_url || '/assets/ashrut-real.jpg');
+
   return (
     <div className="space-y-3">
       {/* Header Profile Card */}
       <div className="flex items-center gap-3 p-2.5 sm:p-3 bg-white border-2 border-pastel-dark rounded-retro shadow-[2.5px_2.5px_0_#ffdab9]">
-        {/* Retro Styled Character Avatar */}
-        <div className="shrink-0 w-13 h-13 sm:w-16 sm:h-16 rounded-2xl bg-pastel-peach border-2 border-pastel-dark overflow-hidden flex items-center justify-center shadow-inner">
-          <svg viewBox="0 0 120 120" className="w-full h-full p-1" aria-label="Ashrut Tiwari Stylized Avatar">
-            <rect width="120" height="120" fill="#ffe4cb" rx="24" />
-            {/* Astronaut helmet / character head */}
-            <circle cx="60" cy="50" r="28" fill="#ffb6c1" stroke="#3d3d3d" strokeWidth="3" />
-            <ellipse cx="60" cy="50" rx="20" ry="14" fill="#a0d4ff" stroke="#3d3d3d" strokeWidth="2.5" />
-            {/* Eyes */}
-            <circle cx="53" cy="48" r="3" fill="#3d3d3d" />
-            <circle cx="67" cy="48" r="3" fill="#3d3d3d" />
-            <circle cx="55" cy="46" r="1" fill="#ffffff" />
-            <circle cx="69" cy="46" r="1" fill="#ffffff" />
-            {/* Smile / Visor shine */}
-            <path d="M54 55 Q60 60 66 55" stroke="#3d3d3d" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-            {/* Body */}
-            <rect x="36" y="80" width="48" height="35" rx="10" fill="#e2d1ff" stroke="#3d3d3d" strokeWidth="3" />
-            {/* Badge */}
-            <circle cx="60" cy="94" r="5" fill="#ffd966" stroke="#3d3d3d" strokeWidth="1.5" />
-          </svg>
+        {/* Profile Picture with Interactive 3D / Real Photo Toggle */}
+        <div className="relative shrink-0 select-none">
+          <div
+            onClick={() => setAvatarMode((prev) => (prev === '3d' ? 'real' : '3d'))}
+            title="Click to toggle between 3D Game-Dev Avatar & Real Photo"
+            className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pastel-peach border-2 border-pastel-dark overflow-hidden flex items-center justify-center shadow-[2px_2px_0_#3d3d3d] cursor-pointer relative group active:scale-95 transition-all"
+          >
+            <img
+              src={activeAvatarSrc}
+              alt="Ashrut Tiwari - Unreal 5 Game Dev & 3D Artist"
+              className={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 ${
+                avatarMode === '3d' ? 'object-top' : 'object-[center_15%]'
+              }`}
+            />
+            {/* Tag indicator overlay */}
+            <span className="absolute bottom-0 inset-x-0 bg-pastel-dark/85 text-white text-[7.5px] sm:text-[8px] font-extrabold text-center py-0.5 tracking-wide backdrop-blur-xs">
+              {avatarMode === '3d' ? '✨ 3D Render' : '📷 Real Photo'}
+            </span>
+          </div>
+
+          {/* Quick Switch Button */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setAvatarMode((prev) => (prev === '3d' ? 'real' : '3d'));
+            }}
+            className="absolute -bottom-1 -right-1 bg-white hover:bg-pastel-mint border border-pastel-dark rounded-full px-1.5 py-0.2 text-[8px] font-extrabold text-pastel-dark shadow-xs transition-all cursor-pointer flex items-center gap-0.5"
+            title="Toggle between 3D Render and Real Photo"
+          >
+            <Sparkles size={8} className="text-amber-500 shrink-0" />
+            <span>{avatarMode === '3d' ? 'Real' : '3D'}</span>
+          </button>
+
+          {/* Enlarge inspect button */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowEnlargedPhoto(true);
+            }}
+            className="absolute -top-1.5 -right-1.5 bg-white hover:bg-pastel-peach border border-pastel-dark rounded-full p-1 shadow-xs transition-all cursor-pointer text-pastel-dark"
+            title="View full portrait"
+          >
+            <Maximize2 size={9} strokeWidth={2.5} />
+          </button>
         </div>
 
         <div className="flex-1 min-w-0">
@@ -171,6 +207,76 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
           })}
         </div>
       </div>
+
+      {/* High-Resolution Portrait Modal Drawer */}
+      {showEnlargedPhoto && (
+        <div
+          onClick={() => setShowEnlargedPhoto(false)}
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="retro-window max-w-sm w-full bg-[#fffcf3] overflow-hidden shadow-2xl animate-in zoom-in-95"
+          >
+            {/* Modal Header */}
+            <div className="bg-pastel-peach px-3 py-2 border-b-2 border-pastel-dark flex items-center justify-between">
+              <span className="font-extrabold text-xs text-pastel-dark flex items-center gap-1.5">
+                <span>👾</span>
+                <span>Ashrut Tiwari · Profile Portrait</span>
+              </span>
+              <button
+                type="button"
+                onClick={() => setShowEnlargedPhoto(false)}
+                className="w-5.5 h-5.5 rounded-full bg-white border border-pastel-dark flex items-center justify-center hover:bg-rose-500 hover:text-white transition-colors cursor-pointer text-pastel-dark"
+              >
+                <X size={12} strokeWidth={3} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-3.5 space-y-3">
+              <div className="aspect-square w-full rounded-2xl border-2 border-pastel-dark overflow-hidden bg-pastel-warm relative shadow-md">
+                <img
+                  src={activeAvatarSrc}
+                  alt="Ashrut Tiwari - Unreal 5 Game Dev & 3D Artist"
+                  className={`w-full h-full object-cover ${
+                    avatarMode === '3d' ? 'object-top' : 'object-[center_15%]'
+                  }`}
+                />
+              </div>
+
+              {/* Mode switch pills */}
+              <div className="flex items-center justify-between gap-2 p-1.5 bg-pastel-mint/30 rounded-xl border border-pastel-dark/30 text-xs font-bold text-pastel-dark">
+                <span>Display Version:</span>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setAvatarMode('3d')}
+                    className={`px-2.5 py-1 rounded-lg text-[10.5px] font-extrabold transition-all cursor-pointer ${
+                      avatarMode === '3d'
+                        ? 'bg-pastel-pink border border-pastel-dark shadow-xs'
+                        : 'bg-white border border-pastel-dark/30 hover:bg-white/80'
+                    }`}
+                  >
+                    ✨ 3D Render
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAvatarMode('real')}
+                    className={`px-2.5 py-1 rounded-lg text-[10.5px] font-extrabold transition-all cursor-pointer ${
+                      avatarMode === 'real'
+                        ? 'bg-pastel-pink border border-pastel-dark shadow-xs'
+                        : 'bg-white border border-pastel-dark/30 hover:bg-white/80'
+                    }`}
+                  >
+                    📷 Real Photo
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

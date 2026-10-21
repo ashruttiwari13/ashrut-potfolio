@@ -91,13 +91,23 @@ export const ResumeWindow: React.FC<ResumeWindowProps> = ({ profile }) => {
       {/* Styled Printable Resume Sheet */}
       <div className="p-4 sm:p-5 bg-white border-2 border-pastel-dark rounded-retro shadow-sm space-y-4 printable-resume">
         {/* Header */}
-        <div className="border-b-2 border-pastel-dark/20 pb-3">
-          <h2 className="text-xl font-extrabold text-pastel-dark break-words">{profile.full_name}</h2>
-          <p className="text-xs font-bold text-amber-800 mt-0.5 break-words">{profile.headline}</p>
-          <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-[11px] text-pastel-soft font-medium break-all">
-            <span>📍 {profile.location}</span>
-            <span>✉️ {profile.email}</span>
-            <span>💼 {profile.freelance_status}</span>
+        <div className="border-b-2 border-pastel-dark/20 pb-3 flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <h2 className="text-xl font-extrabold text-pastel-dark break-words">{profile.full_name}</h2>
+            <p className="text-xs font-bold text-amber-800 mt-0.5 break-words">{profile.headline}</p>
+            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-[11px] text-pastel-soft font-medium break-all">
+              <span>📍 {profile.location}</span>
+              <span>✉️ {profile.email}</span>
+              <span>💼 {profile.freelance_status}</span>
+            </div>
+          </div>
+
+          <div className="shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-xl border-2 border-pastel-dark overflow-hidden shadow-[2px_2px_0_#3d3d3d] bg-pastel-peach">
+            <img
+              src={profile.avatar_url || '/assets/ashrut-avatar.jpg'}
+              alt={profile.full_name}
+              className="w-full h-full object-cover object-top"
+            />
           </div>
         </div>
 

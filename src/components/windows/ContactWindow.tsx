@@ -234,10 +234,18 @@ export const ContactWindow: React.FC = () => {
                 · Direct Pipeline
               </span>
             </div>
-            <h3 className="font-extrabold text-sm sm:text-base text-pastel-dark flex items-center gap-1.5 pt-0.5 break-words">
-              <Briefcase size={17} className="text-pastel-dark shrink-0" />
-              <span>Commission Ashrut Tiwari for Your Project</span>
-            </h3>
+            <div className="flex items-center gap-2 pt-0.5">
+              <div className="w-8 h-8 rounded-full border-2 border-pastel-dark overflow-hidden shrink-0 shadow-xs bg-pastel-peach">
+                <img
+                  src="/assets/ashrut-avatar.jpg"
+                  alt="Ashrut Tiwari"
+                  className="w-full h-full object-cover object-top"
+                />
+              </div>
+              <h3 className="font-extrabold text-sm sm:text-base text-pastel-dark flex items-center gap-1.5 break-words">
+                <span>Commission Ashrut Tiwari for Your Project</span>
+              </h3>
+            </div>
             <p className="text-xs text-pastel-soft break-words">
               Game development, 3D character modeling, environment art & cinematic VFX.
             </p>

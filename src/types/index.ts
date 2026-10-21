@@ -50,6 +50,8 @@ export interface ProfileSettings {
   full_name: string;
   headline: string;
   bio: string;
+  avatar_url?: string;
+  avatar_real_url?: string;
   specialties: string[];
   location: string;
   freelance_status: string;
