@@ -208,12 +208,7 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
 
       {/* Floating Singing Cat Music Widget Container: Positioned in Up-Right */}
       <div
-        className={`fixed z-[350] pointer-events-auto select-none w-[84px] sm:w-[92px] flex flex-col items-center transition-opacity duration-200 top-3 right-4 ${
-          /* Mobile: hide when ANY window is open so it NEVER covers text, cards, or close buttons */
-          isAnyWindowOpen || isAnyWindowMaximized
-            ? 'max-md:opacity-0 max-md:pointer-events-none'
-            : ''
-        }`}
+        className="fixed z-[350] pointer-events-auto select-none w-auto sm:w-[92px] flex flex-col items-center transition-all duration-200 top-1.5 right-2.5 sm:top-3 sm:right-4"
       >
         <div
           className="relative flex flex-col items-center"
@@ -224,36 +219,36 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
           {(showHint || isHovered) && (
             <div
               role="status"
-              className="absolute top-[calc(100%+8px)] right-0 whitespace-nowrap px-3 py-1.5 bg-[rgba(255,250,240,0.98)] backdrop-blur-md rounded-2xl border-2 border-pastel-dark shadow-retro text-xs text-pastel-dark flex items-center gap-2 pointer-events-none z-50 transition-opacity duration-150"
+              className="absolute top-[calc(100%+6px)] right-0 whitespace-nowrap px-2.5 py-1 sm:px-3 sm:py-1.5 bg-[rgba(255,250,240,0.98)] backdrop-blur-md rounded-2xl border-2 border-pastel-dark shadow-retro text-[10px] sm:text-xs text-pastel-dark flex items-center gap-1.5 sm:gap-2 pointer-events-none z-50 transition-opacity duration-150"
             >
               <span className="text-sm shrink-0">{isPlaying ? '🎶' : '🌸'}</span>
               <div className="flex flex-col">
-                <span className="font-bold text-[11px] leading-tight">
+                <span className="font-bold text-[10px] sm:text-[11px] leading-tight">
                   {hasError
                     ? 'Singing Cat: Resting'
                     : isPlaying
                     ? 'Singing cheerfully! Click to mute'
                     : 'Music off. Click to play! 🎵'}
                 </span>
-                <span className="text-[9px] text-pastel-soft leading-none mt-0.5">
+                <span className="text-[8px] sm:text-[9px] text-pastel-soft leading-none mt-0.5">
                   {isPlaying ? 'Click to turn off music' : 'Click to start music'}
                 </span>
               </div>
               {/* Cute speech bubble caret pointer pointing UP to the cat */}
-              <div className="absolute -top-1.5 right-7 w-2.5 h-2.5 bg-[#fffaf0] border-l-2 border-t-2 border-pastel-dark rotate-45 pointer-events-none" />
+              <div className="absolute -top-1.5 right-5 sm:right-7 w-2.5 h-2.5 bg-[#fffaf0] border-l-2 border-t-2 border-pastel-dark rotate-45 pointer-events-none" />
             </div>
           )}
 
           {/* Floating Magical Musical Notes (when singing) */}
           {isPlaying && (
-            <div className="absolute -top-3 left-0 right-0 h-6 pointer-events-none overflow-visible">
-              <span className="absolute -left-1 text-amber-500 font-bold text-xs animate-[floatNote1_1.4s_ease-in-out_infinite]">
+            <div className="absolute -top-2 sm:-top-3 left-0 right-0 h-5 sm:h-6 pointer-events-none overflow-visible">
+              <span className="absolute -left-1 text-amber-500 font-bold text-[10px] sm:text-xs animate-[floatNote1_1.4s_ease-in-out_infinite]">
                 ♪
               </span>
-              <span className="absolute left-1/2 -translate-x-1/2 text-orange-400 font-bold text-sm animate-[floatNote2_1.6s_ease-in-out_infinite_0.4s]">
+              <span className="absolute left-1/2 -translate-x-1/2 text-orange-400 font-bold text-xs sm:text-sm animate-[floatNote2_1.6s_ease-in-out_infinite_0.4s]">
                 ♫
               </span>
-              <span className="absolute -right-1 text-pink-500 font-bold text-xs animate-[floatNote3_1.5s_ease-in-out_infinite_0.8s]">
+              <span className="absolute -right-1 text-pink-500 font-bold text-[10px] sm:text-xs animate-[floatNote3_1.5s_ease-in-out_infinite_0.8s]">
                 ♩
               </span>
             </div>
@@ -264,13 +259,13 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
             type="button"
             id="bgm-toggle-button"
             onClick={togglePlay}
-            className="relative flex flex-col items-center justify-center p-1 rounded-2xl cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark select-none"
+            className="relative flex flex-col items-center justify-center p-0.5 sm:p-1 rounded-2xl cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark select-none"
             aria-label={isPlaying ? 'Turn off music (cat singing)' : 'Turn on music'}
             title={isPlaying ? 'Click to turn off music' : 'Click to turn on music'}
           >
             {/* Cat Sprite on Pastel Cloud */}
             <div
-              className={`relative w-[72px] h-[72px] sm:w-[84px] sm:h-[84px] drop-shadow-[2px_3px_0_rgba(61,61,61,0.22)] ${
+              className={`relative w-[48px] h-[48px] sm:w-[84px] sm:h-[84px] drop-shadow-[2px_3px_0_rgba(61,61,61,0.22)] ${
                 isPlaying
                   ? 'animate-[catSingBounce_0.84s_ease-in-out_infinite]'
                   : isHovered
@@ -315,7 +310,7 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
 
             {/* Status Indicator Badge Under Cat */}
             <span
-              className={`text-[9px] font-bold px-2.5 py-0.5 rounded-full border border-pastel-dark shadow-retro-sm -mt-0.5 transition-colors duration-150 ${
+              className={`text-[7.5px] sm:text-[9px] font-bold px-1.5 py-0.2 sm:px-2.5 sm:py-0.5 rounded-full border border-pastel-dark shadow-retro-sm -mt-0.5 transition-colors duration-150 ${
                 isPlaying
                   ? 'bg-pastel-mint text-pastel-dark'
                   : isHovered

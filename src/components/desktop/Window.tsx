@@ -226,13 +226,13 @@ export const Window: React.FC<WindowProps> = ({
         willChange: isDragging ? 'left, top' : 'auto',
         ...(isMobile
           ? {
-              top: '8px',
+              top: '64px', // Clears the singing cat in the top-right completely
               left: '8px',
               right: '8px',
-              bottom: '74px', // Sits cleanly above the bottom dock
+              bottom: '58px', // Clears the compact bottom dock
               width: 'auto',
               maxWidth: 'none',
-              height: 'calc(100dvh - 82px)',
+              height: 'calc(100dvh - 124px)',
             }
           : isMaximized
           ? {
