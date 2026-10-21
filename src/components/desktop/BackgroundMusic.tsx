@@ -19,15 +19,18 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
 }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const fadeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const lastToggleRef = useRef<number>(0);
 
-  // Component state - Starts singing immediately when website starts!
+  // Component state - Starts singing immediately when website starts on all platforms!
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
+  const [isAudioActive, setIsAudioActive] = useState<boolean>(false);
   const isPlayingRef = useRef<boolean>(true);
   isPlayingRef.current = isPlaying;
 
   const [singFrame, setSingFrame] = useState<1 | 2>(1);
   const [hasError, setHasError] = useState<boolean>(false);
-  const [showHint, setShowHint] = useState<boolean>(false);
+  const [showHint, setShowHint] = useState<boolean>(true);
   const [isHovered, setIsHovered] = useState<boolean>(false);
 
   // Smooth volume ramping helper
@@ -56,9 +59,6 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     }, stepInterval);
   }, []);
 
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const lastToggleRef = useRef<number>(0);
-
   // Start playback & cat singing
   const startPlayback = useCallback(() => {
     setIsPlaying(true);
@@ -67,17 +67,20 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
 
     const audio = audioRef.current;
     if (!audio) return;
+
+    audio.muted = false;
     audio.volume = DEFAULT_VOLUME;
 
     const playPromise = audio.play();
     if (playPromise !== undefined) {
       playPromise
         .then(() => {
+          setIsAudioActive(true);
           setIsPlaying(true);
           setShowHint(false);
         })
         .catch((err) => {
-          console.log('Mobile audio playback waiting for interaction:', err?.name);
+          console.log('Audio playback waiting for interaction:', err?.name);
         });
     }
   }, []);
@@ -86,6 +89,8 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
   const pausePlayback = useCallback(() => {
     setIsPlaying(false);
     isPlayingRef.current = false;
+    setIsAudioActive(false);
+
     const audio = audioRef.current;
     if (!audio) return;
 
@@ -97,9 +102,13 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
   // Main toggle handler: Click/Tap on Cat to stop / start singing anytime
   const togglePlay = useCallback(() => {
     setShowHint(false);
-    if (isPlayingRef.current) {
+    const audio = audioRef.current;
+
+    // If audio is currently actively playing with sound -> User wants to STOP it!
+    if (audio && !audio.paused && isPlayingRef.current) {
       pausePlayback();
     } else {
+      // Audio is paused or waiting -> User wants to START it!
       startPlayback();
     }
   }, [pausePlayback, startPlayback]);
@@ -113,26 +122,30 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     togglePlay();
   };
 
-  // Automatic singing & mobile-friendly audio unlock on website start
+  // Automatic singing & multi-platform audio unlock on website start
   useEffect(() => {
-    // 1. Cat is singing immediately on website load!
+    // 1. Cat is singing immediately on website load on all platforms!
     setIsPlaying(true);
     isPlayingRef.current = true;
 
     // 2. Direct autoplay attempt on page load
     const audio = audioRef.current;
     if (audio) {
+      audio.muted = false;
       audio.volume = DEFAULT_VOLUME;
-      audio.play().catch((err) => {
-        console.log('Mobile browser waiting for gesture to play audio:', err?.name);
-      });
+      const p = audio.play();
+      if (p !== undefined) {
+        p.then(() => {
+          setIsAudioActive(true);
+        }).catch((err) => {
+          console.log('Browser policy waiting for first user gesture before unmuting:', err?.name);
+        });
+      }
     }
 
-    // 3. Robust touch/tap gesture unlock for mobile browsers (iOS & Android)
+    // 3. Robust touch/click unlock for all browsers across all platforms
     const tryUnlockAudio = () => {
-      // If user has intentionally stopped the cat, don't auto-resume
       if (!isPlayingRef.current) return;
-
       const aud = audioRef.current;
       if (!aud) return;
 
@@ -149,14 +162,15 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
         }
       }
 
+      aud.muted = false;
       aud.volume = DEFAULT_VOLUME;
       const p = aud.play();
       if (p !== undefined) {
         p.then(() => {
-          // Successfully playing! Now we can safely remove all unlock listeners
+          setIsAudioActive(true);
           cleanupGestureListeners();
         }).catch(() => {
-          // Keep listeners active until genuine tap occurs
+          // Keep listening until genuine user gesture unlocks audio
         });
       }
     };
@@ -175,7 +189,12 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     window.addEventListener('touchend', tryUnlockAudio, { passive: true });
     window.addEventListener('keydown', tryUnlockAudio, { passive: true });
 
+    // Show initial speech bubble for 4.5 seconds on website start
+    setShowHint(true);
+    const hintTimer = setTimeout(() => setShowHint(false), 4500);
+
     return () => {
+      clearTimeout(hintTimer);
       cleanupGestureListeners();
     };
   }, []);
@@ -218,6 +237,14 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
         loop
         preload="auto"
         playsInline
+        onPlay={() => {
+          setIsAudioActive(true);
+          setIsPlaying(true);
+          isPlayingRef.current = true;
+        }}
+        onPause={() => {
+          setIsAudioActive(false);
+        }}
         onError={() => {
           if (audioRef.current && !audioRef.current.src.endsWith('/audio/website-music.mp3')) {
             audioRef.current.src = '/audio/website-music.mp3';
@@ -255,17 +282,23 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
               role="status"
               className="absolute top-[calc(100%+6px)] right-0 whitespace-nowrap px-2.5 py-1 sm:px-3 sm:py-1.5 bg-[rgba(255,250,240,0.98)] backdrop-blur-md rounded-2xl border-2 border-pastel-dark shadow-retro text-[10px] sm:text-xs text-pastel-dark flex items-center gap-1.5 sm:gap-2 pointer-events-none z-50 transition-opacity duration-150"
             >
-              <span className="text-sm shrink-0">{isPlaying ? '🎶' : '🌸'}</span>
+              <span className="text-sm shrink-0">{isAudioActive ? '🎶' : isPlaying ? '🎵' : '🌸'}</span>
               <div className="flex flex-col">
                 <span className="font-bold text-[10px] sm:text-[11px] leading-tight">
                   {hasError
                     ? 'Singing Cat: Resting'
+                    : isAudioActive
+                    ? 'Singing cheerfully! Click cat to stop ⏹️'
                     : isPlaying
-                    ? 'Singing cheerfully! Click to stop ⏹️'
+                    ? 'Singing Cat! Click anywhere to hear me sing 🎵'
                     : 'Cat is resting. Click to sing! 🎵'}
                 </span>
                 <span className="text-[8px] sm:text-[9px] text-pastel-soft leading-none mt-0.5">
-                  {isPlaying ? 'Click to stop the cat' : 'Click to make the cat sing'}
+                  {isAudioActive
+                    ? 'Click to stop the cat'
+                    : isPlaying
+                    ? 'Click cat to start music'
+                    : 'Click cat to sing again'}
                 </span>
               </div>
               {/* Cute speech bubble caret pointer pointing UP to the cat */}
@@ -274,7 +307,7 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
           )}
 
           {/* Floating Magical Musical Notes (when singing) */}
-          {isPlaying && (
+          {(isAudioActive || isPlaying) && (
             <div className="absolute -top-2 sm:-top-3 left-0 right-0 h-5 sm:h-6 pointer-events-none overflow-visible">
               <span className="absolute -left-1 text-amber-500 font-bold text-[10px] sm:text-xs animate-[floatNote1_1.4s_ease-in-out_infinite]">
                 ♪
@@ -295,8 +328,8 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
             onClick={handleToggle}
             onTouchEnd={handleToggle}
             className="relative flex flex-col items-center justify-center p-1 sm:p-1.5 rounded-2xl cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark select-none touch-manipulation min-w-[54px] min-h-[54px]"
-            aria-label={isPlaying ? 'Stop music (cat singing)' : 'Start music (cat singing)'}
-            title={isPlaying ? 'Click to stop the cat from singing' : 'Click to make the cat sing'}
+            aria-label={isAudioActive ? 'Stop music (cat singing)' : 'Start music (cat singing)'}
+            title={isAudioActive ? 'Click to stop the cat from singing' : 'Click to make the cat sing'}
           >
             {/* Cat Sprite on Pastel Cloud */}
             <div
@@ -346,14 +379,20 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
             {/* Status Indicator Badge Under Cat */}
             <span
               className={`text-[7.5px] sm:text-[9px] font-bold px-1.5 py-0.2 sm:px-2.5 sm:py-0.5 rounded-full border border-pastel-dark shadow-retro-sm -mt-0.5 transition-colors duration-150 ${
-                isPlaying
+                isAudioActive || isPlaying
                   ? 'bg-pastel-mint text-pastel-dark'
                   : isHovered
                   ? 'bg-pastel-peach text-pastel-dark'
                   : 'bg-white/95 text-pastel-dark'
               }`}
             >
-              {hasError ? 'Resting' : isPlaying ? 'Singing 🎵' : 'Stopped 🔇'}
+              {hasError
+                ? 'Resting'
+                : isAudioActive
+                ? 'Singing 🎵'
+                : isPlaying
+                ? 'Singing 🎵'
+                : 'Stopped 🔇'}
             </span>
           </button>
         </div>
