@@ -51,9 +51,9 @@ export const Window: React.FC<WindowProps> = ({
     const isMobile = vw < 768;
 
     if (isMobile) {
-      const winW = Math.min(numericWidth, vw - 16);
-      const x = Math.max(8, Math.floor((vw - winW) / 2));
-      const y = 12;
+      const winW = Math.min(numericWidth, vw - 20);
+      const x = Math.max(10, Math.floor((vw - winW) / 2));
+      const y = 60; // Cleanly below the singing cat
       return { x, y };
     }
 
@@ -136,9 +136,9 @@ export const Window: React.FC<WindowProps> = ({
     });
   };
 
-  // Touch drag handling for tablets & mobile
+  // Touch drag handling for mobile & tablets
   const handleTouchStart = (e: React.TouchEvent) => {
-    if (isMaximized || isMobile) return;
+    if (isMaximized) return;
     onFocus();
     if (e.touches.length === 1) {
       hasUserDragged.current = true;
@@ -150,7 +150,7 @@ export const Window: React.FC<WindowProps> = ({
     }
   };
 
-  // Silky smooth RAF-throttled dragging that tracks cursor 1:1 without latency
+  // Silky smooth RAF-throttled dragging that tracks finger/cursor 1:1 without latency
   useEffect(() => {
     if (!isDragging) return;
 
@@ -158,9 +158,12 @@ export const Window: React.FC<WindowProps> = ({
 
     const handleMouseMove = (e: MouseEvent) => {
       if (isMaximized) return;
-      const minX = isMobile ? 8 : 96;
-      const newX = Math.max(minX, Math.min(window.innerWidth - 100, e.clientX - dragOffset.x));
-      const newY = Math.max(10, Math.min(window.innerHeight - 80, e.clientY - dragOffset.y));
+      const minX = isMobile ? -80 : 96;
+      const maxX = window.innerWidth - (isMobile ? 60 : 100);
+      const minY = isMobile ? 54 : 10;
+      const maxY = window.innerHeight - (isMobile ? 80 : 80);
+      const newX = Math.max(minX, Math.min(maxX, e.clientX - dragOffset.x));
+      const newY = Math.max(minY, Math.min(maxY, e.clientY - dragOffset.y));
 
       if (rafId !== null) cancelAnimationFrame(rafId);
       rafId = requestAnimationFrame(() => {
@@ -170,10 +173,16 @@ export const Window: React.FC<WindowProps> = ({
 
     const handleTouchMove = (e: TouchEvent) => {
       if (isMaximized || e.touches.length !== 1) return;
+      if (e.cancelable) {
+        e.preventDefault(); // Prevent page scroll while dragging the header
+      }
       const touch = e.touches[0];
-      const minX = isMobile ? 8 : 96;
-      const newX = Math.max(minX, Math.min(window.innerWidth - 100, touch.clientX - dragOffset.x));
-      const newY = Math.max(10, Math.min(window.innerHeight - 80, touch.clientY - dragOffset.y));
+      const minX = -80;
+      const maxX = window.innerWidth - 60;
+      const minY = 54;
+      const maxY = window.innerHeight - 80;
+      const newX = Math.max(minX, Math.min(maxX, touch.clientX - dragOffset.x));
+      const newY = Math.max(minY, Math.min(maxY, touch.clientY - dragOffset.y));
 
       if (rafId !== null) cancelAnimationFrame(rafId);
       rafId = requestAnimationFrame(() => {
@@ -188,7 +197,7 @@ export const Window: React.FC<WindowProps> = ({
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('mouseup', handleDragEnd);
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
     window.addEventListener('touchend', handleDragEnd);
 
     return () => {
@@ -224,32 +233,26 @@ export const Window: React.FC<WindowProps> = ({
         zIndex: isMaximized ? Math.max(zIndex, 320) : zIndex,
         display: isMinimized ? 'none' : 'flex',
         willChange: isDragging ? 'left, top' : 'auto',
-        ...(isMobile
-          ? {
-              top: '60px', // Clears the singing cat in the top-right completely
-              left: '12px',
-              right: '12px',
-              bottom: '76px', // Clears the enlarged bottom toolbar
-              width: 'auto',
-              maxWidth: '460px',
-              margin: '0 auto',
-              height: 'calc(100dvh - 142px)',
-            }
-          : isMaximized
+        ...(isMaximized
           ? {
               top: '12px',
-              left: '98px', // Leaves left dock tabs 100% visible and unhidden
-              right: '102px', // Leaves up-right cat 100% visible and close button unhidden
-              bottom: '64px', // Leaves clear gap above bottom taskbar
+              left: isMobile ? '8px' : '98px',
+              right: isMobile ? '8px' : '102px',
+              bottom: isMobile ? '76px' : '64px',
               width: 'auto',
               maxWidth: 'none',
-              height: 'calc(100vh - 76px)',
+              height: isMobile ? 'calc(100dvh - 142px)' : 'calc(100vh - 76px)',
             }
           : {
               top: `${position.y}px`,
               left: `${position.x}px`,
-              width: typeof width === 'number' ? `${width}px` : width,
-              maxWidth: '92vw',
+              width: isMobile
+                ? `min(${numericWidth}px, calc(100vw - 20px))`
+                : typeof width === 'number'
+                ? `${width}px`
+                : width,
+              maxWidth: isMobile ? 'calc(100vw - 20px)' : '92vw',
+              maxHeight: isMobile ? 'calc(100dvh - 140px)' : 'calc(100vh - 80px)',
             }),
       }}
       className={`fixed select-none retro-window overflow-hidden flex flex-col focus:outline-none ${
@@ -281,6 +284,7 @@ export const Window: React.FC<WindowProps> = ({
           {onMinimize && (
             <button
               type="button"
+              onTouchStart={(e) => e.stopPropagation()}
               onClick={(e) => {
                 e.stopPropagation();
                 onMinimize();
@@ -295,6 +299,7 @@ export const Window: React.FC<WindowProps> = ({
 
           <button
             type="button"
+            onTouchStart={(e) => e.stopPropagation()}
             onClick={(e) => {
               e.stopPropagation();
               toggleMaximize();
@@ -308,6 +313,7 @@ export const Window: React.FC<WindowProps> = ({
 
           <button
             type="button"
+            onTouchStart={(e) => e.stopPropagation()}
             onClick={(e) => {
               e.stopPropagation();
               onClose();
