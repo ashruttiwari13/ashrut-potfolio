@@ -20,12 +20,16 @@ interface ProfileWindowProps {
 }
 
 export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigate }) => {
-  const [avatarMode, setAvatarMode] = useState<'3d' | 'real'>('3d');
+  const [avatarMode, setAvatarMode] = useState<'real' | '3d'>('real');
   const [showEnlargedPhoto, setShowEnlargedPhoto] = useState(false);
 
-  const activeAvatarSrc = avatarMode === '3d'
-    ? (profile.avatar_url || '/assets/ashrut-avatar.jpg')
-    : (profile.avatar_real_url || '/assets/ashrut-real.jpg');
+  const activeAvatarSrc = avatarMode === 'real'
+    ? '/assets/ashrut-photo-crop.jpg'
+    : '/assets/ashrut-avatar.jpg';
+
+  const enlargedAvatarSrc = avatarMode === 'real'
+    ? '/assets/ashrut-photo.jpg'
+    : '/assets/ashrut-avatar.jpg';
 
   return (
     <div className="space-y-3">
@@ -34,20 +38,18 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
         {/* Profile Picture with Interactive 3D / Real Photo Toggle */}
         <div className="relative shrink-0 select-none">
           <div
-            onClick={() => setAvatarMode((prev) => (prev === '3d' ? 'real' : '3d'))}
-            title="Click to toggle between 3D Game-Dev Avatar & Real Photo"
-            className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pastel-peach border-2 border-pastel-dark overflow-hidden flex items-center justify-center shadow-[2px_2px_0_#3d3d3d] cursor-pointer relative group active:scale-95 transition-all"
+            onClick={() => setShowEnlargedPhoto(true)}
+            title="Click to view full photo"
+            className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pastel-peach border-2 border-pastel-dark overflow-hidden flex items-center justify-center shadow-[2.5px_2.5px_0_#3d3d3d] cursor-pointer relative group active:scale-95 transition-all"
           >
             <img
               src={activeAvatarSrc}
               alt="Ashrut Tiwari - Unreal 5 Game Dev & 3D Artist"
-              className={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 ${
-                avatarMode === '3d' ? 'object-top' : 'object-[center_15%]'
-              }`}
+              className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
             />
             {/* Tag indicator overlay */}
             <span className="absolute bottom-0 inset-x-0 bg-pastel-dark/85 text-white text-[7.5px] sm:text-[8px] font-extrabold text-center py-0.5 tracking-wide backdrop-blur-xs">
-              {avatarMode === '3d' ? '✨ 3D Render' : '📷 Real Photo'}
+              {avatarMode === 'real' ? '📷 Real Photo' : '✨ 3D Render'}
             </span>
           </div>
 
@@ -56,13 +58,13 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
             type="button"
             onClick={(e) => {
               e.stopPropagation();
-              setAvatarMode((prev) => (prev === '3d' ? 'real' : '3d'));
+              setAvatarMode((prev) => (prev === 'real' ? '3d' : 'real'));
             }}
             className="absolute -bottom-1 -right-1 bg-white hover:bg-pastel-mint border border-pastel-dark rounded-full px-1.5 py-0.2 text-[8px] font-extrabold text-pastel-dark shadow-xs transition-all cursor-pointer flex items-center gap-0.5"
-            title="Toggle between 3D Render and Real Photo"
+            title="Toggle between Real Photo and 3D Render"
           >
             <Sparkles size={8} className="text-amber-500 shrink-0" />
-            <span>{avatarMode === '3d' ? 'Real' : '3D'}</span>
+            <span>{avatarMode === 'real' ? '3D' : 'Real'}</span>
           </button>
 
           {/* Enlarge inspect button */}
@@ -237,11 +239,9 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
             <div className="p-3.5 space-y-3">
               <div className="aspect-square w-full rounded-2xl border-2 border-pastel-dark overflow-hidden bg-pastel-warm relative shadow-md">
                 <img
-                  src={activeAvatarSrc}
+                  src={enlargedAvatarSrc}
                   alt="Ashrut Tiwari - Unreal 5 Game Dev & 3D Artist"
-                  className={`w-full h-full object-cover ${
-                    avatarMode === '3d' ? 'object-top' : 'object-[center_15%]'
-                  }`}
+                  className="w-full h-full object-cover object-top"
                 />
               </div>
 

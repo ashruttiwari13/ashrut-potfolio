@@ -104,7 +104,7 @@ export const ResumeWindow: React.FC<ResumeWindowProps> = ({ profile }) => {
 
           <div className="shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-xl border-2 border-pastel-dark overflow-hidden shadow-[2px_2px_0_#3d3d3d] bg-pastel-peach">
             <img
-              src={profile.avatar_url || '/assets/ashrut-avatar.jpg'}
+              src="/assets/ashrut-photo-crop.jpg"
               alt={profile.full_name}
               className="w-full h-full object-cover object-top"
             />

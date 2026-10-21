@@ -237,7 +237,7 @@ export const ContactWindow: React.FC = () => {
             <div className="flex items-center gap-2 pt-0.5">
               <div className="w-8 h-8 rounded-full border-2 border-pastel-dark overflow-hidden shrink-0 shadow-xs bg-pastel-peach">
                 <img
-                  src="/assets/ashrut-avatar.jpg"
+                  src="/assets/ashrut-photo-crop.jpg"
                   alt="Ashrut Tiwari"
                   className="w-full h-full object-cover object-top"
                 />
