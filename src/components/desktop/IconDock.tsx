@@ -98,14 +98,14 @@ export const IconDock: React.FC<IconDockProps> = ({
         top-4 left-3.5 sm:left-4 flex flex-col items-center gap-1.5 p-2 rounded-[28px]
         bg-[rgba(255,250,240,0.96)] backdrop-blur-md border-[3px] border-pastel-peach shadow-retro
         max-h-[calc(100vh-32px)] overflow-y-auto dock-scrollbar scroll-smooth overscroll-contain
-        /* Mobile: Horizontal scrollable bottom bar */
-        max-md:top-auto max-md:bottom-2.5 max-md:left-2 max-md:right-2
+        /* Mobile: Horizontal scrollable bottom bar without ugly scrollbar */
+        max-md:top-auto max-md:bottom-2 max-md:left-2 max-md:right-2
         max-md:flex-row max-md:justify-start sm:max-md:justify-around
         max-md:p-1.5 max-md:rounded-full max-md:max-h-none 
-        max-md:overflow-x-auto max-md:overflow-y-hidden max-md:gap-1.5
-        touch-pan-x"
+        max-md:overflow-x-auto max-md:overflow-y-hidden max-md:gap-1 sm:max-md:gap-1.5
+        max-md:no-scrollbar touch-pan-x"
       style={{
-        paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom, 0.5rem))',
+        paddingBottom: 'max(0.375rem, env(safe-area-inset-bottom, 0.375rem))',
       }}
     >
       {items.map((item, idx) => {

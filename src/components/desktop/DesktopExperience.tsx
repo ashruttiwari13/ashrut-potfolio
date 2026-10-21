@@ -292,6 +292,8 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
     Object.entries(windowsState).map(([id, st]) => [id, st.isOpen && !st.isMinimized])
   ) as Record<WindowId, boolean>;
 
+  const isAnyWindowOpen = Object.values(windowsState).some((w) => w.isOpen && !w.isMinimized);
+
   return (
     <main className="relative w-screen h-screen overflow-hidden select-none">
       {/* Dynamic Background */}
@@ -314,6 +316,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       {/* Floating Ambient Background Music Controls */}
       <BackgroundMusic
         isGameActive={windowsState.gameWin.isOpen && !windowsState.gameWin.isMinimized}
+        isAnyWindowOpen={isAnyWindowOpen}
         isAnyWindowMaximized={Boolean(maximizedWindowId)}
       />
 

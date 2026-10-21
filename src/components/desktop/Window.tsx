@@ -138,7 +138,7 @@ export const Window: React.FC<WindowProps> = ({
 
   // Touch drag handling for tablets & mobile
   const handleTouchStart = (e: React.TouchEvent) => {
-    if (isMaximized) return;
+    if (isMaximized || isMobile) return;
     onFocus();
     if (e.touches.length === 1) {
       hasUserDragged.current = true;
@@ -224,15 +224,25 @@ export const Window: React.FC<WindowProps> = ({
         zIndex: isMaximized ? Math.max(zIndex, 320) : zIndex,
         display: isMinimized ? 'none' : 'flex',
         willChange: isDragging ? 'left, top' : 'auto',
-        ...(isMaximized
+        ...(isMobile
           ? {
-              top: isMobile ? '8px' : '12px',
-              left: isMobile ? '8px' : '98px', // Leaves left dock tabs 100% visible and unhidden
-              right: isMobile ? '8px' : '102px', // Leaves up-right cat 100% visible and close button unhidden
-              bottom: isMobile ? '74px' : '64px', // Leaves clear gap above bottom taskbar
+              top: '8px',
+              left: '8px',
+              right: '8px',
+              bottom: '74px', // Sits cleanly above the bottom dock
               width: 'auto',
               maxWidth: 'none',
-              height: isMobile ? 'calc(100vh - 82px)' : 'calc(100vh - 76px)',
+              height: 'calc(100dvh - 82px)',
+            }
+          : isMaximized
+          ? {
+              top: '12px',
+              left: '98px', // Leaves left dock tabs 100% visible and unhidden
+              right: '102px', // Leaves up-right cat 100% visible and close button unhidden
+              bottom: '64px', // Leaves clear gap above bottom taskbar
+              width: 'auto',
+              maxWidth: 'none',
+              height: 'calc(100vh - 76px)',
             }
           : {
               top: `${position.y}px`,
@@ -312,11 +322,11 @@ export const Window: React.FC<WindowProps> = ({
 
       {/* Window Body */}
       <div
-        className={`p-4 sm:p-5 overflow-y-auto bg-[#fffcf3] text-pastel-dark flex-1 ${
+        className={`p-3.5 sm:p-5 overflow-y-auto bg-[#fffcf3] text-pastel-dark flex-1 ${
           isDragging ? 'pointer-events-none select-none' : ''
         } ${
-          isMaximized
-            ? 'h-full max-h-none'
+          isMobile || isMaximized
+            ? 'h-full max-h-none pb-12'
             : 'max-h-[calc(100vh-140px)] md:max-h-[calc(100vh-160px)]'
         }`}
       >

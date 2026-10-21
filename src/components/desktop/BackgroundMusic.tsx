@@ -5,6 +5,7 @@ import Image from 'next/image';
 
 interface BackgroundMusicProps {
   isGameActive?: boolean;
+  isAnyWindowOpen?: boolean;
   isAnyWindowMaximized?: boolean;
 }
 
@@ -13,6 +14,7 @@ const DEFAULT_VOLUME = 0.25; // 25% comfortable, cozy volume
 
 export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
   isGameActive = false,
+  isAnyWindowOpen = false,
   isAnyWindowMaximized = false,
 }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -207,8 +209,8 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
       {/* Floating Singing Cat Music Widget Container: Positioned in Up-Right */}
       <div
         className={`fixed z-[350] pointer-events-auto select-none w-[84px] sm:w-[92px] flex flex-col items-center transition-opacity duration-200 top-3 right-4 ${
-          /* Mobile: hide when window is maximized to keep 100% of mobile screen clear */
-          isAnyWindowMaximized
+          /* Mobile: hide when ANY window is open so it NEVER covers text, cards, or close buttons */
+          isAnyWindowOpen || isAnyWindowMaximized
             ? 'max-md:opacity-0 max-md:pointer-events-none'
             : ''
         }`}
