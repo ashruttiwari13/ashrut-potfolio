@@ -19,11 +19,11 @@ interface ProfileWindowProps {
 
 export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigate }) => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* Header Profile Card */}
-      <div className="flex items-center gap-4 p-3 bg-white border-2 border-pastel-dark rounded-retro shadow-[3px_3px_0_#ffdab9]">
+      <div className="flex items-center gap-3 p-2.5 sm:p-3 bg-white border-2 border-pastel-dark rounded-retro shadow-[2.5px_2.5px_0_#ffdab9]">
         {/* Retro Styled Character Avatar */}
-        <div className="shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-pastel-peach border-[2.5px] border-pastel-dark overflow-hidden flex items-center justify-center shadow-inner">
+        <div className="shrink-0 w-13 h-13 sm:w-16 sm:h-16 rounded-2xl bg-pastel-peach border-2 border-pastel-dark overflow-hidden flex items-center justify-center shadow-inner">
           <svg viewBox="0 0 120 120" className="w-full h-full p-1" aria-label="Ashrut Tiwari Stylized Avatar">
             <rect width="120" height="120" fill="#ffe4cb" rx="24" />
             {/* Astronaut helmet / character head */}
@@ -44,51 +44,51 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
         </div>
 
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <h2 className="text-xl sm:text-2xl font-extrabold text-pastel-dark truncate">
+          <div className="flex items-center gap-1.5">
+            <h2 className="text-lg sm:text-xl font-extrabold text-pastel-dark truncate">
               {profile.full_name}
             </h2>
-            <span className="text-lg">👾</span>
+            <span className="text-base">👾</span>
           </div>
-          <p className="text-xs sm:text-sm font-extrabold text-pastel-dark line-clamp-1">
+          <p className="text-[11px] sm:text-xs font-extrabold text-pastel-dark line-clamp-1">
             {profile.headline}
           </p>
-          <div className="flex flex-wrap gap-1.5 mt-1">
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-pastel-mint border border-pastel-dark text-[10px] font-extrabold text-pastel-dark shadow-sm">
+          <div className="flex flex-wrap gap-1 mt-1">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-full bg-pastel-mint border border-pastel-dark text-[9px] font-extrabold text-pastel-dark shadow-xs">
               💼 Primary Profession
             </span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-pastel-lavender border border-pastel-dark text-[10px] font-bold text-pastel-dark shadow-sm">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-full bg-pastel-lavender border border-pastel-dark text-[9px] font-bold text-pastel-dark shadow-xs">
               🎬 Filmmaking (Creative Hobby)
             </span>
           </div>
-          <div className="flex items-center gap-2 mt-1.5 text-[11px] text-pastel-soft">
-            <MapPin size={12} className="shrink-0 text-pastel-dark" />
+          <div className="flex items-center gap-1.5 mt-1 text-[10px] sm:text-[11px] text-pastel-soft">
+            <MapPin size={11} className="shrink-0 text-pastel-dark" />
             <span className="truncate">{profile.location}</span>
           </div>
         </div>
       </div>
 
       {/* Biography */}
-      <div className="text-xs sm:text-sm leading-relaxed text-pastel-dark space-y-2 bg-pastel-warm/60 p-3.5 rounded-retro-sm border border-pastel-dark/20">
+      <div className="text-xs sm:text-[12.5px] leading-relaxed text-pastel-dark space-y-1.5 bg-pastel-warm/60 p-2.5 sm:p-3 rounded-retro-sm border border-pastel-dark/20">
         <p>{profile.bio}</p>
-        <p className="flex items-center gap-1.5 font-semibold text-emerald-800">
-          <Briefcase size={14} className="shrink-0" />
+        <p className="flex items-center gap-1.5 font-semibold text-emerald-800 text-[11px]">
+          <Briefcase size={13} className="shrink-0" />
           <span>{profile.freelance_status}</span>
         </p>
       </div>
 
       {/* Creative Hobby Demarcation Banner */}
-      <div className="p-2.5 bg-pastel-lavender/40 border border-pastel-dark rounded-retro-sm text-[11px] text-pastel-dark flex items-center justify-between gap-2 shadow-sm">
+      <div className="p-2 bg-pastel-lavender/40 border border-pastel-dark rounded-retro-sm text-[10.5px] text-pastel-dark flex items-center justify-between gap-2 shadow-xs">
         <div className="flex items-center gap-1.5">
-          <span className="text-base shrink-0">🎬</span>
+          <span className="text-sm shrink-0">🎬</span>
           <span>
-            <strong>Note on Filmmaking:</strong> Pursued purely as a creative personal hobby to enrich game lighting and camera directing.
+            <strong>Filmmaking:</strong> Creative personal hobby to enrich game camera directing.
           </span>
         </div>
         <button
           type="button"
           onClick={() => onNavigate('hobbiesWin')}
-          className="text-[10px] font-extrabold px-2 py-1 bg-white border border-pastel-dark rounded-md hover:bg-pastel-peach shrink-0 shadow-xs"
+          className="text-[9.5px] font-extrabold px-1.5 py-0.5 bg-white border border-pastel-dark rounded hover:bg-pastel-peach shrink-0 shadow-xs"
         >
           View Hobby ➔
         </button>
@@ -96,17 +96,17 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
 
       {/* Specialties Badges */}
       <div>
-        <h3 className="text-xs font-bold text-pastel-soft uppercase tracking-wider mb-2 flex items-center gap-1">
-          <Sparkles size={12} />
+        <h3 className="text-[11px] font-bold text-pastel-soft uppercase tracking-wider mb-1.5 flex items-center gap-1">
+          <Sparkles size={11} />
           <span>Disciplines & Focus</span>
         </h3>
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1">
           {profile.specialties.map((spec, i) => {
             const isHobby = spec.toLowerCase().includes('hobby');
             return (
               <span
                 key={i}
-                className={`text-[11px] font-bold px-2.5 py-1 rounded-full border border-pastel-dark shadow-sm flex items-center gap-1 ${
+                className={`text-[10px] font-bold px-2 py-0.5 rounded-full border border-pastel-dark shadow-xs flex items-center gap-1 ${
                   isHobby
                     ? 'bg-pastel-lavender text-pastel-dark'
                     : 'bg-pastel-mint/80 text-pastel-dark'
@@ -121,13 +121,13 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
       </div>
 
       {/* Fast Action Buttons */}
-      <div className="grid grid-cols-3 gap-2 pt-1 pb-1">
+      <div className="grid grid-cols-3 gap-1.5 pt-0.5 pb-0.5">
         <button
           type="button"
           onClick={() => onNavigate('contactWin')}
-          className="retro-btn retro-btn-primary py-2 text-xs"
+          className="retro-btn retro-btn-primary py-1.5 text-[11px]"
         >
-          <Mail size={13} strokeWidth={2.5} />
+          <Mail size={12} strokeWidth={2.5} />
           <span>Hire Me</span>
         </button>
 

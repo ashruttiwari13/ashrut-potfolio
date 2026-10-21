@@ -85,7 +85,7 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
               key={cat.value}
               type="button"
               onClick={() => setSelectedCategory(cat.value)}
-              className={`retro-btn text-[11px] px-2.5 py-1 ${
+              className={`retro-btn text-[10px] sm:text-[11px] px-2 py-0.5 sm:px-2.5 sm:py-1 ${
                 selectedCategory === cat.value
                   ? 'bg-pastel-pink shadow-[2px_2px_0_#3d3d3d]'
                   : 'bg-white hover:bg-pastel-peach/50'

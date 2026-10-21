@@ -226,13 +226,14 @@ export const Window: React.FC<WindowProps> = ({
         willChange: isDragging ? 'left, top' : 'auto',
         ...(isMobile
           ? {
-              top: '64px', // Clears the singing cat in the top-right completely
-              left: '8px',
-              right: '8px',
-              bottom: '58px', // Clears the compact bottom dock
+              top: '60px', // Clears the singing cat in the top-right completely
+              left: '12px',
+              right: '12px',
+              bottom: '76px', // Clears the enlarged bottom toolbar
               width: 'auto',
-              maxWidth: 'none',
-              height: 'calc(100dvh - 124px)',
+              maxWidth: '460px',
+              margin: '0 auto',
+              height: 'calc(100dvh - 142px)',
             }
           : isMaximized
           ? {
@@ -262,11 +263,11 @@ export const Window: React.FC<WindowProps> = ({
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchStart}
         onDoubleClick={toggleMaximize}
-        className={`${headerColor} px-4 py-2.5 border-b-[3px] border-pastel-dark flex items-center justify-between cursor-grab active:cursor-grabbing select-none touch-none`}
+        className={`${headerColor} px-3 sm:px-4 py-2 sm:py-2.5 border-b-[2.5px] sm:border-b-[3px] border-pastel-dark flex items-center justify-between cursor-grab active:cursor-grabbing select-none touch-none`}
         title="Drag to move · Double click to maximize"
       >
-        <div className="flex items-center gap-2 font-bold text-sm text-pastel-dark tracking-wide truncate">
-          <span className="w-2.5 h-2.5 rounded-full bg-pastel-dark/30 animate-pulse shrink-0" />
+        <div className="flex items-center gap-1.5 sm:gap-2 font-bold text-xs sm:text-sm text-pastel-dark tracking-wide truncate">
+          <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-pastel-dark/30 animate-pulse shrink-0" />
           <span className="truncate">{title}</span>
           {isMaximized && (
             <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-white/90 border border-pastel-dark text-pastel-dark shrink-0 hidden sm:inline-flex shadow-2xs">
