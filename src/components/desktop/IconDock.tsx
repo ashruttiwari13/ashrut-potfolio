@@ -94,13 +94,18 @@ export const IconDock: React.FC<IconDockProps> = ({
       role="tablist"
       aria-label="Desktop application tabs"
       className="fixed z-[300] pointer-events-auto select-none
-        /* Down side: Sleek horizontal floating dock centered at bottom */
-        bottom-3 left-1/2 -translate-x-1/2
-        flex flex-row items-center justify-start sm:justify-center gap-1 sm:gap-2 p-1.5 sm:p-2 rounded-[28px] sm:rounded-full 
-        bg-[rgba(255,250,240,0.96)] backdrop-blur-md border-[3px] border-pastel-peach shadow-retro 
-        max-w-[calc(100vw-24px)] overflow-x-auto no-scrollbar scroll-smooth touch-pan-x"
+        /* Left vertical dock on desktop */
+        top-4 left-3.5 sm:left-4 flex flex-col items-center gap-1.5 p-2 rounded-[28px]
+        bg-[rgba(255,250,240,0.96)] backdrop-blur-md border-[3px] border-pastel-peach shadow-retro
+        max-h-[calc(100vh-32px)] overflow-y-auto dock-scrollbar scroll-smooth overscroll-contain
+        /* Mobile: Horizontal scrollable bottom bar */
+        max-md:top-auto max-md:bottom-2.5 max-md:left-2 max-md:right-2
+        max-md:flex-row max-md:justify-start sm:max-md:justify-around
+        max-md:p-1.5 max-md:rounded-full max-md:max-h-none 
+        max-md:overflow-x-auto max-md:overflow-y-hidden max-md:gap-1.5
+        touch-pan-x"
       style={{
-        paddingBottom: 'max(0.375rem, env(safe-area-inset-bottom, 0.375rem))',
+        paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom, 0.5rem))',
       }}
     >
       {items.map((item, idx) => {
@@ -118,7 +123,7 @@ export const IconDock: React.FC<IconDockProps> = ({
               onKeyDown={(e) => handleKeyDown(e, idx)}
               className="group relative shrink-0 snap-center flex flex-col items-center justify-center p-1 cursor-pointer transition-transform active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark rounded-2xl min-w-[46px] sm:min-w-[54px]"
             >
-              <div className="relative p-1.5 sm:p-2 md:p-2.5 bg-white rounded-2xl border-[2.5px] border-pastel-dark shadow-[2px_2px_0_#ffb6c1] group-hover:scale-105 group-hover:shadow-[3px_3px_0_#c0f0dd] group-hover:-translate-y-0.5 transition-all">
+              <div className="relative p-1.5 sm:p-2 bg-white rounded-2xl border-[2.5px] border-pastel-dark shadow-[2px_2px_0_#ffb6c1] group-hover:scale-105 md:group-hover:translate-x-1.5 group-hover:shadow-[3px_3px_0_#c0f0dd] transition-all duration-200">
                 {item.icon}
               </div>
               <span className="text-[9px] sm:text-[10px] font-bold mt-0.5 text-pastel-dark px-1.5 py-0.2 rounded-full bg-white/90 border border-pastel-dark/20 whitespace-nowrap">
@@ -148,18 +153,21 @@ export const IconDock: React.FC<IconDockProps> = ({
               </span>
             )}
             <div
-              className={`relative p-1.5 sm:p-2 md:p-2.5 rounded-2xl border-[2.5px] border-pastel-dark transition-all duration-150 ${
+              className={`relative p-1.5 sm:p-2 rounded-2xl border-[2.5px] border-pastel-dark transition-all duration-200 ${
                 isTopmost
-                  ? 'bg-pastel-mint shadow-[2px_2px_0_#3d3d3d] -translate-y-1 scale-105 ring-2 ring-pastel-dark'
+                  ? 'bg-pastel-mint shadow-[2.5px_2.5px_0_#3d3d3d] md:translate-x-1.5 scale-105 ring-2 ring-pastel-dark'
                   : isOpen
-                  ? 'bg-pastel-peach/80 shadow-[2px_2px_0_#3d3d3d] -translate-y-0.5'
-                  : 'bg-white shadow-[2px_2px_0_#c0f0dd] group-hover:scale-105 group-hover:-translate-y-1 group-hover:shadow-[3px_3px_0_#ffb6c1]'
+                  ? 'bg-pastel-peach/85 shadow-[2px_2px_0_#3d3d3d] md:translate-x-0.5'
+                  : 'bg-white shadow-[2px_2px_0_#c0f0dd] group-hover:scale-105 md:group-hover:translate-x-1.5 group-hover:shadow-[3px_3px_0_#ffb6c1]'
               }`}
             >
               {item.icon}
-              {/* Active window indicator dot at bottom of tile */}
+              {/* Active window indicator dot */}
               {isOpen && (
-                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-pastel-dark" />
+                <span className="absolute -left-1 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-pastel-dark max-md:hidden" />
+              )}
+              {isOpen && (
+                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-pastel-dark md:hidden" />
               )}
             </div>
             <span

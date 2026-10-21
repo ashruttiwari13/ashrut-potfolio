@@ -204,16 +204,13 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
         <source src="/audio/calm-ambient.mp3" type="audio/mpeg" />
       </audio>
 
-      {/* Floating Singing Cat Music Widget Container */}
+      {/* Floating Singing Cat Music Widget Container: Positioned in Up-Right */}
       <div
-        className={`fixed z-[290] pointer-events-auto select-none w-[90px] flex flex-col items-center transition-opacity duration-200 ${
-          /* Desktop: safely anchored at bottom-left in the dock column, completely clear of windows and close buttons */
-          'md:bottom-3 md:left-4 md:top-auto md:right-auto'
-        } ${
-          /* Mobile: hide when window is maximized to keep 100% of mobile screen clear; otherwise bottom-left */
+        className={`fixed z-[350] pointer-events-auto select-none w-[84px] sm:w-[92px] flex flex-col items-center transition-opacity duration-200 top-3 right-4 ${
+          /* Mobile: hide when window is maximized to keep 100% of mobile screen clear */
           isAnyWindowMaximized
             ? 'max-md:opacity-0 max-md:pointer-events-none'
-            : 'max-md:bottom-[72px] max-md:left-3'
+            : ''
         }`}
       >
         <div
@@ -221,11 +218,11 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          {/* Cute Speech Bubble / Tooltip (Positioned ABSOLUTE so it NEVER shifts the cat) */}
+          {/* Cute Speech Bubble / Tooltip (Positioned ABSOLUTE below the cat, extending inwards to left) */}
           {(showHint || isHovered) && (
             <div
               role="status"
-              className="absolute bottom-[calc(100%+8px)] left-0 whitespace-nowrap px-3 py-1.5 bg-[rgba(255,250,240,0.98)] backdrop-blur-md rounded-2xl border-2 border-pastel-dark shadow-retro text-xs text-pastel-dark flex items-center gap-2 pointer-events-none z-50 transition-opacity duration-150"
+              className="absolute top-[calc(100%+8px)] right-0 whitespace-nowrap px-3 py-1.5 bg-[rgba(255,250,240,0.98)] backdrop-blur-md rounded-2xl border-2 border-pastel-dark shadow-retro text-xs text-pastel-dark flex items-center gap-2 pointer-events-none z-50 transition-opacity duration-150"
             >
               <span className="text-sm shrink-0">{isPlaying ? '🎶' : '🌸'}</span>
               <div className="flex flex-col">
@@ -240,8 +237,8 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
                   {isPlaying ? 'Click to turn off music' : 'Click to start music'}
                 </span>
               </div>
-              {/* Cute speech bubble caret pointer pointing down to the cat */}
-              <div className="absolute -bottom-1.5 left-7 w-2.5 h-2.5 bg-[#fffaf0] border-r-2 border-b-2 border-pastel-dark rotate-45 pointer-events-none" />
+              {/* Cute speech bubble caret pointer pointing UP to the cat */}
+              <div className="absolute -top-1.5 right-7 w-2.5 h-2.5 bg-[#fffaf0] border-l-2 border-t-2 border-pastel-dark rotate-45 pointer-events-none" />
             </div>
           )}
 
