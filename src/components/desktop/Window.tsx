@@ -122,9 +122,11 @@ export const Window: React.FC<WindowProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, [calculateCenter, isMaximized]);
 
-  // Mouse drag handling
+  // Mouse drag handling with zero lag
   const handleMouseDown = (e: React.MouseEvent) => {
     if (isMaximized) return;
+    if (e.button !== 0) return; // Only drag with left mouse button
+    e.preventDefault();
     onFocus();
     hasUserDragged.current = true;
     setIsDragging(true);
@@ -148,42 +150,55 @@ export const Window: React.FC<WindowProps> = ({
     }
   };
 
+  // Silky smooth RAF-throttled dragging that tracks cursor 1:1 without latency
   useEffect(() => {
+    if (!isDragging) return;
+
+    let rafId: number | null = null;
+
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isDragging || isMaximized) return;
+      if (isMaximized) return;
       const minX = isMobile ? 8 : 96;
       const newX = Math.max(minX, Math.min(window.innerWidth - 100, e.clientX - dragOffset.x));
       const newY = Math.max(10, Math.min(window.innerHeight - 80, e.clientY - dragOffset.y));
-      setPosition({ x: newX, y: newY });
+
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        setPosition({ x: newX, y: newY });
+      });
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      if (!isDragging || isMaximized || e.touches.length !== 1) return;
+      if (isMaximized || e.touches.length !== 1) return;
       const touch = e.touches[0];
       const minX = isMobile ? 8 : 96;
       const newX = Math.max(minX, Math.min(window.innerWidth - 100, touch.clientX - dragOffset.x));
       const newY = Math.max(10, Math.min(window.innerHeight - 80, touch.clientY - dragOffset.y));
-      setPosition({ x: newX, y: newY });
+
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        setPosition({ x: newX, y: newY });
+      });
     };
 
     const handleDragEnd = () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
       setIsDragging(false);
     };
 
-    if (isDragging) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleDragEnd);
-      window.addEventListener('touchmove', handleTouchMove);
-      window.addEventListener('touchend', handleDragEnd);
-    }
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('mouseup', handleDragEnd);
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchend', handleDragEnd);
 
     return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleDragEnd);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleDragEnd);
     };
-  }, [isDragging, dragOffset, isMaximized]);
+  }, [isDragging, dragOffset, isMaximized, isMobile]);
 
   const [isMounted, setIsMounted] = useState(false);
 
@@ -208,6 +223,7 @@ export const Window: React.FC<WindowProps> = ({
       style={{
         zIndex: isMaximized ? Math.max(zIndex, 320) : zIndex,
         display: isMinimized ? 'none' : 'flex',
+        willChange: isDragging ? 'left, top' : 'auto',
         ...(isMaximized
           ? {
               top: isMobile ? '8px' : '12px',
@@ -225,8 +241,10 @@ export const Window: React.FC<WindowProps> = ({
               maxWidth: '92vw',
             }),
       }}
-      className={`fixed transition-all duration-150 select-none retro-window overflow-hidden flex flex-col focus:outline-none ${
-        isDragging ? 'opacity-95 shadow-2xl' : ''
+      className={`fixed select-none retro-window overflow-hidden flex flex-col focus:outline-none ${
+        isDragging
+          ? 'opacity-95 shadow-2xl transition-none cursor-grabbing'
+          : 'transition-all duration-200'
       }`}
     >
       {/* Window Header */}
@@ -234,8 +252,8 @@ export const Window: React.FC<WindowProps> = ({
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchStart}
         onDoubleClick={toggleMaximize}
-        className={`${headerColor} px-4 py-2.5 border-b-[3px] border-pastel-dark flex items-center justify-between cursor-grab active:cursor-grabbing select-none`}
-        title="Double click to maximize or restore"
+        className={`${headerColor} px-4 py-2.5 border-b-[3px] border-pastel-dark flex items-center justify-between cursor-grab active:cursor-grabbing select-none touch-none`}
+        title="Drag to move · Double click to maximize"
       >
         <div className="flex items-center gap-2 font-bold text-sm text-pastel-dark tracking-wide truncate">
           <span className="w-2.5 h-2.5 rounded-full bg-pastel-dark/30 animate-pulse shrink-0" />
@@ -295,6 +313,8 @@ export const Window: React.FC<WindowProps> = ({
       {/* Window Body */}
       <div
         className={`p-4 sm:p-5 overflow-y-auto bg-[#fffcf3] text-pastel-dark flex-1 ${
+          isDragging ? 'pointer-events-none select-none' : ''
+        } ${
           isMaximized
             ? 'h-full max-h-none'
             : 'max-h-[calc(100vh-140px)] md:max-h-[calc(100vh-160px)]'
