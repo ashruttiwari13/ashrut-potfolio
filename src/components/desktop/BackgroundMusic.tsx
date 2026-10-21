@@ -20,8 +20,11 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const fadeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Component state
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  // Component state - Starts singing immediately when website starts!
+  const [isPlaying, setIsPlaying] = useState<boolean>(true);
+  const isPlayingRef = useRef<boolean>(true);
+  isPlayingRef.current = isPlaying;
+
   const [singFrame, setSingFrame] = useState<1 | 2>(1);
   const [hasError, setHasError] = useState<boolean>(false);
   const [showHint, setShowHint] = useState<boolean>(false);
@@ -53,13 +56,14 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     }, stepInterval);
   }, []);
 
-  // Start playback with smooth fade in
+  // Start playback & cat singing
   const startPlayback = useCallback(() => {
     const audio = audioRef.current;
-    if (!audio) return;
-
+    setIsPlaying(true);
     setHasError(false);
-    audio.volume = 0;
+
+    if (!audio) return;
+    audio.volume = DEFAULT_VOLUME;
 
     const playPromise = audio.play();
     if (playPromise !== undefined) {
@@ -67,92 +71,78 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
         .then(() => {
           setIsPlaying(true);
           setShowHint(false);
-          rampVolume(DEFAULT_VOLUME, 450);
-          try {
-            localStorage.setItem(STORAGE_KEY_ENABLED, 'true');
-          } catch {}
         })
         .catch((err) => {
-          // Browser autoplay policy prevented instant audio: wait for user interaction
-          console.log('Autoplay waiting for user gesture:', err?.name);
-          setIsPlaying(false);
+          console.log('Audio playback waiting for first gesture:', err?.name);
         });
     }
-  }, [rampVolume]);
+  }, []);
 
-  // Pause / turn off playback with smooth fade out
-  const pausePlayback = useCallback((userInitiated = true) => {
+  // Pause playback & stop cat singing when user clicks to stop
+  const pausePlayback = useCallback(() => {
+    setIsPlaying(false);
     const audio = audioRef.current;
     if (!audio) return;
 
-    rampVolume(0, 300, () => {
+    rampVolume(0, 200, () => {
       audio.pause();
-      setIsPlaying(false);
-      if (userInitiated) {
-        try {
-          localStorage.setItem(STORAGE_KEY_ENABLED, 'false');
-        } catch {}
-      }
     });
   }, [rampVolume]);
 
-  // Main toggle handler (Click on Cat to toggle Singing & Music off / on)
+  // Main toggle handler: Click on Cat to stop / start singing anytime
   const togglePlay = () => {
     setShowHint(false);
-    try {
-      sessionStorage.setItem('ashrut_bgm_hint_seen', 'true');
-    } catch {}
-
     if (isPlaying) {
-      pausePlayback(true);
+      pausePlayback();
     } else {
       startPlayback();
     }
   };
 
-  // Automatic playback on website start
+  // Automatic singing & music playback on website start
   useEffect(() => {
-    let shouldAutoPlay = true;
-    try {
-      const storedEnabled = localStorage.getItem(STORAGE_KEY_ENABLED);
-      // Only skip autoplay if the user explicitly clicked OFF before
-      if (storedEnabled === 'false') {
-        shouldAutoPlay = false;
-      }
-    } catch {}
+    // 1. Cat is singing immediately on website load
+    setIsPlaying(true);
 
-    if (!shouldAutoPlay) return;
+    const audio = audioRef.current;
+    if (audio) {
+      audio.volume = DEFAULT_VOLUME;
+      audio.play().catch((err) => {
+        console.log('Browser waiting for first gesture before playing unmuted audio:', err?.name);
+      });
+    }
 
-    // 1. Attempt instant direct autoplay on website load
-    startPlayback();
-
-    // 2. In case browser blocks unmuted audio before user gesture,
-    // attach a one-time gesture listener anywhere on the page to start automatically
+    // 2. In case browser blocks unmuted audio before user interaction,
+    // trigger audio playback on the very first touch/click/scroll anywhere
     const handleFirstGesture = () => {
-      if (!audioRef.current || audioRef.current.paused) {
-        startPlayback();
+      // Only unlock if the user hasn't explicitly stopped it
+      if (audioRef.current && isPlayingRef.current && audioRef.current.paused) {
+        audioRef.current.volume = DEFAULT_VOLUME;
+        audioRef.current.play().catch(() => {});
       }
       cleanupGestureListeners();
     };
 
     const cleanupGestureListeners = () => {
       window.removeEventListener('pointerdown', handleFirstGesture);
+      window.removeEventListener('click', handleFirstGesture);
+      window.removeEventListener('touchstart', handleFirstGesture);
       window.removeEventListener('keydown', handleFirstGesture);
       window.removeEventListener('scroll', handleFirstGesture, { capture: true });
-      window.removeEventListener('touchstart', handleFirstGesture);
     };
 
     window.addEventListener('pointerdown', handleFirstGesture, { once: true });
+    window.addEventListener('click', handleFirstGesture, { once: true });
+    window.addEventListener('touchstart', handleFirstGesture, { once: true });
     window.addEventListener('keydown', handleFirstGesture, { once: true });
     window.addEventListener('scroll', handleFirstGesture, { once: true, capture: true });
-    window.addEventListener('touchstart', handleFirstGesture, { once: true });
 
     return () => {
       cleanupGestureListeners();
     };
-  }, [startPlayback]);
+  }, []);
 
-  // Singing animation loop (alternates frame 1 and 2 while music is playing)
+  // Singing animation loop (alternates frame 1 and 2 while cat is singing)
   useEffect(() => {
     if (!isPlaying) {
       setSingFrame(1);
@@ -186,12 +176,18 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
       {/* Hidden Native Audio Element */}
       <audio
         ref={audioRef}
+        src="/assets/audio/website-music.mp3"
         loop
         preload="auto"
+        playsInline
         onError={() => {
-          console.warn('Audio playback/load error.');
-          setHasError(true);
-          setIsPlaying(false);
+          if (audioRef.current && !audioRef.current.src.endsWith('/audio/website-music.mp3')) {
+            audioRef.current.src = '/audio/website-music.mp3';
+            if (isPlayingRef.current) audioRef.current.play().catch(() => {});
+          } else {
+            console.warn('Audio playback/load error.');
+            setHasError(true);
+          }
         }}
         onEnded={() => {
           if (audioRef.current && isPlaying) {
@@ -201,9 +197,8 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
         }}
       >
         <source src="/assets/audio/website-music.mp3" type="audio/mpeg" />
-        <source src="/assets/audio/calm-ambient.mp3" type="audio/mpeg" />
         <source src="/audio/website-music.mp3" type="audio/mpeg" />
-        <source src="/audio/calm-ambient.mp3" type="audio/mpeg" />
+        <source src="/assets/audio/calm-ambient.mp3" type="audio/mpeg" />
       </audio>
 
       {/* Floating Singing Cat Music Widget Container: Positioned in Up-Right */}
@@ -227,11 +222,11 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
                   {hasError
                     ? 'Singing Cat: Resting'
                     : isPlaying
-                    ? 'Singing cheerfully! Click to mute'
-                    : 'Music off. Click to play! 🎵'}
+                    ? 'Singing cheerfully! Click to stop ⏹️'
+                    : 'Cat is resting. Click to sing! 🎵'}
                 </span>
                 <span className="text-[8px] sm:text-[9px] text-pastel-soft leading-none mt-0.5">
-                  {isPlaying ? 'Click to turn off music' : 'Click to start music'}
+                  {isPlaying ? 'Click to stop the cat' : 'Click to make the cat sing'}
                 </span>
               </div>
               {/* Cute speech bubble caret pointer pointing UP to the cat */}
@@ -318,7 +313,7 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
                   : 'bg-white/95 text-pastel-dark'
               }`}
             >
-              {hasError ? 'Resting' : isPlaying ? 'Music ON 🎵' : 'Music OFF 🔇'}
+              {hasError ? 'Resting' : isPlaying ? 'Singing 🎵' : 'Stopped 🔇'}
             </span>
           </button>
         </div>
