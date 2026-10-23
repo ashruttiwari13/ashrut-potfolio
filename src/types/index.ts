@@ -7,6 +7,7 @@ export interface Project {
   tagline: string;
   description: string;
   category: ProjectCategory;
+  secondary_categories?: ProjectCategory[];
   cover_image: string;
   gallery_images: string[];
   technologies: string[];
@@ -15,6 +16,10 @@ export interface Project {
   demo_url?: string | null;
   github_url?: string | null;
   video_url?: string | null;
+  sketchfab_url?: string | null;
+  model_embed_url?: string | null;
+  triangles_count?: string;
+  vertices_count?: string;
   is_featured: boolean;
   is_published: boolean;
   order_index: number;

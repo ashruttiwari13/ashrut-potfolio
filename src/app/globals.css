@@ -99,6 +99,21 @@ body {
   background: var(--accent-lavender);
 }
 
+.retro-btn-sketchfab {
+  background-color: #1caad9 !important;
+  color: #ffffff !important;
+  border-color: var(--text-dark) !important;
+}
+
+.retro-btn-sketchfab:hover {
+  background-color: #158db5 !important;
+  color: #ffffff !important;
+}
+
+.retro-btn-sketchfab * {
+  color: #ffffff !important;
+}
+
 .retro-card {
   background: white;
   border: 2px solid var(--text-dark);
