@@ -136,7 +136,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-pastel-peach via-pastel-lavender to-pastel-mint flex flex-col items-center justify-center p-6 text-center">
                   <span className="text-5xl filter drop-shadow">
-                    {project.category === 'game-dev' ? '⚔️' : project.category === 'cinematography' ? '🎬' : '🦊'}
+                    {project.category === 'game-dev' ? '⚔️' : project.category === 'cinematography' ? '🎬' : '💀'}
                   </span>
                   <h3 className="font-extrabold text-lg sm:text-xl text-pastel-dark mt-2">
                     {project.title}

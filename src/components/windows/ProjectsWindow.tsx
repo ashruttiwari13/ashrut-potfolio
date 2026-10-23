@@ -32,7 +32,7 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
     { label: 'All Projects', value: 'all' },
     { label: '🎮 Games (Core Work)', value: 'game-dev' },
     { label: '🗿 3D Art (Core Work)', value: '3d-art' },
-    { label: '🦊 Characters (Core Work)', value: 'character-design' },
+    { label: '💀 Characters (Core Work)', value: 'character-design' },
     { label: '🎬 Filmmaking (Creative Hobby)', value: 'cinematography' },
   ];
 
@@ -155,7 +155,7 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                       <div className="w-full h-full bg-gradient-to-br from-pastel-peach via-pastel-lavender to-pastel-mint flex items-center justify-center text-center p-3">
                         <div>
                           <span className="text-3xl filter drop-shadow">
-                            {project.category === 'game-dev' ? '⚔️' : project.category === 'cinematography' ? '🎬' : '🦊'}
+                            {project.category === 'game-dev' ? '⚔️' : project.category === 'cinematography' ? '🎬' : '💀'}
                           </span>
                           <h5 className="font-extrabold text-sm text-pastel-dark mt-1 tracking-wide break-words">
                             {project.title}
@@ -365,7 +365,7 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-pastel-peach via-pastel-lavender to-pastel-mint flex flex-col items-center justify-center text-center p-4">
                       <span className="text-4xl filter drop-shadow">
-                        {activeProject.category === 'game-dev' ? '⚔️' : activeProject.category === 'cinematography' ? '🎬' : '🦊'}
+                        {activeProject.category === 'game-dev' ? '⚔️' : activeProject.category === 'cinematography' ? '🎬' : '💀'}
                       </span>
                       <h4 className="font-extrabold text-base text-pastel-dark mt-2">
                         {activeProject.title}
