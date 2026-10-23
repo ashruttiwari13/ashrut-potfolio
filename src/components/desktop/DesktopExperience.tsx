@@ -311,6 +311,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         onResetWindows={resetWindows}
         onBringAllFront={bringAllFront}
         onMinimizeAll={minimizeAll}
+        onOpenContact={() => openWindow('contactWin')}
       />
 
       {/* Floating Ambient Background Music Controls */}

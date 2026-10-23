@@ -16,6 +16,7 @@ import {
   Image as ImageIcon
 } from 'lucide-react';
 import Link from 'next/link';
+import { soundFX } from '@/lib/soundEffects';
 
 interface ProjectsWindowProps {
   projects: Project[];
@@ -54,6 +55,7 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
   });
 
   const handleOpenInspect = (project: Project) => {
+    soundFX.playWindowOpen();
     setActiveProject(project);
     setSelectedImage(project.cover_image || '');
     setViewMode('photo');
@@ -97,13 +99,16 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
         </div>
 
         {/* Categories */}
-        <div className="flex flex-wrap gap-1">
+        <div className="flex overflow-x-auto no-scrollbar gap-1 pb-1 touch-pan-x sm:flex-wrap">
           {categories.map((cat) => (
             <button
               key={cat.value}
               type="button"
-              onClick={() => setSelectedCategory(cat.value)}
-              className={`retro-btn text-[10px] sm:text-[11px] px-2 py-0.5 sm:px-2.5 sm:py-1 ${
+              onClick={() => {
+                soundFX.playClick(620);
+                setSelectedCategory(cat.value);
+              }}
+              className={`retro-btn text-[10px] sm:text-[11px] px-2.5 py-1 whitespace-nowrap shrink-0 ${
                 selectedCategory === cat.value
                   ? 'bg-pastel-pink shadow-[2px_2px_0_#3d3d3d]'
                   : 'bg-white hover:bg-pastel-peach/50'
@@ -300,8 +305,11 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
               </h3>
               <button
                 type="button"
-                onClick={() => setActiveProject(null)}
-                className="w-6 h-6 rounded-full bg-white border-2 border-pastel-dark flex items-center justify-center hover:bg-pastel-coral hover:text-white transition-colors"
+                onClick={() => {
+                  soundFX.playWindowClose();
+                  setActiveProject(null);
+                }}
+                className="w-6 h-6 rounded-full bg-white border-2 border-pastel-dark flex items-center justify-center hover:bg-pastel-coral hover:text-white transition-colors cursor-pointer"
               >
                 <X size={12} strokeWidth={3} />
               </button>

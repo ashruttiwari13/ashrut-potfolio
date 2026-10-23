@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { FileText, Download, Printer, CheckCircle2, Briefcase, GraduationCap, Sparkles } from 'lucide-react';
 import { ProfileSettings } from '@/types';
+import { soundFX } from '@/lib/soundEffects';
 
 interface ResumeWindowProps {
   profile: ProfileSettings;
@@ -12,6 +13,7 @@ export const ResumeWindow: React.FC<ResumeWindowProps> = ({ profile }) => {
   const [downloadNote, setDownloadNote] = useState<string | null>(null);
 
   const handlePrint = () => {
+    soundFX.playClick(600);
     window.print();
   };
 
@@ -71,6 +73,7 @@ export const ResumeWindow: React.FC<ResumeWindowProps> = ({ profile }) => {
             href={profile.resume_url || '/resume-ashrut-tiwari.pdf'}
             download="Ashrut_Tiwari_Resume.pdf"
             onClick={() => {
+              soundFX.playClick(720);
               setDownloadNote('📄 Resume download initiated. If the file is not yet cached, you can also use "Print CV" to save as PDF!');
               setTimeout(() => setDownloadNote(null), 6000);
             }}

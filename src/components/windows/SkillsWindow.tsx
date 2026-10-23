@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Skill, SkillCategory } from '@/types';
+import { soundFX } from '@/lib/soundEffects';
 import { 
   Flame, 
   Box, 
@@ -64,13 +65,16 @@ export const SkillsWindow: React.FC<SkillsWindowProps> = ({ skills }) => {
       </div>
 
       {/* Category Filter Pills / Tabs */}
-      <div className="flex flex-wrap gap-1 pb-1 border-b border-pastel-dark/10">
+      <div className="flex overflow-x-auto no-scrollbar gap-1 pb-1 border-b border-pastel-dark/10 touch-pan-x sm:flex-wrap">
         {categories.map((cat) => (
           <button
             key={cat.value}
             type="button"
-            onClick={() => setSelectedCategory(cat.value)}
-            className={`retro-btn text-[10.5px] sm:text-xs px-2 py-0.5 sm:px-2.5 sm:py-1 ${
+            onClick={() => {
+              soundFX.playClick(620);
+              setSelectedCategory(cat.value);
+            }}
+            className={`retro-btn text-[10.5px] sm:text-xs px-2.5 py-1 whitespace-nowrap shrink-0 ${
               selectedCategory === cat.value
                 ? 'bg-pastel-pink shadow-[2px_2px_0_#3d3d3d] -translate-y-0.5'
                 : 'bg-white hover:bg-pastel-peach/50'

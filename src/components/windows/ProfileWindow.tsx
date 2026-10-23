@@ -13,6 +13,7 @@ import {
   Maximize2,
   X
 } from 'lucide-react';
+import { soundFX } from '@/lib/soundEffects';
 
 interface ProfileWindowProps {
   profile: ProfileSettings;
@@ -58,6 +59,7 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
             type="button"
             onClick={(e) => {
               e.stopPropagation();
+              soundFX.playClick(680);
               setAvatarMode((prev) => (prev === 'real' ? '3d' : 'real'));
             }}
             className="absolute -bottom-1 -right-1 bg-white hover:bg-pastel-mint border border-pastel-dark rounded-full px-1.5 py-0.2 text-[8px] font-extrabold text-pastel-dark shadow-xs transition-all cursor-pointer flex items-center gap-0.5"
@@ -72,6 +74,7 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
             type="button"
             onClick={(e) => {
               e.stopPropagation();
+              soundFX.playWindowOpen();
               setShowEnlargedPhoto(true);
             }}
             className="absolute -top-1.5 -right-1.5 bg-white hover:bg-pastel-peach border border-pastel-dark rounded-full p-1 shadow-xs transition-all cursor-pointer text-pastel-dark"
@@ -162,7 +165,10 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
       <div className="grid grid-cols-3 gap-1.5 pt-0.5 pb-0.5">
         <button
           type="button"
-          onClick={() => onNavigate('contactWin')}
+          onClick={() => {
+            soundFX.playClick(640);
+            onNavigate('contactWin');
+          }}
           className="retro-btn retro-btn-primary py-1.5 px-1 text-[11px] min-w-0 justify-center"
         >
           <Mail size={12} strokeWidth={2.5} className="shrink-0" />
@@ -171,7 +177,10 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
 
         <button
           type="button"
-          onClick={() => onNavigate('projectsWin')}
+          onClick={() => {
+            soundFX.playClick(640);
+            onNavigate('projectsWin');
+          }}
           className="retro-btn retro-btn-mint py-1.5 px-1 text-[11px] min-w-0 justify-center"
         >
           <Gamepad2 size={12} strokeWidth={2.5} className="shrink-0" />
@@ -180,7 +189,10 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
 
         <button
           type="button"
-          onClick={() => onNavigate('resumeWin')}
+          onClick={() => {
+            soundFX.playClick(640);
+            onNavigate('resumeWin');
+          }}
           className="retro-btn retro-btn-lavender py-1.5 px-1 text-[11px] min-w-0 justify-center"
         >
           <FileText size={12} strokeWidth={2.5} className="shrink-0" />

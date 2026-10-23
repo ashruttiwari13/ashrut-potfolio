@@ -14,6 +14,7 @@ import {
   Skull 
 } from 'lucide-react';
 import { WindowId } from '@/types';
+import { soundFX } from '@/lib/soundEffects';
 
 interface IconDockProps {
   onOpenWindow: (id: WindowId) => void;
@@ -50,7 +51,7 @@ export const IconDock: React.FC<IconDockProps> = ({
     { id: 'admin', label: 'Admin', icon: <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />, isLink: true, href: '/admin' },
   ];
 
-  // Auto-scroll active tab into view when device is mobile or scrolled
+  // Auto-scroll active tab into view when device is mobile
   useEffect(() => {
     if (activeWindowId && itemRefs.current[activeWindowId]) {
       const el = itemRefs.current[activeWindowId];
@@ -88,6 +89,11 @@ export const IconDock: React.FC<IconDockProps> = ({
     }
   };
 
+  const handleItemClick = (id: WindowId) => {
+    soundFX.playClick(580);
+    onOpenWindow(id);
+  };
+
   return (
     <nav 
       ref={dockRef}
@@ -98,11 +104,11 @@ export const IconDock: React.FC<IconDockProps> = ({
         top-4 left-3.5 sm:left-4 flex flex-col items-center gap-2 p-2.5 sm:p-3 rounded-[30px]
         bg-[rgba(255,250,240,0.97)] backdrop-blur-md border-[3px] sm:border-[3.5px] border-pastel-peach shadow-retro
         max-h-[calc(100vh-32px)] overflow-y-auto dock-scrollbar scroll-smooth overscroll-contain
-        /* Mobile: Sleek horizontal bottom toolbar with comfortable touch targets */
-        max-md:top-auto max-md:bottom-2 max-md:left-2.5 max-md:right-2.5
-        max-md:flex-row max-md:justify-start sm:max-md:justify-around
+        /* Mobile: Sleek horizontal bottom toolbar with tactile touch targets */
+        max-md:top-auto max-md:bottom-2 max-md:left-2 max-md:right-2
+        max-md:flex-row max-md:justify-start
         max-md:p-1.5 max-md:rounded-2xl max-md:max-h-none 
-        max-md:overflow-x-auto max-md:overflow-y-hidden max-md:gap-1.5
+        max-md:overflow-x-auto max-md:overflow-y-hidden max-md:gap-2
         max-md:no-scrollbar touch-pan-x"
       style={{
         paddingBottom: 'max(0.375rem, env(safe-area-inset-bottom, 0.375rem))',
@@ -120,13 +126,14 @@ export const IconDock: React.FC<IconDockProps> = ({
               href={item.href}
               title={item.label}
               aria-label={item.label}
+              onClick={() => soundFX.playClick(640)}
               onKeyDown={(e) => handleKeyDown(e, idx)}
-              className="group relative shrink-0 snap-center flex flex-col items-center justify-center p-0.5 sm:p-1 cursor-pointer transition-transform active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark rounded-xl sm:rounded-2xl min-w-[40px] sm:min-w-[46px] md:min-w-[52px]"
+              className="group relative shrink-0 snap-center flex flex-col items-center justify-center p-0.5 sm:p-1 cursor-pointer transition-transform active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark rounded-xl sm:rounded-2xl min-w-[46px] sm:min-w-[48px] md:min-w-[52px]"
             >
-              <div className="relative p-1 sm:p-1.5 md:p-2 bg-white rounded-xl sm:rounded-2xl border-2 sm:border-[2.5px] border-pastel-dark shadow-[1.5px_1.5px_0_#ffb6c1] sm:shadow-[2px_2px_0_#ffb6c1] group-hover:scale-105 md:group-hover:translate-x-1.5 group-hover:shadow-[3px_3px_0_#c0f0dd] transition-all duration-200">
+              <div className="relative p-1.5 sm:p-2 bg-white rounded-xl sm:rounded-2xl border-2 sm:border-[2.5px] border-pastel-dark shadow-[1.5px_1.5px_0_#ffb6c1] sm:shadow-[2px_2px_0_#ffb6c1] group-hover:scale-105 md:group-hover:translate-x-1.5 group-hover:shadow-[3px_3px_0_#c0f0dd] transition-all duration-200">
                 {item.icon}
               </div>
-              <span className="text-[8px] sm:text-[9px] md:text-[9.5px] font-bold mt-0.5 text-pastel-dark px-1.5 py-0.2 rounded-full bg-white/95 border border-pastel-dark/20 whitespace-nowrap shadow-xs">
+              <span className="text-[8.5px] sm:text-[9px] md:text-[9.5px] font-bold mt-0.5 text-pastel-dark px-1.5 py-0.2 rounded-full bg-white/95 border border-pastel-dark/20 whitespace-nowrap shadow-xs">
                 {item.label}
               </span>
             </Link>
@@ -141,11 +148,11 @@ export const IconDock: React.FC<IconDockProps> = ({
             aria-selected={isTopmost}
             aria-controls={item.id}
             type="button"
-            onClick={() => onOpenWindow(item.id as WindowId)}
+            onClick={() => handleItemClick(item.id as WindowId)}
             onKeyDown={(e) => handleKeyDown(e, idx)}
             title={item.label}
             aria-label={item.label}
-            className="group relative shrink-0 snap-center flex flex-col items-center justify-center p-0.5 sm:p-1 cursor-pointer transition-transform active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark rounded-xl sm:rounded-2xl min-w-[40px] sm:min-w-[46px] md:min-w-[52px]"
+            className="group relative shrink-0 snap-center flex flex-col items-center justify-center p-0.5 sm:p-1 cursor-pointer transition-transform active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark rounded-xl sm:rounded-2xl min-w-[46px] sm:min-w-[48px] md:min-w-[52px]"
           >
             {item.badge && (
               <span className="absolute -top-1 -right-0.5 z-10 px-1 py-0.2 text-[7.5px] sm:text-[8.5px] font-extrabold uppercase bg-pastel-pink text-pastel-dark border border-pastel-dark rounded-full shadow-xs animate-bounce pointer-events-none">
@@ -153,7 +160,7 @@ export const IconDock: React.FC<IconDockProps> = ({
               </span>
             )}
             <div
-              className={`relative p-1 sm:p-1.5 md:p-2 rounded-xl sm:rounded-2xl border-2 sm:border-[2.5px] border-pastel-dark transition-all duration-200 ${
+              className={`relative p-1.5 sm:p-2 rounded-xl sm:rounded-2xl border-2 sm:border-[2.5px] border-pastel-dark transition-all duration-200 ${
                 isTopmost
                   ? 'bg-pastel-mint shadow-[2px_2px_0_#3d3d3d] md:translate-x-1.5 scale-105 ring-2 ring-pastel-dark'
                   : isOpen
@@ -171,7 +178,7 @@ export const IconDock: React.FC<IconDockProps> = ({
               )}
             </div>
             <span
-              className={`text-[8px] sm:text-[9px] md:text-[9.5px] font-bold mt-0.5 text-pastel-dark px-1.5 py-0.2 rounded-full transition-colors whitespace-nowrap shadow-xs ${
+              className={`text-[8.5px] sm:text-[9px] md:text-[9.5px] font-bold mt-0.5 text-pastel-dark px-1.5 py-0.2 rounded-full transition-colors whitespace-nowrap shadow-xs ${
                 isTopmost
                   ? 'bg-pastel-peach border border-pastel-dark'
                   : isOpen
