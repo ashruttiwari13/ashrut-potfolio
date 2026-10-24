@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { RotateCcw, Layers, Sparkles, Clock, ShieldCheck, Gamepad2 } from 'lucide-react';
+import { RotateCcw, Layers, Sparkles, Clock, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { soundFX } from '@/lib/soundEffects';
 
@@ -19,6 +19,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
   onOpenContact,
 }) => {
   const [time, setTime] = useState<string>('');
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   useEffect(() => {
     const updateTime = () => {
@@ -45,6 +46,16 @@ export const Taskbar: React.FC<TaskbarProps> = ({
   const handleBringAllFront = () => {
     soundFX.playClick(580);
     onBringAllFront();
+  };
+
+  const handleToggleExpand = () => {
+    if (isExpanded) {
+      soundFX.playWindowClose();
+      setIsExpanded(false);
+    } else {
+      soundFX.playWindowOpen();
+      setIsExpanded(true);
+    }
   };
 
   return (
@@ -93,72 +104,108 @@ export const Taskbar: React.FC<TaskbarProps> = ({
         </div>
       </header>
 
-      {/* DESKTOP TASKBAR (Visible on screens >= 768px) */}
+      {/* DESKTOP TASKBAR (Compressible / Sideways Collapsible Tab on screens >= 768px) */}
       <footer 
         role="region"
         aria-label="Desktop taskbar"
-        className="fixed bottom-3 right-4 z-[300] hidden md:flex items-center gap-2 p-1.5 sm:p-2 bg-[rgba(255,250,240,0.95)] backdrop-blur-md rounded-full border-[2.5px] border-pastel-dark shadow-retro text-xs font-bold pointer-events-auto select-none"
+        className="fixed bottom-3 right-4 z-[300] hidden md:flex items-center bg-[rgba(255,250,240,0.96)] backdrop-blur-md rounded-full border-[2.5px] border-pastel-dark shadow-retro text-xs font-bold pointer-events-auto select-none transition-all duration-300 ease-out"
       >
-        {/* Live Status Pill */}
-        <button
-          type="button"
-          onClick={() => {
-            soundFX.playClick(620);
-            if (onOpenContact) onOpenContact();
-          }}
-          className="flex items-center gap-1.5 px-2.5 py-1 bg-pastel-mint/80 hover:bg-pastel-mint rounded-full border border-pastel-dark text-pastel-dark cursor-pointer transition-colors"
-          title="Open for Freelance Opportunities - Click to message"
-        >
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
-          <span className="text-[11px] whitespace-nowrap">Open for Freelance</span>
-        </button>
+        {!isExpanded ? (
+          /* Compressed / Compact State: Click anywhere to open sideways */
+          <button
+            type="button"
+            onClick={handleToggleExpand}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-pastel-peach/50 active:scale-95 transition-all cursor-pointer group"
+            title="Click to expand toolbar sideways"
+            aria-expanded={false}
+          >
+            <div className="p-1 rounded-full bg-pastel-mint border border-pastel-dark group-hover:-translate-x-0.5 transition-transform flex items-center justify-center">
+              <ChevronLeft size={13} strokeWidth={3} className="text-pastel-dark" />
+            </div>
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
+            <span className="text-[11.5px] text-pastel-dark font-extrabold tracking-tight">Toolbar</span>
+            <div className="flex items-center gap-1 px-2.5 py-0.5 bg-white rounded-full border border-pastel-dark text-pastel-dark text-[10.5px]">
+              <Clock size={10} strokeWidth={2.5} />
+              <span>{time || '--:--'}</span>
+            </div>
+          </button>
+        ) : (
+          /* Full Expanded State: Slides open sideways with all controls */
+          <div className="flex items-center gap-2 p-1.5 sm:p-2 animate-fadeIn">
+            {/* Compress Button (chevron pointing right to compress sideways) */}
+            <button
+              type="button"
+              onClick={handleToggleExpand}
+              className="p-1 sm:p-1.5 rounded-full bg-pastel-peach hover:bg-pastel-pink border border-pastel-dark text-pastel-dark transition-all cursor-pointer hover:translate-x-0.5 active:scale-90"
+              title="Compress toolbar sideways"
+              aria-expanded={true}
+              aria-label="Compress toolbar"
+            >
+              <ChevronRight size={14} strokeWidth={3} />
+            </button>
 
-        {/* Taskbar Action Controls */}
-        <button
-          type="button"
-          onClick={handleResetWindows}
-          className="retro-btn text-[11px] px-2.5 py-1 bg-white hover:bg-pastel-peach"
-          title="Arrange windows to original positions"
-        >
-          <RotateCcw size={12} strokeWidth={2.5} />
-          <span>Reset</span>
-        </button>
+            {/* Live Status Pill */}
+            <button
+              type="button"
+              onClick={() => {
+                soundFX.playClick(620);
+                if (onOpenContact) onOpenContact();
+              }}
+              className="flex items-center gap-1.5 px-2.5 py-1 bg-pastel-mint/80 hover:bg-pastel-mint rounded-full border border-pastel-dark text-pastel-dark cursor-pointer transition-colors"
+              title="Open for Freelance Opportunities - Click to message"
+            >
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
+              <span className="text-[11px] whitespace-nowrap">Open for Freelance</span>
+            </button>
 
-        <button
-          type="button"
-          onClick={handleBringAllFront}
-          className="retro-btn text-[11px] px-2.5 py-1 bg-white hover:bg-pastel-lavender"
-          title="Bring all open windows forward"
-        >
-          <Layers size={12} strokeWidth={2.5} />
-          <span className="hidden xl:inline">Bring Front</span>
-        </button>
+            {/* Taskbar Action Controls */}
+            <button
+              type="button"
+              onClick={handleResetWindows}
+              className="retro-btn text-[11px] px-2.5 py-1 bg-white hover:bg-pastel-peach"
+              title="Arrange windows to original positions"
+            >
+              <RotateCcw size={12} strokeWidth={2.5} />
+              <span>Reset</span>
+            </button>
 
-        <button
-          type="button"
-          onClick={handleMinimizeAll}
-          className="retro-btn text-[11px] px-2.5 py-1 bg-white hover:bg-pastel-sky"
-          title="Minimize / hide all windows to reveal desktop"
-        >
-          <Sparkles size={12} strokeWidth={2.5} />
-          <span>Desk</span>
-        </button>
+            <button
+              type="button"
+              onClick={handleBringAllFront}
+              className="retro-btn text-[11px] px-2.5 py-1 bg-white hover:bg-pastel-lavender"
+              title="Bring all open windows forward"
+            >
+              <Layers size={12} strokeWidth={2.5} />
+              <span className="hidden xl:inline">Bring Front</span>
+            </button>
 
-        {/* Clock */}
-        <div className="flex items-center gap-1 px-3 py-1 bg-white rounded-full border border-pastel-dark text-pastel-dark text-[11px]">
-          <Clock size={11} strokeWidth={2.5} />
-          <span>{time || '--:--'}</span>
-        </div>
+            <button
+              type="button"
+              onClick={handleMinimizeAll}
+              className="retro-btn text-[11px] px-2.5 py-1 bg-white hover:bg-pastel-sky"
+              title="Minimize / hide all windows to reveal desktop"
+            >
+              <Sparkles size={12} strokeWidth={2.5} />
+              <span>Desk</span>
+            </button>
 
-        {/* Admin shortcut */}
-        <Link
-          href="/admin"
-          onClick={() => soundFX.playClick(700)}
-          className="p-1.5 rounded-full bg-pastel-peach border border-pastel-dark hover:bg-pastel-pink transition-colors"
-          title="Admin Dashboard"
-        >
-          <ShieldCheck size={14} className="text-pastel-dark" />
-        </Link>
+            {/* Clock */}
+            <div className="flex items-center gap-1 px-3 py-1 bg-white rounded-full border border-pastel-dark text-pastel-dark text-[11px]">
+              <Clock size={11} strokeWidth={2.5} />
+              <span>{time || '--:--'}</span>
+            </div>
+
+            {/* Admin shortcut */}
+            <Link
+              href="/admin"
+              onClick={() => soundFX.playClick(700)}
+              className="p-1.5 rounded-full bg-pastel-peach border border-pastel-dark hover:bg-pastel-pink transition-colors"
+              title="Admin Dashboard"
+            >
+              <ShieldCheck size={14} className="text-pastel-dark" />
+            </Link>
+          </div>
+        )}
       </footer>
     </>
   );
