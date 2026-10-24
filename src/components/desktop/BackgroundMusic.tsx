@@ -249,7 +249,7 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
       <div
         className="fixed z-[9990] pointer-events-auto select-none w-auto sm:w-[92px] flex flex-col items-center transition-all duration-200 right-2 sm:right-4"
         style={{ 
-          top: 'max(0.375rem, env(safe-area-inset-top, 0.375rem))',
+          top: 'max(0.25rem, env(safe-area-inset-top, 0.25rem))',
           pointerEvents: 'auto' 
         }}
       >
@@ -304,13 +304,13 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
               e.preventDefault();
               handleToggle(e);
             }}
-            className="relative flex flex-col items-center justify-center p-0.5 sm:p-1.5 rounded-2xl cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark select-none touch-manipulation min-w-[54px] min-h-[54px] active:scale-95 transition-transform"
+            className="relative flex flex-col items-center justify-center p-0.5 sm:p-1 rounded-2xl cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark select-none touch-manipulation min-w-[46px] min-h-[46px] sm:min-w-[54px] sm:min-h-[54px] active:scale-95 transition-transform"
             aria-label={isSinging ? 'Stop music (cat singing)' : 'Start music (cat singing)'}
             title={isSinging ? 'Click or tap to stop music' : 'Click or tap to play music'}
           >
             {/* Cat Sprite on Pastel Cloud - Direct <img> for instant zero-latency render on all mobile browsers */}
             <div
-              className={`relative w-[54px] h-[54px] sm:w-[84px] sm:h-[84px] drop-shadow-[2px_3px_0_rgba(61,61,61,0.22)] flex items-center justify-center overflow-visible ${
+              className={`relative w-[44px] h-[44px] sm:w-[84px] sm:h-[84px] drop-shadow-[2px_3px_0_rgba(61,61,61,0.22)] flex items-center justify-center overflow-visible ${
                 isSinging
                   ? 'animate-[catSingBounce_0.84s_ease-in-out_infinite]'
                   : 'animate-[catIdleFloat_3s_ease-in-out_infinite]'
@@ -356,7 +356,7 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
 
             {/* Status Indicator Badge Under Cat */}
             <span
-              className={`text-[8px] sm:text-[9px] font-bold px-2 py-0.5 rounded-full border border-pastel-dark shadow-retro-sm -mt-0.5 transition-colors duration-150 flex items-center gap-1 ${
+              className={`text-[7.5px] sm:text-[9px] font-bold px-1.5 py-0.2 sm:px-2 sm:py-0.5 rounded-full border border-pastel-dark shadow-retro-sm -mt-0.5 transition-colors duration-150 flex items-center gap-1 ${
                 isSinging
                   ? 'bg-pastel-mint text-pastel-dark'
                   : isHovered
@@ -366,12 +366,12 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
             >
               {isSinging ? (
                 <>
-                  <Volume2 size={9} className="text-emerald-700 shrink-0" />
+                  <Volume2 size={8} className="text-emerald-700 shrink-0" />
                   <span>Singing 🎵</span>
                 </>
               ) : (
                 <>
-                  <VolumeX size={9} className="text-rose-600 shrink-0" />
+                  <VolumeX size={8} className="text-rose-600 shrink-0" />
                   <span>Muted</span>
                 </>
               )}

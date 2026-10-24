@@ -1,96 +1,84 @@
 'use client';
 
-import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { X, Minus, Square } from 'lucide-react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Minus, Square, X } from 'lucide-react';
+import { WindowId } from '@/types';
 import { soundFX } from '@/lib/soundEffects';
 
 interface WindowProps {
-  id: string;
+  id: WindowId;
   title: string;
   isOpen: boolean;
-  isMinimized?: boolean;
+  isMinimized: boolean;
   isMaximized?: boolean;
   onToggleMaximize?: () => void;
   zIndex: number;
-  initialPosition?: { x: number; y: number };
   width?: number | string;
-  headerColor?: string;
+  headerColor: string;
+  initialPosition?: { x: number; y: number };
+  children: React.ReactNode;
   onClose: () => void;
   onFocus: () => void;
   onMinimize?: () => void;
-  children: React.ReactNode;
 }
 
 export const Window: React.FC<WindowProps> = ({
   id,
   title,
   isOpen,
-  isMinimized = false,
+  isMinimized,
   isMaximized: propIsMaximized,
   onToggleMaximize,
   zIndex,
+  width = 620,
+  headerColor,
   initialPosition,
-  width = 480,
-  headerColor = 'bg-pastel-pink',
+  children,
   onClose,
   onFocus,
   onMinimize,
-  children,
 }) => {
   const windowRef = useRef<HTMLDivElement>(null);
-  const numericWidth = typeof width === 'number' ? width : 480;
-  const hasUserDragged = useRef(false);
 
+  // Detect mobile
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
-    const checkMobile = () => setIsMobile(typeof window !== 'undefined' && window.innerWidth < 768);
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Responsive center position calculation
+  // Window coordinate calculation (desktop)
   const calculateCenter = useCallback(() => {
-    if (typeof window === 'undefined') {
-      return { x: 300, y: 30 };
-    }
-
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-
-    // Desktop dock sits on left side (~84px wide)
-    const dockWidth = 84;
-    const availableWidth = Math.max(numericWidth, vw - dockWidth - 20);
-    const rawX = dockWidth + Math.floor((availableWidth - numericWidth) / 2);
-    const x = Math.max(dockWidth + 14, Math.min(vw - numericWidth - 20, rawX));
-
-    // Vertical positioning: centered in upper-middle of screen clear of taskbar
-    const availableHeight = vh - 75;
-    const estimatedHeight = 520;
-    const rawY = Math.floor((availableHeight - estimatedHeight) / 2);
-    const y = Math.max(16, Math.min(50, rawY));
-
+    if (typeof window === 'undefined') return { x: 120, y: 80 };
+    const winWidth = typeof width === 'number' ? width : 520;
+    const isSmall = window.innerWidth < 768;
+    const x = isSmall
+      ? Math.max(10, Math.floor((window.innerWidth - Math.min(winWidth, window.innerWidth - 20)) / 2))
+      : Math.max(100, Math.floor((window.innerWidth - winWidth) / 2));
+    const y = isSmall ? 84 : Math.max(20, Math.floor((window.innerHeight - 560) / 2));
     return { x, y };
-  }, [numericWidth]);
+  }, [width]);
 
-  const [position, setPosition] = useState<{ x: number; y: number }>(() => {
-    if (initialPosition) return initialPosition;
-    return calculateCenter();
-  });
+  const [position, setPosition] = useState<{ x: number; y: number }>(initialPosition || calculateCenter());
+  const hasUserDragged = useRef(false);
 
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [internalMaximized, setInternalMaximized] = useState(false);
   const isMaximized = propIsMaximized !== undefined ? propIsMaximized : internalMaximized;
 
-  // Mobile swipe-down pull distance
-  const [mobilePullY, setMobilePullY] = useState(0);
-  const touchStartYRef = useRef(0);
-  const touchStartTimeRef = useRef(0);
-  const isPullingRef = useRef(false);
+  // Mobile drag and pull-down handling
+  const [mobileOffset, setMobileOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const touchStartPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const initialOffsetRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const isDraggingMobileRef = useRef<boolean>(false);
+  const touchStartTimeRef = useRef<number>(0);
 
   const toggleMaximize = useCallback(() => {
     soundFX.playClick(600);
+    setMobileOffset({ x: 0, y: 0 });
     if (onToggleMaximize) {
       onToggleMaximize();
     } else {
@@ -103,6 +91,7 @@ export const Window: React.FC<WindowProps> = ({
   useEffect(() => {
     if (isOpen && !prevIsOpen.current) {
       soundFX.playWindowOpen();
+      setMobileOffset({ x: 0, y: 0 });
       if (initialPosition) {
         setPosition(initialPosition);
       } else {
@@ -138,39 +127,59 @@ export const Window: React.FC<WindowProps> = ({
     });
   };
 
-  // Touch handlers for mobile (Swipe down to minimize gesture)
+  // Touch drag handlers for mobile (free movement + swipe down to minimize)
   const handleTouchStart = (e: React.TouchEvent) => {
     onFocus();
+    if (isMaximized) return;
     if (e.touches.length === 1) {
-      touchStartYRef.current = e.touches[0].clientY;
+      const t = e.touches[0];
+      touchStartPosRef.current = { x: t.clientX, y: t.clientY };
+      initialOffsetRef.current = { ...mobileOffset };
       touchStartTimeRef.current = Date.now();
-      isPullingRef.current = true;
+      isDraggingMobileRef.current = true;
     }
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isPullingRef.current || e.touches.length !== 1) return;
-    const currentY = e.touches[0].clientY;
-    const deltaY = currentY - touchStartYRef.current;
+    if (!isDraggingMobileRef.current || isMaximized || e.touches.length !== 1) return;
+    const t = e.touches[0];
+    const deltaX = t.clientX - touchStartPosRef.current.x;
+    const deltaY = t.clientY - touchStartPosRef.current.y;
 
-    // Only pull downward
-    if (deltaY > 0) {
-      if (e.cancelable) e.preventDefault();
-      // Apply slight rubber-band friction
-      setMobilePullY(Math.min(120, deltaY * 0.7));
-    }
+    if (e.cancelable) e.preventDefault();
+
+    setMobileOffset({
+      x: initialOffsetRef.current.x + deltaX * 0.9,
+      y: Math.max(-25, initialOffsetRef.current.y + deltaY),
+    });
   };
 
   const handleTouchEnd = () => {
-    if (!isPullingRef.current) return;
-    isPullingRef.current = false;
+    if (!isDraggingMobileRef.current) return;
+    isDraggingMobileRef.current = false;
 
-    // If pulled down more than 65px on mobile, minimize window!
-    if (mobilePullY > 65 && onMinimize) {
+    const timeDiff = Date.now() - touchStartTimeRef.current;
+    // Fast swipe down (> 85px in < 400ms) or deep pull down (> 130px) triggers minimize
+    if (mobileOffset.y > 85 && timeDiff < 400 && onMinimize) {
       soundFX.playWindowClose();
       onMinimize();
+      setMobileOffset({ x: 0, y: 0 });
+      return;
     }
-    setMobilePullY(0);
+    if (mobileOffset.y > 130 && onMinimize) {
+      soundFX.playWindowClose();
+      onMinimize();
+      setMobileOffset({ x: 0, y: 0 });
+      return;
+    }
+
+    // Keep position within viewport bounds
+    const maxY = typeof window !== 'undefined' ? window.innerHeight - 180 : 300;
+    const maxX = typeof window !== 'undefined' ? window.innerWidth * 0.4 : 120;
+    setMobileOffset((prev) => ({
+      x: Math.max(-maxX, Math.min(maxX, prev.x)),
+      y: Math.max(-15, Math.min(maxY, prev.y)),
+    }));
   };
 
   // Desktop Mouse drag tracking
@@ -216,34 +225,35 @@ export const Window: React.FC<WindowProps> = ({
 
   if (!isMounted || !isOpen) return null;
 
-  // Window styling logic: On mobile, expansive, beautiful full-height card
+  // Window styling logic:
+  // On mobile: top is anchored at 84px to completely clear the top bar & cat widget!
   const windowStyle: React.CSSProperties = {
     zIndex: isMaximized ? Math.max(zIndex, 320) : zIndex,
     display: isMinimized ? 'none' : 'flex',
-    transform: mobilePullY > 0 ? `translateY(${mobilePullY}px)` : 'none',
-    transition: mobilePullY > 0 ? 'none' : 'transform 0.2s ease, opacity 0.2s ease',
     ...(isMobile
       ? isMaximized
         ? {
-            top: '8px',
+            top: 'max(80px, calc(env(safe-area-inset-top, 0px) + 76px))',
+            bottom: 'max(68px, calc(env(safe-area-inset-bottom, 0px) + 64px))',
             left: '8px',
             right: '8px',
-            bottom: '8px',
             width: 'auto',
-            height: 'calc(100dvh - 16px)',
+            height: 'calc(100dvh - max(152px, calc(env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px) + 144px)))',
             maxHeight: 'none',
             maxWidth: 'none',
           }
         : {
-            top: 'max(48px, calc(env(safe-area-inset-top, 0px) + 44px))',
+            top: 'max(84px, calc(env(safe-area-inset-top, 0px) + 80px))',
             bottom: 'max(72px, calc(env(safe-area-inset-bottom, 0px) + 68px))',
             left: '8px',
             right: '8px',
             width: 'auto',
             maxWidth: '640px',
             margin: '0 auto',
-            height: 'calc(100dvh - max(120px, calc(env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px) + 112px)))',
-            maxHeight: 'calc(100dvh - max(120px, calc(env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px) + 112px)))',
+            transform: `translate3d(${mobileOffset.x}px, ${mobileOffset.y}px, 0)`,
+            transition: isDraggingMobileRef.current ? 'none' : 'transform 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1)',
+            height: 'calc(100dvh - max(162px, calc(env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px) + 152px)))',
+            maxHeight: 'calc(100dvh - max(162px, calc(env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px) + 152px)))',
           }
       : isMaximized
       ? {
@@ -291,11 +301,17 @@ export const Window: React.FC<WindowProps> = ({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        onDoubleClick={toggleMaximize}
+        onDoubleClick={() => {
+          if (isMobile) {
+            setMobileOffset({ x: 0, y: 0 });
+          } else {
+            toggleMaximize();
+          }
+        }}
         className={`${headerColor} px-3 sm:px-4 py-2 border-b-2 sm:border-b-[2.5px] border-pastel-dark flex flex-col justify-center cursor-grab active:cursor-grabbing select-none touch-none min-h-[46px] sm:min-h-[50px] shrink-0`}
-        title="Drag on desktop · Swipe down on mobile to minimize · Double click to maximize"
+        title="Drag on desktop · Drag to move on mobile (swipe down to minimize) · Double click to maximize"
       >
-        {/* Mobile Swipe-Down Pill Indicator */}
+        {/* Mobile Swipe / Drag Pill Indicator */}
         <div className="w-10 h-1 rounded-full bg-pastel-dark/30 mx-auto -mt-0.5 mb-1 sm:hidden pointer-events-none" />
 
         <div className="flex items-center justify-between w-full">
@@ -319,11 +335,17 @@ export const Window: React.FC<WindowProps> = ({
                   soundFX.playWindowClose();
                   onMinimize();
                 }}
-                title="Minimize to Dock (or swipe down)"
+                onTouchEnd={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  soundFX.playWindowClose();
+                  onMinimize();
+                }}
+                title="Minimize to Dock"
                 aria-label="Minimize"
-                className="w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 rounded-full bg-white border-2 border-pastel-dark flex items-center justify-center hover:bg-pastel-peach active:scale-90 transition-all text-pastel-dark shadow-xs cursor-pointer"
+                className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-white border-2 border-pastel-dark flex items-center justify-center hover:bg-pastel-peach active:scale-90 transition-all text-pastel-dark shadow-xs cursor-pointer touch-manipulation"
               >
-                <Minus className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={3.5} />
+                <Minus className="w-4 h-4 sm:w-4 sm:h-4" strokeWidth={3.5} />
               </button>
             )}
 
@@ -333,11 +355,16 @@ export const Window: React.FC<WindowProps> = ({
                 e.stopPropagation();
                 toggleMaximize();
               }}
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                toggleMaximize();
+              }}
               title={isMaximized ? 'Restore window size' : 'Expand window'}
               aria-label={isMaximized ? 'Restore window size' : 'Expand window'}
-              className="w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 rounded-full bg-white border-2 border-pastel-dark flex items-center justify-center hover:bg-pastel-mint active:scale-90 transition-all text-pastel-dark shadow-xs cursor-pointer"
+              className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-white border-2 border-pastel-dark flex items-center justify-center hover:bg-pastel-mint active:scale-90 transition-all text-pastel-dark shadow-xs cursor-pointer touch-manipulation"
             >
-              <Square className="w-3 h-3 sm:w-3.5 sm:h-3.5" strokeWidth={3.5} />
+              <Square className="w-3.5 h-3.5 sm:w-3.5 sm:h-3.5" strokeWidth={3.5} />
             </button>
 
             <button
@@ -347,11 +374,17 @@ export const Window: React.FC<WindowProps> = ({
                 soundFX.playWindowClose();
                 onClose();
               }}
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                soundFX.playWindowClose();
+                onClose();
+              }}
               title="Close Tab"
               aria-label="Close"
-              className="w-7.5 h-7.5 sm:w-8.5 sm:h-8.5 rounded-full bg-white border-2 border-pastel-dark flex items-center justify-center hover:bg-rose-500 hover:text-white active:scale-90 transition-all text-pastel-dark font-bold shadow-xs cursor-pointer"
+              className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-white border-2 border-pastel-dark flex items-center justify-center hover:bg-rose-500 hover:text-white active:scale-90 transition-all text-pastel-dark font-bold shadow-xs cursor-pointer touch-manipulation"
             >
-              <X className="w-4 h-4 sm:w-4.5 sm:h-4.5" strokeWidth={3.5} />
+              <X className="w-4.5 h-4.5 sm:w-4.5 sm:h-4.5" strokeWidth={3.5} />
             </button>
           </div>
         </div>
