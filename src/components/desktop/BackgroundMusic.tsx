@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import Image from 'next/image';
-import { Volume2, VolumeX, Play } from 'lucide-react';
+import { Volume2, VolumeX } from 'lucide-react';
 
 interface BackgroundMusicProps {
   isGameActive?: boolean;
@@ -18,116 +17,26 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
 }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const fadeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const isStartingRef = useRef<boolean>(false);
   const lastToggleRef = useRef<number>(0);
 
-  // Web Audio fallback references
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const webAudioSourceRef = useRef<AudioBufferSourceNode | null>(null);
-  const webAudioGainRef = useRef<GainNode | null>(null);
-  const audioBufferRef = useRef<AudioBuffer | null>(null);
-  const isWebAudioPlayingRef = useRef<boolean>(false);
-
-  // Component state
+  // Component state: Cat sings automatically on site open across phone & desktop!
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
-  const [isAudioActive, setIsAudioActive] = useState<boolean>(false);
-  const [needsGesture, setNeedsGesture] = useState<boolean>(false);
+  const [isAudioActive, setIsAudioActive] = useState<boolean>(true);
   const isPlayingRef = useRef<boolean>(true);
   isPlayingRef.current = isPlaying;
 
   const [singFrame, setSingFrame] = useState<1 | 2>(1);
-  const [hasError, setHasError] = useState<boolean>(false);
   const [showHint, setShowHint] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
-
-  // Unlock / Resume Web Audio API context
-  const getOrCreateAudioContext = useCallback(() => {
-    if (typeof window === 'undefined') return null;
-    try {
-      if (!audioContextRef.current) {
-        const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-        if (AudioCtx) {
-          audioContextRef.current = new AudioCtx();
-        }
-      }
-      if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
-        audioContextRef.current.resume().catch(() => {});
-      }
-      return audioContextRef.current;
-    } catch {
-      return null;
-    }
-  }, []);
-
-  // Web Audio API buffer playback fallback (rock-solid on mobile Safari & Chrome)
-  const playWebAudioFallback = useCallback(async () => {
-    try {
-      const ctx = getOrCreateAudioContext();
-      if (!ctx) return false;
-
-      if (ctx.state === 'suspended') {
-        await ctx.resume();
-      }
-
-      if (!audioBufferRef.current) {
-        const res = await fetch(AUDIO_SRC);
-        const arrayBuf = await res.arrayBuffer();
-        audioBufferRef.current = await ctx.decodeAudioData(arrayBuf);
-      }
-
-      if (webAudioSourceRef.current) {
-        try { webAudioSourceRef.current.stop(); } catch {}
-      }
-
-      const source = ctx.createBufferSource();
-      const gain = ctx.createGain();
-      source.buffer = audioBufferRef.current;
-      source.loop = true;
-      gain.gain.value = DEFAULT_VOLUME;
-
-      source.connect(gain);
-      gain.connect(ctx.destination);
-
-      source.start(0);
-      webAudioSourceRef.current = source;
-      webAudioGainRef.current = gain;
-      isWebAudioPlayingRef.current = true;
-
-      setIsAudioActive(true);
-      setIsPlaying(true);
-      setNeedsGesture(false);
-      return true;
-    } catch (err) {
-      console.warn('Web Audio fallback could not play:', err);
-      return false;
-    }
-  }, [getOrCreateAudioContext]);
-
-  const stopWebAudio = useCallback(() => {
-    if (webAudioSourceRef.current) {
-      try {
-        webAudioSourceRef.current.stop();
-      } catch {}
-      webAudioSourceRef.current = null;
-    }
-    isWebAudioPlayingRef.current = false;
-  }, []);
 
   // Smooth volume ramping helper
   const rampVolume = useCallback((targetVol: number, durationMs: number, onComplete?: () => void) => {
     if (fadeTimerRef.current) clearInterval(fadeTimerRef.current);
 
     const audio = audioRef.current;
-    if (isWebAudioPlayingRef.current && webAudioGainRef.current && audioContextRef.current) {
-      try {
-        const gain = webAudioGainRef.current;
-        gain.gain.setValueAtTime(gain.gain.value, audioContextRef.current.currentTime);
-        gain.gain.linearRampToValueAtTime(targetVol, audioContextRef.current.currentTime + durationMs / 1000);
-        if (onComplete) setTimeout(onComplete, durationMs);
-        return;
-      } catch {}
-    }
-
     if (!audio) return;
+
     const startVol = audio.volume;
     const diff = targetVol - startVol;
     const steps = 16;
@@ -148,53 +57,49 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     }, stepInterval);
   }, []);
 
-  // Main playback trigger: starts HTML5 audio or Web Audio fallback
+  // Main playback trigger: strict single-instance playback (never plays twice)
   const startPlayback = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
     setIsPlaying(true);
     isPlayingRef.current = true;
-    setHasError(false);
-    setNeedsGesture(false);
+    setIsAudioActive(true);
 
-    getOrCreateAudioContext();
-
-    const audio = audioRef.current;
-    if (audio) {
-      audio.muted = false;
-      audio.volume = DEFAULT_VOLUME;
-
-      const playPromise = audio.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            setIsAudioActive(true);
-            setIsPlaying(true);
-            setNeedsGesture(false);
-            setShowHint(false);
-          })
-          .catch(async (err) => {
-            console.log('HTML5 play rejected, attempting Web Audio API fallback:', err?.name);
-            const playedWebAudio = await playWebAudioFallback();
-            if (!playedWebAudio) {
-              setNeedsGesture(true);
-              setIsAudioActive(false);
-            }
-          });
-        return;
-      }
+    // If audio is already actively playing and unmuted, do not restart or double-play
+    if (!audio.paused && audio.currentTime > 0 && !audio.muted) {
+      return;
     }
 
-    // Direct Web Audio fallback if no HTML audio tag
-    playWebAudioFallback();
-  }, [getOrCreateAudioContext, playWebAudioFallback]);
+    // Guard against concurrent overlapping play requests
+    if (isStartingRef.current) return;
+    isStartingRef.current = true;
 
-  // Pause playback
+    audio.muted = false;
+    audio.volume = DEFAULT_VOLUME;
+
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          isStartingRef.current = false;
+        })
+        .catch(() => {
+          isStartingRef.current = false;
+          // If unmuted autoplay blocked by phone policy, keep playing muted until first touch
+          audio.muted = true;
+          audio.play().catch(() => {});
+        });
+    } else {
+      isStartingRef.current = false;
+    }
+  }, []);
+
+  // Pause playback cleanly
   const pausePlayback = useCallback(() => {
     setIsPlaying(false);
     isPlayingRef.current = false;
     setIsAudioActive(false);
-    setNeedsGesture(false);
-
-    stopWebAudio();
 
     const audio = audioRef.current;
     if (!audio) return;
@@ -202,23 +107,23 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     rampVolume(0, 150, () => {
       audio.pause();
     });
-  }, [rampVolume, stopWebAudio]);
+  }, [rampVolume]);
 
-  // Toggle play/pause
+  // Toggle play/pause on cat click
   const togglePlay = useCallback(() => {
     setShowHint(false);
     const audio = audioRef.current;
+    if (!audio) return;
 
-    const isCurrentlyPlaying = (audio && !audio.paused && isAudioActive) || isWebAudioPlayingRef.current;
-
-    if (isCurrentlyPlaying) {
+    const isCurrentlySinging = isPlaying && isAudioActive;
+    if (isCurrentlySinging) {
       pausePlayback();
     } else {
       startPlayback();
     }
-  }, [pausePlayback, startPlayback, isAudioActive]);
+  }, [pausePlayback, startPlayback, isPlaying, isAudioActive]);
 
-  // Debounced tap handler
+  // Debounced tap handler for the singing cat widget button
   const handleToggle = useCallback((e?: React.SyntheticEvent) => {
     if (e) {
       e.stopPropagation();
@@ -229,12 +134,12 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     togglePlay();
   }, [togglePlay]);
 
-  // Autoplay attempt on mount & global gesture unlock
+  // Automatic singing & audio playback on phone and desktop
   useEffect(() => {
     setIsPlaying(true);
     isPlayingRef.current = true;
+    setIsAudioActive(true);
 
-    // Check if audio already entered during this session
     const audio = audioRef.current;
     if (audio) {
       audio.muted = false;
@@ -242,68 +147,44 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
       const p = audio.play();
       if (p !== undefined) {
         p.then(() => {
-          setIsAudioActive(true);
-          setIsPlaying(true);
-          setNeedsGesture(false);
-        }).catch((err) => {
-          // Autoplay blocked by mobile phone browser policy: wait for first tap anywhere
-          console.log('Browser blocked autoplay on mobile, awaiting first tap:', err?.name);
-          setNeedsGesture(true);
-          setIsAudioActive(false);
-          setShowHint(true);
-          setTimeout(() => setShowHint(false), 4500);
+          // Autoplay with sound succeeded immediately
+        }).catch(() => {
+          // If phone browser blocks unmuted sound on cold load:
+          // Keep audio stream active in muted mode so cat sings immediately without interruption
+          if (audio) {
+            audio.muted = true;
+            audio.play().catch(() => {});
+          }
         });
       }
     }
 
-    // Global Capture-Phase gesture listener so ANY touch on phone unlocks playback immediately
-    const unlockOnGesture = () => {
-      if (!isPlayingRef.current) return;
-      getOrCreateAudioContext();
-
+    // Seamless instant unmute on very first touch/scroll anywhere on the phone
+    const unmuteOnFirstTouch = () => {
       const aud = audioRef.current;
-      if (aud) {
+      if (aud && isPlayingRef.current) {
         aud.muted = false;
         aud.volume = DEFAULT_VOLUME;
-        const p = aud.play();
-        if (p !== undefined) {
-          p.then(() => {
-            setIsAudioActive(true);
-            setIsPlaying(true);
-            setNeedsGesture(false);
-            cleanupGestureListeners();
-          }).catch(() => {
-            // If HTML5 audio still fails on mobile, trigger Web Audio
-            playWebAudioFallback().then((success) => {
-              if (success) cleanupGestureListeners();
-            });
-          });
+        if (aud.paused) {
+          aud.play().catch(() => {});
         }
       }
     };
 
-    const cleanupGestureListeners = () => {
-      window.removeEventListener('touchend', unlockOnGesture, true);
-      window.removeEventListener('touchstart', unlockOnGesture, true);
-      window.removeEventListener('pointerdown', unlockOnGesture, true);
-      window.removeEventListener('mousedown', unlockOnGesture, true);
-      window.removeEventListener('click', unlockOnGesture, true);
-      window.removeEventListener('keydown', unlockOnGesture, true);
-    };
-
-    window.addEventListener('touchend', unlockOnGesture, { capture: true, passive: true });
-    window.addEventListener('touchstart', unlockOnGesture, { capture: true, passive: true });
-    window.addEventListener('pointerdown', unlockOnGesture, { capture: true, passive: true });
-    window.addEventListener('mousedown', unlockOnGesture, { capture: true, passive: true });
-    window.addEventListener('click', unlockOnGesture, { capture: true, passive: true });
-    window.addEventListener('keydown', unlockOnGesture, { capture: true, passive: true });
+    window.addEventListener('touchstart', unmuteOnFirstTouch, { once: true, passive: true });
+    window.addEventListener('touchend', unmuteOnFirstTouch, { once: true, passive: true });
+    window.addEventListener('pointerdown', unmuteOnFirstTouch, { once: true, passive: true });
+    window.addEventListener('click', unmuteOnFirstTouch, { once: true, passive: true });
 
     return () => {
-      cleanupGestureListeners();
+      window.removeEventListener('touchstart', unmuteOnFirstTouch);
+      window.removeEventListener('touchend', unmuteOnFirstTouch);
+      window.removeEventListener('pointerdown', unmuteOnFirstTouch);
+      window.removeEventListener('click', unmuteOnFirstTouch);
     };
-  }, [getOrCreateAudioContext, playWebAudioFallback]);
+  }, []);
 
-  // Singing animation loop (alternates frame 1 and 2 ONLY when actually singing)
+  // Singing animation loop (alternates frame 1 and 2 automatically when cat is singing)
   useEffect(() => {
     if (!isPlaying || !isAudioActive) {
       setSingFrame(1);
@@ -329,15 +210,14 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
   useEffect(() => {
     return () => {
       if (fadeTimerRef.current) clearInterval(fadeTimerRef.current);
-      stopWebAudio();
     };
-  }, [stopWebAudio]);
+  }, []);
 
   const isSinging = isPlaying && isAudioActive;
 
   return (
     <>
-      {/* Hidden Native Audio Element */}
+      {/* Hidden Native Audio Element (Single Source of Truth) */}
       <audio
         ref={audioRef}
         src={AUDIO_SRC}
@@ -348,19 +228,17 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
           setIsAudioActive(true);
           setIsPlaying(true);
           isPlayingRef.current = true;
-          setNeedsGesture(false);
         }}
         onError={() => {
           if (audioRef.current && !audioRef.current.src.endsWith('/audio/website-music.mp3')) {
             audioRef.current.src = '/audio/website-music.mp3';
-            if (isPlayingRef.current) audioRef.current.play().catch(() => {});
-          } else {
-            console.warn('Audio element error, falling back to Web Audio');
-            playWebAudioFallback();
+            if (isPlayingRef.current) {
+              audioRef.current.play().catch(() => {});
+            }
           }
         }}
         onEnded={() => {
-          if (audioRef.current && isPlaying) {
+          if (audioRef.current && isPlayingRef.current) {
             audioRef.current.currentTime = 0;
             audioRef.current.play().catch(() => {});
           }
@@ -389,12 +267,8 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
               <span className="text-sm shrink-0">{isSinging ? '🎶' : '🌸'}</span>
               <div className="flex flex-col">
                 <span className="font-bold text-[9.5px] sm:text-[11px] leading-tight truncate">
-                  {hasError
-                    ? 'Singing Cat: Resting'
-                    : isSinging
+                  {isSinging
                     ? 'Singing cheerfully! Tap to mute'
-                    : needsGesture
-                    ? 'Tap cat or screen to hear me sing! 🎵'
                     : 'Cat is resting. Tap to sing! 🎵'}
                 </span>
                 <span className="text-[7.5px] sm:text-[9px] text-pastel-soft leading-none mt-0.5">
@@ -406,7 +280,7 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
             </div>
           )}
 
-          {/* Floating Magical Musical Notes (strictly when music is actively playing) */}
+          {/* Floating Magical Musical Notes (strictly when cat is singing) */}
           {isSinging && (
             <div className="absolute -top-2 sm:-top-3 left-0 right-0 h-5 sm:h-6 pointer-events-none overflow-visible">
               <span className="absolute -left-1 text-amber-500 font-bold text-[10px] sm:text-xs animate-[floatNote1_1.4s_ease-in-out_infinite]">
@@ -430,49 +304,52 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
               e.preventDefault();
               handleToggle(e);
             }}
-            className="relative flex flex-col items-center justify-center p-0.5 sm:p-1.5 rounded-2xl cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark select-none touch-manipulation min-w-[50px] min-h-[50px] active:scale-95 transition-transform"
+            className="relative flex flex-col items-center justify-center p-0.5 sm:p-1.5 rounded-2xl cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark select-none touch-manipulation min-w-[54px] min-h-[54px] active:scale-95 transition-transform"
             aria-label={isSinging ? 'Stop music (cat singing)' : 'Start music (cat singing)'}
             title={isSinging ? 'Click or tap to stop music' : 'Click or tap to play music'}
           >
-            {/* Cat Sprite on Pastel Cloud */}
+            {/* Cat Sprite on Pastel Cloud - Direct <img> for instant zero-latency render on all mobile browsers */}
             <div
-              className={`relative w-[48px] h-[48px] sm:w-[84px] sm:h-[84px] drop-shadow-[2px_3px_0_rgba(61,61,61,0.22)] ${
+              className={`relative w-[54px] h-[54px] sm:w-[84px] sm:h-[84px] drop-shadow-[2px_3px_0_rgba(61,61,61,0.22)] flex items-center justify-center overflow-visible ${
                 isSinging
                   ? 'animate-[catSingBounce_0.84s_ease-in-out_infinite]'
                   : 'animate-[catIdleFloat_3s_ease-in-out_infinite]'
               }`}
             >
               {/* Idle Frame */}
-              <Image
+              <img
                 src="/assets/cat_idle.png"
                 alt="Cute cat resting on fluffy cloud"
-                fill
-                sizes="84px"
-                priority
-                className={`object-contain select-none transition-opacity duration-150 ${
-                  !isSinging ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                width={84}
+                height={84}
+                loading="eager"
+                decoding="sync"
+                className={`w-full h-full object-contain select-none pointer-events-none ${
+                  !isSinging ? 'block' : 'hidden'
                 }`}
               />
               {/* Singing Frame 1 (paw up singing) */}
-              <Image
+              <img
                 src="/assets/cat_sing_1.png"
                 alt="Cute cat singing cheerfully frame 1"
-                fill
-                sizes="84px"
-                priority
-                className={`object-contain select-none transition-opacity duration-75 ${
-                  isSinging && singFrame === 1 ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                width={84}
+                height={84}
+                loading="eager"
+                decoding="sync"
+                className={`w-full h-full object-contain select-none pointer-events-none ${
+                  isSinging && singFrame === 1 ? 'block' : 'hidden'
                 }`}
               />
               {/* Singing Frame 2 (dancing & wagging tail) */}
-              <Image
+              <img
                 src="/assets/cat_sing_2.png"
                 alt="Cute cat dancing and singing frame 2"
-                fill
-                sizes="84px"
-                priority
-                className={`object-contain select-none transition-opacity duration-75 ${
-                  isSinging && singFrame === 2 ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                width={84}
+                height={84}
+                loading="eager"
+                decoding="sync"
+                className={`w-full h-full object-contain select-none pointer-events-none ${
+                  isSinging && singFrame === 2 ? 'block' : 'hidden'
                 }`}
               />
             </div>
@@ -482,8 +359,6 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
               className={`text-[8px] sm:text-[9px] font-bold px-2 py-0.5 rounded-full border border-pastel-dark shadow-retro-sm -mt-0.5 transition-colors duration-150 flex items-center gap-1 ${
                 isSinging
                   ? 'bg-pastel-mint text-pastel-dark'
-                  : needsGesture
-                  ? 'bg-pastel-peach text-pastel-dark animate-pulse'
                   : isHovered
                   ? 'bg-pastel-peach text-pastel-dark'
                   : 'bg-white/95 text-pastel-dark'
@@ -494,13 +369,6 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
                   <Volume2 size={9} className="text-emerald-700 shrink-0" />
                   <span>Singing 🎵</span>
                 </>
-              ) : needsGesture ? (
-                <>
-                  <Play size={8} className="text-amber-700 shrink-0 fill-amber-700" />
-                  <span>Tap to Play</span>
-                </>
-              ) : hasError ? (
-                <span>Resting</span>
               ) : (
                 <>
                   <VolumeX size={9} className="text-rose-600 shrink-0" />
