@@ -14,6 +14,7 @@ import {
   X
 } from 'lucide-react';
 import { soundFX } from '@/lib/soundEffects';
+import { useTheme } from '@/context/ThemeContext';
 
 interface ProfileWindowProps {
   profile: ProfileSettings;
@@ -21,6 +22,7 @@ interface ProfileWindowProps {
 }
 
 export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigate }) => {
+  const { isPanda } = useTheme();
   const [avatarMode, setAvatarMode] = useState<'real' | '3d'>('real');
   const [showEnlargedPhoto, setShowEnlargedPhoto] = useState(false);
 
@@ -38,6 +40,12 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
       <div className="flex items-center gap-3 p-2.5 sm:p-3 bg-white border-2 border-pastel-dark rounded-retro shadow-[2.5px_2.5px_0_#ffdab9]">
         {/* Profile Picture with Interactive 3D / Real Photo Toggle */}
         <div className="relative shrink-0 select-none">
+          {/* Panda Badge on Avatar */}
+          {isPanda && (
+            <span className="absolute -top-2 -left-2 z-20 text-sm select-none" title="Panda Dev">
+              🐼
+            </span>
+          )}
           <div
             onClick={() => setShowEnlargedPhoto(true)}
             title="Click to view full photo"
@@ -89,17 +97,20 @@ export const ProfileWindow: React.FC<ProfileWindowProps> = ({ profile, onNavigat
             <h2 className="text-base sm:text-xl font-extrabold text-pastel-dark break-words">
               {profile.full_name}
             </h2>
-            <span className="text-base shrink-0">👾</span>
+            <span className="text-base shrink-0">{isPanda ? '🐼' : '👾'}</span>
           </div>
           <p className="text-[11px] sm:text-xs font-bold text-pastel-dark leading-snug break-words mt-0.5">
             {profile.headline}
           </p>
           <div className="flex flex-wrap gap-1 mt-1.5">
             <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-full bg-pastel-mint border border-pastel-dark text-[9px] font-extrabold text-pastel-dark shadow-xs">
-              💼 Primary Profession
+              💼 Game Developer
             </span>
             <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-full bg-pastel-lavender border border-pastel-dark text-[9px] font-bold text-pastel-dark shadow-xs">
-              🎬 Filmmaking (Creative Hobby)
+              🎬 Filmmaking (Hobby)
+            </span>
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-full bg-pastel-pink border border-pastel-dark text-[9px] font-extrabold text-pastel-dark shadow-xs">
+              {isPanda ? '🎋 Panda OS' : '🌸 Cozy Retro'}
             </span>
           </div>
           <div className="flex items-center gap-1.5 mt-1 text-[10px] sm:text-[11px] text-pastel-soft min-w-0">

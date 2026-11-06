@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
+import { useTheme } from '@/context/ThemeContext';
 
 interface BackgroundMusicProps {
   isGameActive?: boolean;
@@ -15,12 +16,13 @@ const AUDIO_SRC = '/assets/audio/website-music.mp3';
 export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
   isGameActive = false,
 }) => {
+  const { isPanda } = useTheme();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const fadeTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isStartingRef = useRef<boolean>(false);
   const lastToggleRef = useRef<number>(0);
 
-  // Component state: Cat sings automatically on site open across phone & desktop!
+  // Component state: Panda sings automatically on site open across phone & desktop!
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [isAudioActive, setIsAudioActive] = useState<boolean>(true);
   const isPlayingRef = useRef<boolean>(true);
@@ -29,6 +31,17 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
   const [singFrame, setSingFrame] = useState<1 | 2>(1);
   const [showHint, setShowHint] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [isHappyHop, setIsHappyHop] = useState<boolean>(false);
+  const [dialogueIdx, setDialogueIdx] = useState<number>(0);
+  const [particles, setParticles] = useState<{ id: number; icon: string; x: number }[]>([]);
+
+  const PANDA_DIALOGUES = [
+    "Om nom nom... fresh bamboo is yummy! 🎋🐼",
+    "Panda DJ spinning cozy lo-fi vibes! 🎧✨",
+    "Big warm panda hugs for visiting! 💕",
+    "Unreal Engine 5 games crafted with love & bamboo 🐾",
+    "Resting peacefully in the bamboo grove... 🎋💤",
+  ];
 
   // Smooth volume ramping helper
   const rampVolume = useCallback((targetVol: number, durationMs: number, onComplete?: () => void) => {
@@ -123,7 +136,7 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     }
   }, [pausePlayback, startPlayback, isPlaying, isAudioActive]);
 
-  // Debounced tap handler for the singing cat widget button
+  // Debounced tap handler for the singing mascot widget button
   const handleToggle = useCallback((e?: React.SyntheticEvent) => {
     if (e) {
       e.stopPropagation();
@@ -131,8 +144,28 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     const now = Date.now();
     if (now - lastToggleRef.current < 250) return;
     lastToggleRef.current = now;
+
+    // Trigger cute happy hop
+    setIsHappyHop(true);
+    setTimeout(() => setIsHappyHop(false), 550);
+
+    // Cycle dialogues
+    setDialogueIdx((prev) => (prev + 1) % PANDA_DIALOGUES.length);
+
+    // Spawn cute heart & sparkle particles
+    const icons = ['💖', '🎋', '✨', '🐾', '🌸'];
+    const newParticles = [
+      { id: now + 1, icon: icons[Math.floor(Math.random() * icons.length)], x: -16 + Math.random() * 8 },
+      { id: now + 2, icon: icons[Math.floor(Math.random() * icons.length)], x: -4 + Math.random() * 8 },
+      { id: now + 3, icon: icons[Math.floor(Math.random() * icons.length)], x: 8 + Math.random() * 8 },
+    ];
+    setParticles((prev) => [...prev, ...newParticles]);
+    setTimeout(() => {
+      setParticles((prev) => prev.filter((p) => !newParticles.some((np) => np.id === p.id)));
+    }, 1100);
+
     togglePlay();
-  }, [togglePlay]);
+  }, [togglePlay, PANDA_DIALOGUES.length]);
 
   // Automatic singing & audio playback on phone and desktop
   useEffect(() => {
@@ -245,7 +278,7 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
         }}
       />
 
-      {/* Floating Singing Cat Music Widget Container: Safe-Area Anchored in Top Right */}
+      {/* Floating Singing Mascot Music Widget Container: Safe-Area Anchored in Top Right */}
       <div
         className="fixed z-[9990] pointer-events-auto select-none w-auto sm:w-[92px] flex flex-col items-center transition-all duration-200 right-2 sm:right-4"
         style={{ 
@@ -262,40 +295,62 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
           {(showHint || isHovered) && (
             <div
               role="status"
-              className="absolute top-[calc(100%+6px)] right-0 whitespace-nowrap px-2.5 py-1 sm:px-3 sm:py-1.5 bg-[rgba(255,250,240,0.98)] backdrop-blur-md rounded-2xl border-2 border-pastel-dark shadow-retro text-[9px] sm:text-xs text-pastel-dark flex items-center gap-1.5 sm:gap-2 pointer-events-none z-50 transition-opacity duration-150 max-w-[210px] sm:max-w-[280px]"
+              className="absolute top-[calc(100%+6px)] right-0 whitespace-nowrap px-2.5 py-1 sm:px-3 sm:py-1.5 bg-[rgba(255,255,255,0.98)] backdrop-blur-md rounded-2xl border-2 border-pastel-dark shadow-retro text-[9px] sm:text-xs text-pastel-dark flex items-center gap-1.5 sm:gap-2 pointer-events-none z-50 transition-opacity duration-150 max-w-[240px] sm:max-w-[310px]"
             >
-              <span className="text-sm shrink-0">{isSinging ? '🎶' : '🌸'}</span>
+              <span className="text-sm shrink-0">
+                {isPanda ? (isSinging ? '🎋' : '🐼') : (isSinging ? '🎶' : '🌸')}
+              </span>
               <div className="flex flex-col">
                 <span className="font-bold text-[9.5px] sm:text-[11px] leading-tight truncate">
-                  {isSinging
-                    ? 'Singing cheerfully! Tap to mute'
-                    : 'Cat is resting. Tap to sing! 🎵'}
+                  {isPanda
+                    ? (isSinging ? PANDA_DIALOGUES[dialogueIdx] : 'Panda is resting among bamboo. Tap to sing! 🎋')
+                    : (isSinging ? 'Singing cheerfully! Tap to mute' : 'Cat is resting. Tap to sing! 🎵')}
                 </span>
                 <span className="text-[7.5px] sm:text-[9px] text-pastel-soft leading-none mt-0.5">
-                  {isSinging ? 'Tap cat to stop ⏹️' : 'Tap cat to play ▶️'}
+                  {isPanda
+                    ? (isSinging ? 'Tap panda to pause ⏹️' : 'Tap panda to play ▶️')
+                    : (isSinging ? 'Tap cat to stop ⏹️' : 'Tap cat to play ▶️')}
                 </span>
               </div>
-              {/* Cute speech bubble caret pointer pointing UP to the cat */}
-              <div className="absolute -top-1.5 right-4 sm:right-7 w-2.5 h-2.5 bg-[#fffaf0] border-l-2 border-t-2 border-pastel-dark rotate-45 pointer-events-none" />
+              <div className="absolute -top-1.5 right-4 sm:right-7 w-2.5 h-2.5 bg-white border-l-2 border-t-2 border-pastel-dark rotate-45 pointer-events-none" />
             </div>
           )}
 
-          {/* Floating Magical Musical Notes (strictly when cat is singing) */}
+          {/* Floating Heart & Sparkle Particles on Tap */}
+          {particles.map((p) => (
+            <span
+              key={p.id}
+              className="absolute pointer-events-none text-base z-50 animate-[heartBurst_1s_ease-out_forwards]"
+              style={{
+                top: '-10px',
+                left: `calc(50% + ${p.x}px)`,
+              }}
+            >
+              {p.icon}
+            </span>
+          ))}
+
+          {/* Floating Magical Musical Notes */}
           {isSinging && (
             <div className="absolute -top-2 sm:-top-3 left-0 right-0 h-5 sm:h-6 pointer-events-none overflow-visible">
-              <span className="absolute -left-1 text-amber-500 font-bold text-[10px] sm:text-xs animate-[floatNote1_1.4s_ease-in-out_infinite]">
+              <span className="absolute -left-1 text-emerald-600 font-bold text-[10px] sm:text-xs animate-[floatNote1_1.4s_ease-in-out_infinite]">
                 ♪
               </span>
-              <span className="absolute left-1/2 -translate-x-1/2 text-orange-400 font-bold text-xs sm:text-sm animate-[floatNote2_1.6s_ease-in-out_infinite_0.4s]">
+              <span className="absolute left-1/2 -translate-x-1/2 text-green-700 font-bold text-xs sm:text-sm animate-[floatNote2_1.6s_ease-in-out_infinite_0.4s]">
                 ♫
               </span>
               <span className="absolute -right-1 text-pink-500 font-bold text-[10px] sm:text-xs animate-[floatNote3_1.5s_ease-in-out_infinite_0.8s]">
-                ♩
+                {isPanda ? '🎋' : '♩'}
               </span>
+              {isPanda && (
+                <span className="absolute right-3 -top-2 text-rose-400 font-bold text-[11px] animate-[floatNote1_1.7s_ease-in-out_infinite_0.6s]">
+                  💕
+                </span>
+              )}
             </div>
           )}
 
-          {/* Interactive Character Button (Instant zero-delay touch & click response) */}
+          {/* Interactive Character Button */}
           <button
             type="button"
             id="bgm-toggle-button"
@@ -305,60 +360,107 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
               handleToggle(e);
             }}
             className="relative flex flex-col items-center justify-center p-0.5 sm:p-1 rounded-2xl cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark select-none touch-manipulation min-w-[46px] min-h-[46px] sm:min-w-[54px] sm:min-h-[54px] active:scale-95 transition-transform"
-            aria-label={isSinging ? 'Stop music (cat singing)' : 'Start music (cat singing)'}
-            title={isSinging ? 'Click or tap to stop music' : 'Click or tap to play music'}
+            aria-label={
+              isSinging
+                ? (isPanda ? 'Mute background music (panda singing)' : 'Stop music (cat singing)')
+                : (isPanda ? 'Play background music (panda singing)' : 'Start music (cat singing)')
+            }
+            title={
+              isSinging
+                ? (isPanda ? 'Click or tap to mute panda music' : 'Click or tap to stop music')
+                : (isPanda ? 'Click or tap to play panda music' : 'Click or tap to play music')
+            }
           >
-            {/* Cat Sprite on Pastel Cloud - Direct <img> for instant zero-latency render on all mobile browsers */}
+            {/* Mascot Sprite on Cloud */}
             <div
-              className={`relative w-[44px] h-[44px] sm:w-[84px] sm:h-[84px] drop-shadow-[2px_3px_0_rgba(61,61,61,0.22)] flex items-center justify-center overflow-visible ${
-                isSinging
-                  ? 'animate-[catSingBounce_0.84s_ease-in-out_infinite]'
-                  : 'animate-[catIdleFloat_3s_ease-in-out_infinite]'
+              className={`relative w-[50px] h-[50px] sm:w-[88px] sm:h-[88px] drop-shadow-[2px_3px_0_rgba(30,36,36,0.22)] flex items-center justify-center overflow-visible transition-transform ${
+                isHappyHop
+                  ? 'animate-[pandaHappyHop_0.55s_ease-in-out]'
+                  : isSinging
+                  ? (isPanda ? 'animate-[pandaSingBounce_0.84s_ease-in-out_infinite]' : 'animate-[catSingBounce_0.84s_ease-in-out_infinite]')
+                  : (isPanda ? 'animate-[pandaIdleFloat_3s_ease-in-out_infinite]' : 'animate-[catIdleFloat_3s_ease-in-out_infinite]')
               }`}
             >
-              {/* Idle Frame */}
-              <img
-                src="/assets/cat_idle.png"
-                alt="Cute cat resting on fluffy cloud"
-                width={84}
-                height={84}
-                loading="eager"
-                decoding="sync"
-                className={`w-full h-full object-contain select-none pointer-events-none ${
-                  !isSinging ? 'block' : 'hidden'
-                }`}
-              />
-              {/* Singing Frame 1 (paw up singing) */}
-              <img
-                src="/assets/cat_sing_1.png"
-                alt="Cute cat singing cheerfully frame 1"
-                width={84}
-                height={84}
-                loading="eager"
-                decoding="sync"
-                className={`w-full h-full object-contain select-none pointer-events-none ${
-                  isSinging && singFrame === 1 ? 'block' : 'hidden'
-                }`}
-              />
-              {/* Singing Frame 2 (dancing & wagging tail) */}
-              <img
-                src="/assets/cat_sing_2.png"
-                alt="Cute cat dancing and singing frame 2"
-                width={84}
-                height={84}
-                loading="eager"
-                decoding="sync"
-                className={`w-full h-full object-contain select-none pointer-events-none ${
-                  isSinging && singFrame === 2 ? 'block' : 'hidden'
-                }`}
-              />
+              {isPanda ? (
+                <>
+                  <img
+                    src="/assets/panda_idle.svg"
+                    alt="Cute panda resting among bamboo"
+                    width={88}
+                    height={88}
+                    loading="eager"
+                    decoding="sync"
+                    className={`w-full h-full object-contain select-none pointer-events-none ${
+                      !isSinging ? 'block' : 'hidden'
+                    }`}
+                  />
+                  <img
+                    src="/assets/panda_sing_1.svg"
+                    alt="Cute panda singing cheerfully frame 1"
+                    width={88}
+                    height={88}
+                    loading="eager"
+                    decoding="sync"
+                    className={`w-full h-full object-contain select-none pointer-events-none ${
+                      isSinging && singFrame === 1 ? 'block' : 'hidden'
+                    }`}
+                  />
+                  <img
+                    src="/assets/panda_sing_2.svg"
+                    alt="Cute panda dancing and singing frame 2"
+                    width={88}
+                    height={88}
+                    loading="eager"
+                    decoding="sync"
+                    className={`w-full h-full object-contain select-none pointer-events-none ${
+                      isSinging && singFrame === 2 ? 'block' : 'hidden'
+                    }`}
+                  />
+                </>
+              ) : (
+                <>
+                  <img
+                    src="/assets/cat_idle.png"
+                    alt="Cute cat resting on fluffy cloud"
+                    width={84}
+                    height={84}
+                    loading="eager"
+                    decoding="sync"
+                    className={`w-full h-full object-contain select-none pointer-events-none ${
+                      !isSinging ? 'block' : 'hidden'
+                    }`}
+                  />
+                  <img
+                    src="/assets/cat_sing_1.png"
+                    alt="Cute cat singing cheerfully frame 1"
+                    width={84}
+                    height={84}
+                    loading="eager"
+                    decoding="sync"
+                    className={`w-full h-full object-contain select-none pointer-events-none ${
+                      isSinging && singFrame === 1 ? 'block' : 'hidden'
+                    }`}
+                  />
+                  <img
+                    src="/assets/cat_sing_2.png"
+                    alt="Cute cat dancing and singing frame 2"
+                    width={84}
+                    height={84}
+                    loading="eager"
+                    decoding="sync"
+                    className={`w-full h-full object-contain select-none pointer-events-none ${
+                      isSinging && singFrame === 2 ? 'block' : 'hidden'
+                    }`}
+                  />
+                </>
+              )}
             </div>
 
-            {/* Status Indicator Badge Under Cat */}
+            {/* Status Indicator Badge Under Mascot */}
             <span
-              className={`text-[7.5px] sm:text-[9px] font-bold px-1.5 py-0.2 sm:px-2 sm:py-0.5 rounded-full border border-pastel-dark shadow-retro-sm -mt-0.5 transition-colors duration-150 flex items-center gap-1 ${
+              className={`text-[8px] sm:text-[9.5px] font-extrabold px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full border-[1.5px] border-pastel-dark shadow-retro-sm -mt-0.5 transition-all duration-150 flex items-center gap-1.5 ${
                 isSinging
-                  ? 'bg-pastel-mint text-pastel-dark'
+                  ? 'bg-pastel-mint text-pastel-dark shadow-[1.5px_1.5px_0_#1e2424]'
                   : isHovered
                   ? 'bg-pastel-peach text-pastel-dark'
                   : 'bg-white/95 text-pastel-dark'
@@ -366,13 +468,20 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
             >
               {isSinging ? (
                 <>
-                  <Volume2 size={8} className="text-emerald-700 shrink-0" />
-                  <span>Singing 🎵</span>
+                  <Volume2 size={9} className="text-emerald-800 shrink-0" />
+                  <span>{isPanda ? 'Panda 🎋' : 'Singing 🎵'}</span>
+                  {isPanda && (
+                    <span className="flex items-end gap-0.5 h-2 shrink-0">
+                      <span className="w-0.5 h-1 bg-emerald-700 rounded-full animate-pulse" />
+                      <span className="w-0.5 h-2 bg-emerald-800 rounded-full animate-[pulse_0.5s_infinite]" />
+                      <span className="w-0.5 h-1.5 bg-emerald-700 rounded-full animate-pulse" />
+                    </span>
+                  )}
                 </>
               ) : (
                 <>
-                  <VolumeX size={8} className="text-rose-600 shrink-0" />
-                  <span>Muted</span>
+                  <VolumeX size={9} className="text-rose-600 shrink-0" />
+                  <span>{isPanda ? 'Panda Zzz 💤' : 'Muted'}</span>
                 </>
               )}
             </span>

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { WindowId } from '@/types';
 import { soundFX } from '@/lib/soundEffects';
+import { useTheme } from '@/context/ThemeContext';
 
 interface IconDockProps {
   onOpenWindow: (id: WindowId) => void;
@@ -36,6 +37,7 @@ export const IconDock: React.FC<IconDockProps> = ({
   activeWindows,
   activeWindowId,
 }) => {
+  const { isPanda, toggleTheme } = useTheme();
   const dockRef = useRef<HTMLElement>(null);
   const itemRefs = useRef<Record<string, HTMLElement | null>>({});
 
@@ -102,7 +104,7 @@ export const IconDock: React.FC<IconDockProps> = ({
       className="fixed z-[300] pointer-events-auto select-none
         /* Left vertical dock on desktop */
         top-4 left-3.5 sm:left-4 flex flex-col items-center gap-2 p-2.5 sm:p-3 rounded-[30px]
-        bg-[rgba(255,250,240,0.97)] backdrop-blur-md border-[3px] sm:border-[3.5px] border-pastel-peach shadow-retro
+        bg-[rgba(255,255,255,0.97)] backdrop-blur-md border-[3px] sm:border-[3.5px] border-pastel-mint shadow-retro
         max-h-[calc(100vh-32px)] overflow-y-auto dock-scrollbar scroll-smooth overscroll-contain
         /* Mobile: Sleek horizontal bottom toolbar with tactile touch targets */
         max-md:top-auto max-md:bottom-2 max-md:left-2 max-md:right-2
@@ -114,6 +116,34 @@ export const IconDock: React.FC<IconDockProps> = ({
         paddingBottom: 'max(0.375rem, env(safe-area-inset-bottom, 0.375rem))',
       }}
     >
+      {/* Mascot Top Badge / Theme Switcher (Desktop only) */}
+      <div className="relative hidden md:flex flex-col items-center mb-1">
+        {/* Cute Panda Ears on Dock Top */}
+        {isPanda && (
+          <div className="absolute -top-4 flex justify-between w-9 pointer-events-none">
+            <div className="w-3.5 h-3.5 rounded-full bg-pastel-dark flex items-center justify-center">
+              <div className="w-1.5 h-1.5 rounded-full bg-pastel-pink" />
+            </div>
+            <div className="w-3.5 h-3.5 rounded-full bg-pastel-dark flex items-center justify-center">
+              <div className="w-1.5 h-1.5 rounded-full bg-pastel-pink" />
+            </div>
+          </div>
+        )}
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="flex flex-col items-center p-1 rounded-2xl hover:bg-pastel-peach/50 active:scale-90 transition-all cursor-pointer group"
+          title={isPanda ? "Theme: Panda Mode (Click to switch to Cat Mode 🐱)" : "Theme: Cat Mode (Click to switch to Panda Mode 🐼)"}
+          aria-label="Shift website theme"
+        >
+          <span className="text-xl group-hover:scale-115 transition-transform">
+            {isPanda ? '🐼' : '🐱'}
+          </span>
+          <span className="text-[8px] font-black text-pastel-dark px-1.5 py-0.2 rounded-full bg-pastel-mint border border-pastel-dark/40 mt-0.5 shadow-2xs">
+            {isPanda ? 'Panda' : 'Cat'}
+          </span>
+        </button>
+      </div>
       {items.map((item, idx) => {
         const isOpen = item.id !== 'admin' && activeWindows[item.id as WindowId];
         const isTopmost = activeWindowId ? item.id === activeWindowId : isOpen;
@@ -130,7 +160,7 @@ export const IconDock: React.FC<IconDockProps> = ({
               onKeyDown={(e) => handleKeyDown(e, idx)}
               className="group relative shrink-0 snap-center flex flex-col items-center justify-center p-0.5 sm:p-1 cursor-pointer transition-transform active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-pastel-dark rounded-xl sm:rounded-2xl min-w-[46px] sm:min-w-[48px] md:min-w-[52px]"
             >
-              <div className="relative p-1.5 sm:p-2 bg-white rounded-xl sm:rounded-2xl border-2 sm:border-[2.5px] border-pastel-dark shadow-[1.5px_1.5px_0_#ffb6c1] sm:shadow-[2px_2px_0_#ffb6c1] group-hover:scale-105 md:group-hover:translate-x-1.5 group-hover:shadow-[3px_3px_0_#c0f0dd] transition-all duration-200">
+              <div className="relative p-1.5 sm:p-2 bg-white rounded-xl sm:rounded-2xl border-2 sm:border-[2.5px] border-pastel-dark shadow-[1.5px_1.5px_0_#ffaec0] sm:shadow-[2px_2px_0_#ffaec0] group-hover:scale-105 md:group-hover:translate-x-1.5 group-hover:shadow-[3px_3px_0_#7ecb9a] transition-all duration-200">
                 {item.icon}
               </div>
               <span className="text-[8.5px] sm:text-[9px] md:text-[9.5px] font-bold mt-0.5 text-pastel-dark px-1.5 py-0.2 rounded-full bg-white/95 border border-pastel-dark/20 whitespace-nowrap shadow-xs">
@@ -165,7 +195,7 @@ export const IconDock: React.FC<IconDockProps> = ({
                   ? 'bg-pastel-mint shadow-[2px_2px_0_#3d3d3d] md:translate-x-1.5 scale-105 ring-2 ring-pastel-dark'
                   : isOpen
                   ? 'bg-pastel-peach/90 shadow-[1.5px_1.5px_0_#3d3d3d] md:translate-x-0.5'
-                  : 'bg-white shadow-[1.5px_1.5px_0_#c0f0dd] group-hover:scale-105 md:group-hover:translate-x-1.5 group-hover:shadow-[3px_3px_0_#ffb6c1]'
+                  : 'bg-white shadow-[1.5px_1.5px_0_#7ecb9a] group-hover:scale-105 md:group-hover:translate-x-1.5 group-hover:shadow-[3px_3px_0_#ffaec0]'
               }`}
             >
               {item.icon}

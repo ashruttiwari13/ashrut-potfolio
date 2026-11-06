@@ -2,8 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+:root,
+.theme-panda,
+body.theme-panda {
+  --bg-light: #f3f8f4;
+  --bg-warm: #eaf4ec;
+  --bg-card: #fffffffa;
+  --text-dark: #1e2424;
+  --text-soft: #475b52;
+  --accent-pink: #ffaec0;
+  --accent-peach: #fae5cc;
+  --accent-mint: #7ecb9a;
+  --accent-lavender: #d8e8e0;
+  --accent-sky: #a3d8d6;
+  --accent-yellow: #f9e07f;
+  --accent-bamboo: #40916c;
+
+  --bg-light-rgb: 243, 248, 244;
+  --bg-warm-rgb: 234, 244, 236;
+  --bg-card-rgb: 255, 255, 255;
+  --text-dark-rgb: 30, 36, 36;
+  --text-soft-rgb: 71, 91, 82;
+  --accent-pink-rgb: 255, 174, 192;
+  --accent-peach-rgb: 250, 229, 204;
+  --accent-mint-rgb: 126, 203, 154;
+  --accent-lavender-rgb: 216, 232, 224;
+  --accent-sky-rgb: 163, 216, 214;
+  --accent-yellow-rgb: 249, 224, 127;
+  --accent-bamboo-rgb: 64, 145, 108;
+
+  --scrollbar-thumb: #7ecb9a;
+  --scrollbar-thumb-hover: #52b788;
+  --scrollbar-track: #e2ece4;
+}
+
+.theme-cat,
+body.theme-cat {
   --bg-light: #fef9e7;
+  --bg-warm: #fff5e6;
   --bg-card: #ffffffea;
   --text-dark: #3d3d3d;
   --text-soft: #6b5e4a;
@@ -13,6 +49,24 @@
   --accent-lavender: #e2d1ff;
   --accent-sky: #a0d4ff;
   --accent-yellow: #ffd966;
+  --accent-bamboo: #c0f0dd;
+
+  --bg-light-rgb: 254, 249, 231;
+  --bg-warm-rgb: 255, 245, 230;
+  --bg-card-rgb: 255, 255, 255;
+  --text-dark-rgb: 61, 61, 61;
+  --text-soft-rgb: 107, 94, 74;
+  --accent-pink-rgb: 255, 182, 193;
+  --accent-peach-rgb: 255, 218, 185;
+  --accent-mint-rgb: 192, 240, 221;
+  --accent-lavender-rgb: 226, 209, 255;
+  --accent-sky-rgb: 160, 212, 255;
+  --accent-yellow-rgb: 255, 217, 102;
+  --accent-bamboo-rgb: 192, 240, 221;
+
+  --scrollbar-thumb: #ffb6c1;
+  --scrollbar-thumb-hover: #ff9fb0;
+  --scrollbar-track: #f0e4d0;
 }
 
 * {
@@ -36,18 +90,18 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f0e4d0;
+  background: var(--scrollbar-track);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--accent-pink);
+  background: var(--scrollbar-thumb);
   border: 1px solid var(--text-dark);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff9fb0;
+  background: var(--scrollbar-thumb-hover);
 }
 
 /* Retro UI Components */
@@ -141,12 +195,107 @@ body {
 
 .pixel-pattern {
   background-image: 
-    linear-gradient(45deg, #ffe5d9 6%, transparent 6%), 
-    linear-gradient(-45deg, #d9e5ff 6%, transparent 6%);
+    linear-gradient(45deg, #d8f3dc 6%, transparent 6%), 
+    linear-gradient(-45deg, #b7e4c7 6%, transparent 6%);
   background-size: 32px 32px;
 }
 
-/* Singing Cat & Music Animations */
+/* Singing Panda & Music Animations */
+@keyframes pandaIdleFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(1deg);
+  }
+}
+
+@keyframes pandaSingBounce {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translateY(-8px) rotate(-3.5deg) scale(1.04);
+  }
+  75% {
+    transform: translateY(2px) rotate(3.5deg) scale(0.98);
+  }
+}
+
+@keyframes pandaHappyHop {
+  0% {
+    transform: scale(1) translateY(0);
+  }
+  35% {
+    transform: scale(1.18) translateY(-16px) rotate(5deg);
+  }
+  70% {
+    transform: scale(0.94) translateY(3px) rotate(-3deg);
+  }
+  100% {
+    transform: scale(1) translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes heartBurst {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.4) rotate(-10deg);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-16px) scale(1.25) rotate(10deg);
+  }
+  70% {
+    opacity: 0.9;
+    transform: translateY(-32px) scale(1.1) rotate(-8deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-48px) scale(0.7) rotate(15deg);
+  }
+}
+
+@keyframes earWiggleLeft {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-16deg); }
+  50% { transform: rotate(8deg); }
+  75% { transform: rotate(-10deg); }
+}
+
+@keyframes earWiggleRight {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(16deg); }
+  50% { transform: rotate(-8deg); }
+  75% { transform: rotate(10deg); }
+}
+
+@keyframes chibiPandaFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+}
+
+@keyframes sakuraFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px) translateX(0) rotate(0deg);
+  }
+  10% {
+    opacity: 0.7;
+  }
+  90% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(120vh) translateX(60px) rotate(360deg);
+  }
+}
+
 @keyframes catIdleFloat {
   0%, 100% {
     transform: translateY(0px);
@@ -213,26 +362,51 @@ body {
   }
 }
 
-/* Custom Sleek Pastel Scrollbar for Left Toolbar */
+/* Floating Bamboo Leaves Animation */
+@keyframes bambooLeafFloat1 {
+  0% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-28px) translateX(18px) rotate(15deg);
+  }
+  100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+}
+
+@keyframes bambooLeafFloat2 {
+  0% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-22px) translateX(-16px) rotate(-20deg);
+  }
+  100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+}
+
+/* Custom Sleek Panda Bamboo Scrollbar for Left Toolbar */
 .dock-scrollbar::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
 .dock-scrollbar::-webkit-scrollbar-track {
-  background: rgba(255, 230, 215, 0.3);
+  background: rgba(216, 243, 220, 0.4);
   border-radius: 9999px;
 }
 .dock-scrollbar::-webkit-scrollbar-thumb {
-  background: #ffb6c1;
+  background: #7ecb9a;
   border-radius: 9999px;
-  border: 1px solid #3d3d3d;
+  border: 1px solid #1e2424;
 }
 .dock-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #3d3d3d;
+  background: #52b788;
 }
 .dock-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #ffb6c1 rgba(255, 230, 215, 0.3);
+  scrollbar-color: #7ecb9a rgba(216, 243, 220, 0.4);
 }
 
 /* Hide scrollbar utility for mobile touch scroll strips */

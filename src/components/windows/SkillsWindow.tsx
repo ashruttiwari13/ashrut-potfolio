@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Skill, SkillCategory } from '@/types';
 import { soundFX } from '@/lib/soundEffects';
+import { useTheme } from '@/context/ThemeContext';
 import { 
   Flame, 
   Box, 
@@ -37,6 +38,7 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 export const SkillsWindow: React.FC<SkillsWindowProps> = ({ skills }) => {
+  const { isPanda } = useTheme();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   const categories: { label: string; value: string }[] = [
@@ -56,11 +58,11 @@ export const SkillsWindow: React.FC<SkillsWindowProps> = ({ skills }) => {
       {/* Scope banner */}
       <div className="flex flex-wrap items-center justify-between gap-1.5 p-1.5 sm:p-2 bg-pastel-mint/30 border border-pastel-dark rounded-retro-sm text-[10.5px] text-pastel-dark shadow-xs">
         <div className="flex items-center gap-1.5">
-          <span className="font-extrabold text-[11px]">💼 Career Focus:</span>
+          <span className="font-extrabold text-[11px]">{isPanda ? '🐾 Panda Dev Career Focus:' : '💼 Career Focus:'}</span>
           <span>Unreal Engine 5 Game Developer & 3D Character/Asset Artist</span>
         </div>
         <span className="text-[9.5px] font-bold px-2 py-0.2 rounded-full bg-pastel-lavender border border-pastel-dark shrink-0">
-          🎬 Filmmaking = Personal Creative Hobby
+          {isPanda ? '🎬 Filmmaking = Creative Hobby 🎋' : '🎬 Filmmaking = Personal Creative Hobby'}
         </span>
       </div>
 

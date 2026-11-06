@@ -15,6 +15,7 @@ import { PixelRunnerGame } from '../game/PixelRunnerGame';
 import { ResumeWindow } from '../windows/ResumeWindow';
 import { ContactWindow } from '../windows/ContactWindow';
 import { ProfileSettings, Skill, Project, Achievement, WindowId } from '@/types';
+import { useTheme } from '@/context/ThemeContext';
 
 interface DesktopExperienceProps {
   initialProfile: ProfileSettings;
@@ -37,6 +38,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
   initialProjects,
   initialAchievements,
 }) => {
+  const { isPanda } = useTheme();
   const [zCounter, setZCounter] = useState(200);
   const [maximizedWindowId, setMaximizedWindowId] = useState<WindowId | null>(null);
 
@@ -47,35 +49,35 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
   const windowConfigs: WindowConfig[] = [
     {
       id: 'profileWin',
-      title: '👾 Ashrut Tiwari · Unreal 5 Game Dev & 3D Artist',
+      title: isPanda ? '🐼 Ashrut Tiwari · Unreal 5 Game Dev & 3D Artist' : '👾 Ashrut Tiwari · Unreal 5 Game Dev & 3D Artist',
       width: 520,
-      headerColor: 'bg-pastel-pink',
+      headerColor: isPanda ? 'bg-pastel-mint' : 'bg-pastel-pink',
       defaultOpen: true,
     },
     {
       id: 'projectsWin',
-      title: '🎮 Playable Dreams & 3D Creations',
+      title: isPanda ? '🎋 Bamboo Studio · Playable Dreams & 3D Creations' : '🎮 Playable Dreams & 3D Portfolio',
       width: 680,
       headerColor: 'bg-pastel-peach',
       defaultOpen: false,
     },
     {
       id: 'skillsWin',
-      title: '🧰 Game Dev & Technical Toolbox',
+      title: isPanda ? '🐾 Panda Toolbox · Game Dev & Technical Skills' : '🧰 Technical & Creative Toolbox',
       width: 540,
       headerColor: 'bg-pastel-mint',
       defaultOpen: false,
     },
     {
       id: 'achievementsWin',
-      title: '🏆 Awards & Industry Recognitions',
+      title: isPanda ? '🏆 Golden Bamboo Awards · Industry Recognitions' : '🏆 Awards & Recognitions',
       width: 520,
       headerColor: 'bg-pastel-lavender',
       defaultOpen: false,
     },
     {
       id: 'hobbiesWin',
-      title: '🎬 Outside the Engine',
+      title: isPanda ? '🎬 Beyond the Bamboo Grove · Filmmaking & Visuals' : '🎬 Outside the Engine',
       width: 540,
       headerColor: 'bg-pastel-peach',
       defaultOpen: false,
@@ -89,14 +91,14 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
     },
     {
       id: 'resumeWin',
-      title: '📄 Curriculum Vitae & Experience Timeline',
+      title: isPanda ? '📄 Panda Scrolls · Experience Timeline & CV' : '📄 Curriculum Vitae & Experience Timeline',
       width: 560,
       headerColor: 'bg-pastel-lavender',
       defaultOpen: false,
     },
     {
       id: 'contactWin',
-      title: '💼 Freelance Studio & Commissions · Ashrut Tiwari',
+      title: isPanda ? '💌 Panda Post · Commissions & Freelance Studio' : '💼 Freelance Studio & Commissions · Ashrut Tiwari',
       width: 560,
       headerColor: 'bg-pastel-pink',
       defaultOpen: false,
@@ -325,14 +327,14 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       {/* 1. Profile Window */}
       <Window
         id="profileWin"
-        title="👾 Ashrut Tiwari · Unreal 5 Game Dev & 3D Artist"
+        title={isPanda ? '🐼 Ashrut Tiwari · Unreal 5 Game Dev & 3D Artist' : '👾 Ashrut Tiwari · Unreal 5 Game Dev & 3D Artist'}
         isOpen={windowsState.profileWin.isOpen}
         isMinimized={windowsState.profileWin.isMinimized}
         isMaximized={maximizedWindowId === 'profileWin'}
         onToggleMaximize={() => toggleMaximizeWindow('profileWin')}
         zIndex={windowsState.profileWin.zIndex}
         width={520}
-        headerColor="bg-pastel-pink"
+        headerColor={isPanda ? 'bg-pastel-mint' : 'bg-pastel-pink'}
         onClose={() => closeWindow('profileWin')}
         onFocus={() => bringToFront('profileWin')}
         onMinimize={() => minimizeWindow('profileWin')}
@@ -343,7 +345,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       {/* 2. Projects Window */}
       <Window
         id="projectsWin"
-        title="🎮 Playable Dreams & 3D Portfolio"
+        title={isPanda ? '🎋 Bamboo Studio · Playable Dreams & 3D Portfolio' : '🎮 Playable Dreams & 3D Portfolio'}
         isOpen={windowsState.projectsWin.isOpen}
         isMinimized={windowsState.projectsWin.isMinimized}
         isMaximized={maximizedWindowId === 'projectsWin'}
@@ -361,7 +363,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       {/* 3. Skills Window */}
       <Window
         id="skillsWin"
-        title="🧰 Technical & Creative Toolbox"
+        title={isPanda ? '🐾 Panda Toolbox · Game Dev & Technical Skills' : '🧰 Technical & Creative Toolbox'}
         isOpen={windowsState.skillsWin.isOpen}
         isMinimized={windowsState.skillsWin.isMinimized}
         isMaximized={maximizedWindowId === 'skillsWin'}
@@ -379,7 +381,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       {/* 4. Achievements Window */}
       <Window
         id="achievementsWin"
-        title="🏆 Awards & Recognitions"
+        title={isPanda ? '🏆 Golden Bamboo Awards · Industry Recognitions' : '🏆 Awards & Recognitions'}
         isOpen={windowsState.achievementsWin.isOpen}
         isMinimized={windowsState.achievementsWin.isMinimized}
         isMaximized={maximizedWindowId === 'achievementsWin'}
@@ -397,7 +399,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       {/* 5. Hobbies Window */}
       <Window
         id="hobbiesWin"
-        title="🎬 Outside the Engine"
+        title={isPanda ? '🎬 Beyond the Bamboo Grove · Outside the Engine' : '🎬 Outside the Engine'}
         isOpen={windowsState.hobbiesWin.isOpen}
         isMinimized={windowsState.hobbiesWin.isMinimized}
         isMaximized={maximizedWindowId === 'hobbiesWin'}
@@ -433,7 +435,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       {/* 7. Resume Window */}
       <Window
         id="resumeWin"
-        title="📄 Curriculum Vitae & Experience Timeline"
+        title={isPanda ? '📄 Panda Scrolls · Experience Timeline & CV' : '📄 Curriculum Vitae & Experience Timeline'}
         isOpen={windowsState.resumeWin.isOpen}
         isMinimized={windowsState.resumeWin.isMinimized}
         isMaximized={maximizedWindowId === 'resumeWin'}
@@ -451,7 +453,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
       {/* 8. Contact Window */}
       <Window
         id="contactWin"
-        title="💼 Freelance Studio & Commissions · Ashrut Tiwari"
+        title={isPanda ? '💌 Panda Post · Commissions & Freelance Studio' : '💼 Freelance Studio & Commissions · Ashrut Tiwari'}
         isOpen={windowsState.contactWin.isOpen}
         isMinimized={windowsState.contactWin.isMinimized}
         isMaximized={maximizedWindowId === 'contactWin'}

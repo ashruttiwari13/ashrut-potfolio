@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Minus, Square, X } from 'lucide-react';
 import { WindowId } from '@/types';
 import { soundFX } from '@/lib/soundEffects';
+import { useTheme } from '@/context/ThemeContext';
 
 interface WindowProps {
   id: WindowId;
@@ -38,6 +39,7 @@ export const Window: React.FC<WindowProps> = ({
   onFocus,
   onMinimize,
 }) => {
+  const { isPanda } = useTheme();
   const windowRef = useRef<HTMLDivElement>(null);
 
   // Detect mobile
@@ -295,6 +297,25 @@ export const Window: React.FC<WindowProps> = ({
           : 'shadow-retro transition-all duration-200'
       }`}
     >
+      {/* Cute Panda Ears Frame */}
+      {isPanda && !isMaximized && (
+        <div className="absolute -top-3.5 left-0 right-0 flex justify-between px-6 sm:px-8 pointer-events-none z-0">
+          {/* Left Panda Ear */}
+          <div className="relative group/ear">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-pastel-dark border-2 border-pastel-dark shadow-[1.5px_1.5px_0_rgba(0,0,0,0.18)] flex items-center justify-center transition-transform duration-300 hover:rotate-[-14deg]">
+              <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-pastel-pink border border-pastel-dark/30" />
+            </div>
+          </div>
+          {/* Right Panda Ear with Bamboo Sprout */}
+          <div className="relative group/ear">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-pastel-dark border-2 border-pastel-dark shadow-[1.5px_1.5px_0_rgba(0,0,0,0.18)] flex items-center justify-center transition-transform duration-300 hover:rotate-[14deg]">
+              <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-pastel-pink border border-pastel-dark/30" />
+            </div>
+            <span className="absolute -top-2.5 -right-1 text-xs select-none">🎋</span>
+          </div>
+        </div>
+      )}
+
       {/* Window Header */}
       <div
         onMouseDown={handleMouseDown}
@@ -308,7 +329,7 @@ export const Window: React.FC<WindowProps> = ({
             toggleMaximize();
           }
         }}
-        className={`${headerColor} px-3 sm:px-4 py-2 border-b-2 sm:border-b-[2.5px] border-pastel-dark flex flex-col justify-center cursor-grab active:cursor-grabbing select-none touch-none min-h-[46px] sm:min-h-[50px] shrink-0`}
+        className={`${headerColor} px-3 sm:px-4 py-2 border-b-2 sm:border-b-[2.5px] border-pastel-dark flex flex-col justify-center cursor-grab active:cursor-grabbing select-none touch-none min-h-[46px] sm:min-h-[50px] shrink-0 relative z-10`}
         title="Drag on desktop · Drag to move on mobile (swipe down to minimize) · Double click to maximize"
       >
         {/* Mobile Swipe / Drag Pill Indicator */}
@@ -316,7 +337,11 @@ export const Window: React.FC<WindowProps> = ({
 
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-1.5 sm:gap-2 font-bold text-xs sm:text-sm text-pastel-dark tracking-wide truncate flex-1 min-w-0">
-            <span className="w-2 h-2 rounded-full bg-pastel-dark/30 animate-pulse shrink-0" />
+            {isPanda ? (
+              <span className="text-xs sm:text-sm shrink-0">🐾</span>
+            ) : (
+              <span className="w-2 h-2 rounded-full bg-pastel-dark/30 animate-pulse shrink-0" />
+            )}
             <span className="truncate">{title}</span>
             {isMaximized && (
               <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded-full bg-white/90 border border-pastel-dark text-pastel-dark shrink-0 hidden sm:inline-flex shadow-2xs">
@@ -392,7 +417,7 @@ export const Window: React.FC<WindowProps> = ({
 
       {/* Window Body */}
       <div
-        className={`p-3 sm:p-4 overflow-y-auto overflow-x-hidden w-full max-w-full bg-[#fffcf3] text-pastel-dark flex-1 overscroll-contain pb-10 sm:pb-8 ${
+        className={`p-3 sm:p-4 overflow-y-auto overflow-x-hidden w-full max-w-full bg-[#fafdfa] text-pastel-dark flex-1 overscroll-contain pb-10 sm:pb-8 ${
           isDragging ? 'pointer-events-none select-none' : ''
         }`}
         style={{

@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { RotateCcw, Layers, Sparkles, Clock, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react';
+import { RotateCcw, Layers, Sparkles, Clock, ShieldCheck, ChevronLeft, ChevronRight, Palette } from 'lucide-react';
 import Link from 'next/link';
 import { soundFX } from '@/lib/soundEffects';
+import { useTheme } from '@/context/ThemeContext';
 
 interface TaskbarProps {
   onResetWindows: () => void;
@@ -18,6 +19,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
   onMinimizeAll,
   onOpenContact,
 }) => {
+  const { isPanda, toggleTheme } = useTheme();
   const [time, setTime] = useState<string>('');
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
@@ -80,11 +82,23 @@ export const Taskbar: React.FC<TaskbarProps> = ({
           title="Open for Freelance Opportunities - Click to Hire Me"
         >
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping shrink-0" />
-          <span className="truncate">👾 Ashrut · Hire</span>
+          <span className="truncate">{isPanda ? '🐼 Ashrut · Hire 🎋' : '👾 Ashrut · Hire'}</span>
         </button>
 
         {/* Center / Right controls */}
         <div className="flex items-center gap-1 shrink-0">
+          {/* Theme Shift Button (Mobile) */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="retro-btn text-[9.5px] px-2 py-0.5 bg-white hover:bg-pastel-peach active:scale-90 flex items-center gap-1"
+            title={isPanda ? "Switch to Cat theme (click to shift)" : "Switch to Panda theme (click to shift)"}
+            aria-label="Shift website theme"
+          >
+            <span>{isPanda ? '🐼' : '🐱'}</span>
+            <span>{isPanda ? 'Panda' : 'Cat'}</span>
+          </button>
+
           {/* Quick Desk Button (Minimize all to reveal desktop) */}
           <button
             type="button"
@@ -92,8 +106,8 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             className="retro-btn text-[9.5px] px-2 py-0.5 bg-white hover:bg-pastel-sky active:scale-90"
             title="Minimize all windows to see desktop"
           >
-            <Sparkles size={10} strokeWidth={2.5} className="text-amber-500" />
-            <span>Desk</span>
+            <Sparkles size={10} strokeWidth={2.5} className="text-emerald-600" />
+            <span>{isPanda ? 'Desk 🎋' : 'Desk'}</span>
           </button>
 
           {/* Clock */}
@@ -108,14 +122,14 @@ export const Taskbar: React.FC<TaskbarProps> = ({
       <footer 
         role="region"
         aria-label="Desktop taskbar"
-        className="fixed bottom-3 right-4 z-[300] hidden md:flex items-center bg-[rgba(255,250,240,0.96)] backdrop-blur-md rounded-full border-[2.5px] border-pastel-dark shadow-retro text-xs font-bold pointer-events-auto select-none transition-all duration-300 ease-out"
+        className="fixed bottom-3 right-4 z-[300] hidden md:flex items-center bg-[rgba(255,255,255,0.96)] backdrop-blur-md rounded-full border-[2.5px] border-pastel-dark shadow-retro text-xs font-bold pointer-events-auto select-none transition-all duration-300 ease-out"
       >
         {!isExpanded ? (
           /* Compressed / Compact State: Click anywhere to open sideways */
           <button
             type="button"
             onClick={handleToggleExpand}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-pastel-peach/50 active:scale-95 transition-all cursor-pointer group"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-pastel-mint/30 active:scale-95 transition-all cursor-pointer group"
             title="Click to expand toolbar sideways"
             aria-expanded={false}
           >
@@ -123,7 +137,9 @@ export const Taskbar: React.FC<TaskbarProps> = ({
               <ChevronLeft size={13} strokeWidth={3} className="text-pastel-dark" />
             </div>
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
-            <span className="text-[11.5px] text-pastel-dark font-extrabold tracking-tight">Toolbar</span>
+            <span className="text-[11.5px] text-pastel-dark font-extrabold tracking-tight">
+              {isPanda ? 'Panda OS 🎋' : 'Retro OS 🐱'}
+            </span>
             <div className="flex items-center gap-1 px-2.5 py-0.5 bg-white rounded-full border border-pastel-dark text-pastel-dark text-[10.5px]">
               <Clock size={10} strokeWidth={2.5} />
               <span>{time || '--:--'}</span>
@@ -136,7 +152,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             <button
               type="button"
               onClick={handleToggleExpand}
-              className="p-1 sm:p-1.5 rounded-full bg-pastel-peach hover:bg-pastel-pink border border-pastel-dark text-pastel-dark transition-all cursor-pointer hover:translate-x-0.5 active:scale-90"
+              className="p-1 sm:p-1.5 rounded-full bg-pastel-mint hover:bg-pastel-peach border border-pastel-dark text-pastel-dark transition-all cursor-pointer hover:translate-x-0.5 active:scale-90"
               title="Compress toolbar sideways"
               aria-expanded={true}
               aria-label="Compress toolbar"
@@ -151,11 +167,28 @@ export const Taskbar: React.FC<TaskbarProps> = ({
                 soundFX.playClick(620);
                 if (onOpenContact) onOpenContact();
               }}
-              className="flex items-center gap-1.5 px-2.5 py-1 bg-pastel-mint/80 hover:bg-pastel-mint rounded-full border border-pastel-dark text-pastel-dark cursor-pointer transition-colors"
+              className="flex items-center gap-1.5 px-2.5 py-1 bg-pastel-mint/90 hover:bg-pastel-mint rounded-full border border-pastel-dark text-pastel-dark cursor-pointer transition-colors"
               title="Open for Freelance Opportunities - Click to message"
             >
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
-              <span className="text-[11px] whitespace-nowrap">Open for Freelance</span>
+              <span className="text-[11px] whitespace-nowrap">
+                {isPanda ? 'Open for Freelance 🎋' : 'Open for Freelance'}
+              </span>
+            </button>
+
+            {/* Theme Shift Button (Desktop) */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="retro-btn text-[11px] px-2.5 py-1 bg-white hover:bg-pastel-peach active:scale-95 flex items-center gap-1.5 transition-all shadow-retro-sm"
+              title={isPanda ? "Currently Panda Theme. Click to switch to Cat Theme 🐱" : "Currently Cat Theme. Click to switch to Panda Theme 🐼"}
+              aria-label="Shift between Panda and Cat themes"
+            >
+              <span className="text-sm shrink-0">{isPanda ? '🐼' : '🐱'}</span>
+              <span>{isPanda ? 'Panda Mode' : 'Cat Mode'}</span>
+              <span className="text-[8.5px] font-extrabold px-1.5 py-0.2 rounded-full bg-pastel-mint border border-pastel-dark text-pastel-dark shrink-0">
+                Shift ⇄
+              </span>
             </button>
 
             {/* Taskbar Action Controls */}

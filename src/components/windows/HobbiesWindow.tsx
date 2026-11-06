@@ -3,6 +3,7 @@
 import React from 'react';
 import { initialHobbies } from '@/lib/mock-data';
 import { Video, Feather, Headphones, Sparkles } from 'lucide-react';
+import { useTheme } from '@/context/ThemeContext';
 
 const iconMap: Record<string, React.ReactNode> = {
   Video: <Video className="w-5 h-5 text-rose-500" />,
@@ -11,6 +12,7 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 export const HobbiesWindow: React.FC = () => {
+  const { isPanda } = useTheme();
   return (
     <div className="space-y-3">
       {/* Distinction Header */}
@@ -46,8 +48,10 @@ export const HobbiesWindow: React.FC = () => {
         ))}
       </div>
 
-      <div className="p-3 bg-pastel-peach/40 border-2 border-pastel-dark rounded-retro-sm text-xs text-center text-pastel-dark font-medium break-words">
-        ✨ Creative philosophy: Strong storytelling, intentional audio, and cinematographic framing make games unforgettable.
+      <div className="p-3 bg-pastel-mint/30 border-2 border-pastel-dark rounded-retro-sm text-xs text-center text-pastel-dark font-medium break-words">
+        {isPanda
+          ? '🎋 Panda Zen: Like a panda peacefully resting between bamboo shoots, balance, curiosity, and play fuel memorable game design and art.'
+          : '✨ Creative philosophy: Strong storytelling, intentional audio, and cinematographic framing make games unforgettable.'}
       </div>
     </div>
   );
