@@ -153,27 +153,29 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     if (now - lastToggleRef.current < 250) return;
     lastToggleRef.current = now;
 
-    // Trigger cute happy hop
-    setIsHappyHop(true);
-    setTimeout(() => setIsHappyHop(false), 550);
+    if (isPanda) {
+      // Trigger cute happy hop for panda
+      setIsHappyHop(true);
+      setTimeout(() => setIsHappyHop(false), 550);
 
-    // Cycle dialogues
-    const maxDialogues = isPanda ? PANDA_DIALOGUES.length : CAT_DIALOGUES.length;
-    setDialogueIdx((prev) => (prev + 1) % maxDialogues);
+      // Cycle panda dialogues
+      setDialogueIdx((prev) => (prev + 1) % PANDA_DIALOGUES.length);
 
-    // Spawn cute heart & sparkle particles
-    const icons = isPanda 
-      ? ['💖', '🎋', '✨', '🐾', '🌸']
-      : ['💖', '🐱', '✨', '🐾', '🌸', '🎵'];
-    const newParticles = [
-      { id: now + 1, icon: icons[Math.floor(Math.random() * icons.length)], x: -16 + Math.random() * 8 },
-      { id: now + 2, icon: icons[Math.floor(Math.random() * icons.length)], x: -4 + Math.random() * 8 },
-      { id: now + 3, icon: icons[Math.floor(Math.random() * icons.length)], x: 8 + Math.random() * 8 },
-    ];
-    setParticles((prev) => [...prev, ...newParticles]);
-    setTimeout(() => {
-      setParticles((prev) => prev.filter((p) => !newParticles.some((np) => np.id === p.id)));
-    }, 1100);
+      // Spawn cute heart & sparkle particles
+      const icons = ['💖', '🎋', '✨', '🐾', '🌸'];
+      const newParticles = [
+        { id: now + 1, icon: icons[Math.floor(Math.random() * icons.length)], x: -16 + Math.random() * 8 },
+        { id: now + 2, icon: icons[Math.floor(Math.random() * icons.length)], x: -4 + Math.random() * 8 },
+        { id: now + 3, icon: icons[Math.floor(Math.random() * icons.length)], x: 8 + Math.random() * 8 },
+      ];
+      setParticles((prev) => [...prev, ...newParticles]);
+      setTimeout(() => {
+        setParticles((prev) => prev.filter((p) => !newParticles.some((np) => np.id === p.id)));
+      }, 1100);
+    } else {
+      // For Cat mode: keep classic interaction
+      setDialogueIdx((prev) => (prev + 1) % CAT_DIALOGUES.length);
+    }
 
     togglePlay();
   }, [togglePlay, isPanda, PANDA_DIALOGUES.length, CAT_DIALOGUES.length]);
@@ -344,22 +346,22 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
           {/* Floating Magical Musical Notes */}
           {isSinging && (
             <div className="absolute -top-2 sm:-top-3 left-0 right-0 h-5 sm:h-6 pointer-events-none overflow-visible">
-              <span className="absolute -left-1 text-emerald-600 font-bold text-[10px] sm:text-xs animate-[floatNote1_1.4s_ease-in-out_infinite]">
+              <span className={`absolute -left-1 font-bold text-[10px] sm:text-xs animate-[floatNote1_1.4s_ease-in-out_infinite] ${
+                isPanda ? 'text-emerald-600' : 'text-amber-500'
+              }`}>
                 ♪
               </span>
-              <span className="absolute left-1/2 -translate-x-1/2 text-green-700 font-bold text-xs sm:text-sm animate-[floatNote2_1.6s_ease-in-out_infinite_0.4s]">
+              <span className={`absolute left-1/2 -translate-x-1/2 font-bold text-xs sm:text-sm animate-[floatNote2_1.6s_ease-in-out_infinite_0.4s] ${
+                isPanda ? 'text-green-700' : 'text-orange-400'
+              }`}>
                 ♫
               </span>
               <span className="absolute -right-1 text-pink-500 font-bold text-[10px] sm:text-xs animate-[floatNote3_1.5s_ease-in-out_infinite_0.8s]">
                 {isPanda ? '🎋' : '♩'}
               </span>
-              {isPanda ? (
+              {isPanda && (
                 <span className="absolute right-3 -top-2 text-rose-400 font-bold text-[11px] animate-[floatNote1_1.7s_ease-in-out_infinite_0.6s]">
                   💕
-                </span>
-              ) : (
-                <span className="absolute right-3 -top-2 text-pink-400 font-bold text-[11px] animate-[floatNote1_1.7s_ease-in-out_infinite_0.6s]">
-                  🌸
                 </span>
               )}
             </div>
@@ -389,13 +391,17 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
             {/* Mascot Sprite on Cloud with Strict Key for Instant Theme Swapping */}
             <div
               key={isPanda ? 'mascot-panda' : 'mascot-cat'}
-              className={`relative w-[50px] h-[50px] sm:w-[88px] sm:h-[88px] drop-shadow-[2px_3px_0_rgba(30,36,36,0.22)] flex items-center justify-center overflow-visible transition-transform ${
-                isHappyHop
-                  ? 'animate-[pandaHappyHop_0.55s_ease-in-out]'
-                  : isSinging
-                  ? (isPanda ? 'animate-[pandaSingBounce_0.84s_ease-in-out_infinite]' : 'animate-[catSingBounce_0.84s_ease-in-out_infinite]')
-                  : (isPanda ? 'animate-[pandaIdleFloat_3s_ease-in-out_infinite]' : 'animate-[catIdleFloat_3s_ease-in-out_infinite]')
-              }`}
+              className={`relative drop-shadow-[2px_3px_0_rgba(61,61,61,0.22)] flex items-center justify-center overflow-visible transition-transform ${
+                isPanda
+                  ? (isHappyHop
+                      ? 'animate-[pandaHappyHop_0.55s_ease-in-out]'
+                      : isSinging
+                      ? 'animate-[pandaSingBounce_0.84s_ease-in-out_infinite]'
+                      : 'animate-[pandaIdleFloat_3s_ease-in-out_infinite]')
+                  : (isSinging
+                      ? 'animate-[catSingBounce_0.84s_ease-in-out_infinite]'
+                      : 'animate-[catIdleFloat_3s_ease-in-out_infinite]')
+              } ${isPanda ? 'w-[50px] h-[50px] sm:w-[88px] sm:h-[88px]' : 'w-[54px] h-[54px] sm:w-[84px] sm:h-[84px]'}`}
             >
               {isPanda ? (
                 <>
@@ -439,11 +445,11 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
               ) : (
                 <>
                   <img
-                    key="cat-idle"
-                    src="/assets/cat_idle.svg"
+                    key="cat-png-idle"
+                    src="/assets/cat_idle.png"
                     alt="Cute cat resting on fluffy cloud"
-                    width={88}
-                    height={88}
+                    width={84}
+                    height={84}
                     loading="eager"
                     decoding="sync"
                     className={`w-full h-full object-contain select-none pointer-events-none ${
@@ -451,11 +457,11 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
                     }`}
                   />
                   <img
-                    key="cat-sing-1"
-                    src="/assets/cat_sing_1.svg"
+                    key="cat-png-sing-1"
+                    src="/assets/cat_sing_1.png"
                     alt="Cute cat singing cheerfully frame 1"
-                    width={88}
-                    height={88}
+                    width={84}
+                    height={84}
                     loading="eager"
                     decoding="sync"
                     className={`w-full h-full object-contain select-none pointer-events-none ${
@@ -463,11 +469,11 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
                     }`}
                   />
                   <img
-                    key="cat-sing-2"
-                    src="/assets/cat_sing_2.svg"
+                    key="cat-png-sing-2"
+                    src="/assets/cat_sing_2.png"
                     alt="Cute cat dancing and singing frame 2"
-                    width={88}
-                    height={88}
+                    width={84}
+                    height={84}
                     loading="eager"
                     decoding="sync"
                     className={`w-full h-full object-contain select-none pointer-events-none ${
@@ -479,34 +485,66 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
             </div>
 
             {/* Status Indicator Badge Under Mascot */}
-            <span
-              className={`text-[8px] sm:text-[9.5px] font-extrabold px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full border-[1.5px] border-pastel-dark shadow-retro-sm -mt-0.5 transition-all duration-150 flex items-center gap-1.5 ${
-                isSinging
-                  ? (isPanda 
-                      ? 'bg-pastel-mint text-pastel-dark shadow-[1.5px_1.5px_0_#1e2424]'
-                      : 'bg-pastel-peach text-pastel-dark shadow-[1.5px_1.5px_0_#3d3d3d]')
-                  : isHovered
-                  ? 'bg-pastel-peach text-pastel-dark'
-                  : 'bg-white/95 text-pastel-dark'
-              }`}
-            >
-              {isSinging ? (
-                <>
-                  <Volume2 size={9} className="text-emerald-800 shrink-0" />
-                  <span>{isPanda ? 'Panda 🎋' : 'Lo-Fi Cat 🎵'}</span>
-                  <span className="flex items-end gap-0.5 h-2 shrink-0">
-                    <span className="w-0.5 h-1 bg-emerald-700 rounded-full animate-pulse" />
-                    <span className="w-0.5 h-2 bg-emerald-800 rounded-full animate-[pulse_0.5s_infinite]" />
-                    <span className="w-0.5 h-1.5 bg-emerald-700 rounded-full animate-pulse" />
-                  </span>
-                </>
-              ) : (
-                <>
-                  <VolumeX size={9} className="text-rose-600 shrink-0" />
-                  <span>{isPanda ? 'Panda Zzz 💤' : 'Cat Zzz 💤'}</span>
-                </>
-              )}
-            </span>
+            {isPanda ? (
+              <span
+                className={`text-[8px] sm:text-[9.5px] font-extrabold px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full border-[1.5px] border-pastel-dark shadow-retro-sm -mt-0.5 transition-all duration-150 flex items-center gap-1.5 ${
+                  isSinging
+                    ? 'bg-pastel-mint text-pastel-dark shadow-[1.5px_1.5px_0_#1e2424]'
+                    : isHovered
+                    ? 'bg-pastel-peach text-pastel-dark'
+                    : 'bg-white/95 text-pastel-dark'
+                }`}
+              >
+                {isSinging ? (
+                  <>
+                    <Volume2 size={9} className="text-emerald-800 shrink-0" />
+                    <span>Panda 🎋</span>
+                    <span className="flex items-end gap-0.5 h-2 shrink-0">
+                      <span className="w-0.5 h-1 bg-emerald-700 rounded-full animate-pulse" />
+                      <span className="w-0.5 h-2 bg-emerald-800 rounded-full animate-[pulse_0.5s_infinite]" />
+                      <span className="w-0.5 h-1.5 bg-emerald-700 rounded-full animate-pulse" />
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <VolumeX size={9} className="text-rose-600 shrink-0" />
+                    <span>Panda Zzz 💤</span>
+                  </>
+                )}
+              </span>
+            ) : (
+              <div
+                className={`flex flex-col items-center justify-center px-4 py-1 sm:px-5 sm:py-1 rounded-full border-2 border-pastel-dark shadow-[2px_2.5px_0_#3d3d3d] -mt-0.5 transition-all duration-150 select-none ${
+                  isSinging
+                    ? 'bg-[#ffe8d4] text-pastel-dark'
+                    : isHovered
+                    ? 'bg-pastel-peach text-pastel-dark'
+                    : 'bg-white/95 text-pastel-dark'
+                }`}
+              >
+                <span className="text-[9.5px] sm:text-[11px] font-extrabold text-pastel-dark tracking-tight leading-tight">
+                  Lo-Fi
+                </span>
+                <div className="flex items-center gap-1.5 leading-none mt-0.5">
+                  {isSinging ? (
+                    <>
+                      <Volume2 size={10} className="text-emerald-800 shrink-0" />
+                      <span className="text-[9.5px] sm:text-[11px] font-extrabold text-pastel-dark">Cat 🎵</span>
+                      <span className="flex items-end gap-0.5 h-2.5 shrink-0">
+                        <span className="w-0.5 h-1 bg-emerald-700 rounded-full animate-pulse" />
+                        <span className="w-0.5 h-2.5 bg-emerald-800 rounded-full animate-[pulse_0.5s_infinite]" />
+                        <span className="w-0.5 h-1.5 bg-emerald-700 rounded-full animate-pulse" />
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <VolumeX size={10} className="text-rose-600 shrink-0" />
+                      <span className="text-[9.5px] sm:text-[11px] font-extrabold text-pastel-dark">Cat 💤</span>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
           </button>
         </div>
       </div>
