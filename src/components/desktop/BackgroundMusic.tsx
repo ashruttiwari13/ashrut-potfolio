@@ -347,21 +347,23 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
           {isSinging && (
             <div className="absolute -top-2 sm:-top-3 left-0 right-0 h-5 sm:h-6 pointer-events-none overflow-visible">
               <span className={`absolute -left-1 font-bold text-[10px] sm:text-xs animate-[floatNote1_1.4s_ease-in-out_infinite] ${
-                isPanda ? 'text-emerald-600' : 'text-amber-500'
+                isPanda ? 'text-purple-400 drop-shadow-[0_0_6px_#c084fc]' : 'text-amber-500'
               }`}>
                 ♪
               </span>
               <span className={`absolute left-1/2 -translate-x-1/2 font-bold text-xs sm:text-sm animate-[floatNote2_1.6s_ease-in-out_infinite_0.4s] ${
-                isPanda ? 'text-green-700' : 'text-orange-400'
+                isPanda ? 'text-fuchsia-400 drop-shadow-[0_0_6px_#e879f9]' : 'text-orange-400'
               }`}>
                 ♫
               </span>
-              <span className="absolute -right-1 text-pink-500 font-bold text-[10px] sm:text-xs animate-[floatNote3_1.5s_ease-in-out_infinite_0.8s]">
-                {isPanda ? '🎋' : '♩'}
+              <span className={`absolute -right-1 font-bold text-[10px] sm:text-xs animate-[floatNote3_1.5s_ease-in-out_infinite_0.8s] ${
+                isPanda ? 'text-amber-300 drop-shadow-[0_0_6px_#fde047]' : 'text-pink-500'
+              }`}>
+                {isPanda ? '🏮' : '♩'}
               </span>
               {isPanda && (
-                <span className="absolute right-3 -top-2 text-rose-400 font-bold text-[11px] animate-[floatNote1_1.7s_ease-in-out_infinite_0.6s]">
-                  💕
+                <span className="absolute right-3 -top-2 text-purple-300 font-bold text-[11px] animate-[floatNote1_1.7s_ease-in-out_infinite_0.6s]">
+                  ✨
                 </span>
               )}
             </div>
@@ -486,34 +488,46 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
 
             {/* Status Indicator Badge Under Mascot - Lo-Fi Vintage Capsule */}
             <div
-              className={`flex flex-col items-center justify-center px-4 py-1 sm:px-5 sm:py-1 rounded-full border-2 border-pastel-dark shadow-[2px_2.5px_0_#1e2424] -mt-0.5 transition-all duration-150 select-none ${
+              className={`flex flex-col items-center justify-center px-4 py-1 sm:px-5 sm:py-1 rounded-full border-2 -mt-0.5 transition-all duration-150 select-none ${
                 isSinging
-                  ? (isPanda ? 'bg-[#d8f3dc] text-pastel-dark' : 'bg-[#ffe8d4] text-pastel-dark')
+                  ? isPanda 
+                    ? 'bg-[#0c0f22]/90 border-purple-500/50 text-white shadow-[0_0_15px_rgba(139,92,246,0.35)]' 
+                    : 'bg-[#ffe8d4] border-pastel-dark text-pastel-dark shadow-[2px_2.5px_0_#3d3d3d]'
                   : isHovered
-                  ? 'bg-pastel-peach text-pastel-dark'
-                  : 'bg-white/95 text-pastel-dark'
+                  ? isPanda
+                    ? 'bg-purple-950/80 border-purple-400 text-white shadow-[0_0_12px_rgba(168,85,247,0.3)]'
+                    : 'bg-pastel-peach border-pastel-dark text-pastel-dark shadow-[2px_2.5px_0_#3d3d3d]'
+                  : isPanda
+                  ? 'bg-[#10142c]/90 border-purple-500/30 text-purple-200'
+                  : 'bg-white/95 border-pastel-dark text-pastel-dark shadow-[2px_2.5px_0_#3d3d3d]'
               }`}
             >
-              <span className="text-[9.5px] sm:text-[11px] font-extrabold text-pastel-dark tracking-tight leading-tight">
+              <span className={`text-[9.5px] sm:text-[11px] font-extrabold tracking-tight leading-tight ${
+                isPanda ? 'text-purple-300 drop-shadow-[0_0_6px_rgba(192,132,252,0.4)]' : 'text-pastel-dark'
+              }`}>
                 Lo-Fi
               </span>
               <div className="flex items-center gap-1.5 leading-none mt-0.5">
                 {isSinging ? (
                   <>
-                    <Volume2 size={10} className="text-emerald-800 shrink-0" />
-                    <span className="text-[9.5px] sm:text-[11px] font-extrabold text-pastel-dark">
-                      {isPanda ? 'Panda 🎋' : 'Cat 🎵'}
+                    <Volume2 size={10} className={`shrink-0 ${isPanda ? 'text-purple-400' : 'text-emerald-800'}`} />
+                    <span className={`text-[9.5px] sm:text-[11px] font-extrabold ${
+                      isPanda ? 'text-white' : 'text-pastel-dark'
+                    }`}>
+                      {isPanda ? 'Panda 🎧' : 'Cat 🎵'}
                     </span>
                     <span className="flex items-end gap-0.5 h-2.5 shrink-0">
-                      <span className="w-0.5 h-1 bg-emerald-700 rounded-full animate-pulse" />
-                      <span className="w-0.5 h-2.5 bg-emerald-800 rounded-full animate-[pulse_0.5s_infinite]" />
-                      <span className="w-0.5 h-1.5 bg-emerald-700 rounded-full animate-pulse" />
+                      <span className={`w-0.5 h-1 rounded-full animate-pulse ${isPanda ? 'bg-purple-400' : 'bg-emerald-700'}`} />
+                      <span className={`w-0.5 h-2.5 rounded-full animate-[pulse_0.5s_infinite] ${isPanda ? 'bg-cyan-400 shadow-[0_0_6px_#22d3ee]' : 'bg-emerald-800'}`} />
+                      <span className={`w-0.5 h-1.5 rounded-full animate-pulse ${isPanda ? 'bg-fuchsia-400' : 'bg-emerald-700'}`} />
                     </span>
                   </>
                 ) : (
                   <>
-                    <VolumeX size={10} className="text-rose-600 shrink-0" />
-                    <span className="text-[9.5px] sm:text-[11px] font-extrabold text-pastel-dark">
+                    <VolumeX size={10} className="text-rose-500 shrink-0" />
+                    <span className={`text-[9.5px] sm:text-[11px] font-extrabold ${
+                      isPanda ? 'text-slate-300' : 'text-pastel-dark'
+                    }`}>
                       {isPanda ? 'Panda 💤' : 'Cat 💤'}
                     </span>
                   </>

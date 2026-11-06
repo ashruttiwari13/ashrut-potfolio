@@ -50,7 +50,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
     {
       id: 'profileWin',
       title: isPanda ? '🐼 Ashrut Tiwari · Unreal 5 Game Dev & 3D Artist' : '👾 Ashrut Tiwari · Unreal 5 Game Dev & 3D Artist',
-      width: 520,
+      width: isPanda ? 570 : 520,
       headerColor: isPanda ? 'bg-pastel-mint' : 'bg-pastel-pink',
       defaultOpen: true,
     },
@@ -333,7 +333,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isMaximized={maximizedWindowId === 'profileWin'}
         onToggleMaximize={() => toggleMaximizeWindow('profileWin')}
         zIndex={windowsState.profileWin.zIndex}
-        width={520}
+        width={isPanda ? 570 : 520}
         headerColor={isPanda ? 'bg-pastel-mint' : 'bg-pastel-pink'}
         onClose={() => closeWindow('profileWin')}
         onFocus={() => bringToFront('profileWin')}

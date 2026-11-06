@@ -5,35 +5,35 @@
 :root,
 .theme-panda,
 body.theme-panda {
-  --bg-light: #f3f8f4;
-  --bg-warm: #eaf4ec;
-  --bg-card: #fffffffa;
-  --text-dark: #1e2424;
-  --text-soft: #475b52;
-  --accent-pink: #ffaec0;
-  --accent-peach: #fae5cc;
-  --accent-mint: #7ecb9a;
-  --accent-lavender: #d8e8e0;
-  --accent-sky: #a3d8d6;
-  --accent-yellow: #f9e07f;
-  --accent-bamboo: #40916c;
+  --bg-light: #090b14;
+  --bg-warm: #0e1224;
+  --bg-card: #13172e;
+  --text-dark: #f8fafc;
+  --text-soft: #94a3b8;
+  --accent-pink: #c084fc;
+  --accent-peach: #8b5cf6;
+  --accent-mint: #a855f7;
+  --accent-lavender: #6366f1;
+  --accent-sky: #38bdf8;
+  --accent-yellow: #fbbf24;
+  --accent-bamboo: #10b981;
 
-  --bg-light-rgb: 243, 248, 244;
-  --bg-warm-rgb: 234, 244, 236;
-  --bg-card-rgb: 255, 255, 255;
-  --text-dark-rgb: 30, 36, 36;
-  --text-soft-rgb: 71, 91, 82;
-  --accent-pink-rgb: 255, 174, 192;
-  --accent-peach-rgb: 250, 229, 204;
-  --accent-mint-rgb: 126, 203, 154;
-  --accent-lavender-rgb: 216, 232, 224;
-  --accent-sky-rgb: 163, 216, 214;
-  --accent-yellow-rgb: 249, 224, 127;
-  --accent-bamboo-rgb: 64, 145, 108;
+  --bg-light-rgb: 9, 11, 20;
+  --bg-warm-rgb: 14, 18, 36;
+  --bg-card-rgb: 19, 23, 46;
+  --text-dark-rgb: 248, 250, 252;
+  --text-soft-rgb: 148, 163, 184;
+  --accent-pink-rgb: 192, 132, 252;
+  --accent-peach-rgb: 139, 92, 246;
+  --accent-mint-rgb: 168, 85, 247;
+  --accent-lavender-rgb: 99, 102, 241;
+  --accent-sky-rgb: 56, 189, 248;
+  --accent-yellow-rgb: 251, 191, 36;
+  --accent-bamboo-rgb: 16, 185, 129;
 
-  --scrollbar-thumb: #7ecb9a;
-  --scrollbar-thumb-hover: #52b788;
-  --scrollbar-track: #e2ece4;
+  --scrollbar-thumb: #8b5cf6;
+  --scrollbar-thumb-hover: #a855f7;
+  --scrollbar-track: #0e1224;
 }
 
 .theme-cat,
@@ -182,6 +182,85 @@ body {
 .retro-card:hover {
   transform: translateY(-2px);
   box-shadow: 4px 4px 0 var(--accent-mint);
+}
+
+/* Theme Panda Overrides - Moonlit Cyber Bamboo Aesthetic */
+.theme-panda .retro-window,
+body.theme-panda .retro-window {
+  background: rgba(14, 18, 38, 0.94);
+  border: 1.5px solid rgba(139, 92, 246, 0.4);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 25px rgba(139, 92, 246, 0.2);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  color: #f8fafc;
+}
+
+.theme-panda .retro-card,
+body.theme-panda .retro-card {
+  background: rgba(19, 24, 48, 0.88);
+  border: 1.5px solid rgba(139, 92, 246, 0.28);
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(139, 92, 246, 0.12);
+  color: #ffffff;
+}
+
+.theme-panda .retro-card:hover,
+body.theme-panda .retro-card:hover {
+  border-color: rgba(168, 85, 247, 0.6);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(168, 85, 247, 0.3);
+  transform: translateY(-2px);
+}
+
+.theme-panda .retro-btn,
+body.theme-panda .retro-btn {
+  background: rgba(26, 32, 60, 0.9);
+  color: #ffffff;
+  border: 1.5px solid rgba(139, 92, 246, 0.35);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(139, 92, 246, 0.18);
+}
+
+.theme-panda .retro-btn:hover,
+body.theme-panda .retro-btn:hover {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  border-color: #c084fc;
+  box-shadow: 0 0 20px rgba(147, 51, 234, 0.5);
+  color: #ffffff;
+}
+
+/* Comprehensive Panda Dark Glass Theme Cascade for Window Contents */
+.theme-panda .retro-window .bg-white,
+body.theme-panda .retro-window .bg-white {
+  background-color: rgba(18, 22, 45, 0.85) !important;
+  color: #f8fafc !important;
+}
+
+.theme-panda .retro-window .text-pastel-dark,
+body.theme-panda .retro-window .text-pastel-dark {
+  color: #f8fafc !important;
+}
+
+.theme-panda .retro-window .text-pastel-soft,
+body.theme-panda .retro-window .text-pastel-soft {
+  color: #94a3b8 !important;
+}
+
+.theme-panda .retro-window .border-pastel-dark,
+body.theme-panda .retro-window .border-pastel-dark {
+  border-color: rgba(139, 92, 246, 0.35) !important;
+}
+
+.theme-panda .retro-window .bg-pastel-warm,
+body.theme-panda .retro-window .bg-pastel-warm {
+  background-color: rgba(15, 18, 40, 0.7) !important;
+}
+
+.theme-panda .retro-window .bg-pastel-mint\/30,
+.theme-panda .retro-window .bg-pastel-lavender\/40,
+body.theme-panda .retro-window .bg-pastel-mint\/30,
+body.theme-panda .retro-window .bg-pastel-lavender\/40 {
+  background-color: rgba(139, 92, 246, 0.15) !important;
+  border-color: rgba(139, 92, 246, 0.35) !important;
 }
 
 /* Ensure images, svgs, and media never spill out of containers */

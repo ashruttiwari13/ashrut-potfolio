@@ -300,18 +300,18 @@ export const Window: React.FC<WindowProps> = ({
       {/* Cute Ears Frame */}
       {isPanda && !isMaximized && (
         <div className="absolute -top-3.5 left-0 right-0 flex justify-between px-6 sm:px-8 pointer-events-none z-0">
-          {/* Left Panda Ear */}
+          {/* Left Panda Ear with Neon Purple Halo */}
           <div className="relative group/ear">
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-pastel-dark border-2 border-pastel-dark shadow-[1.5px_1.5px_0_rgba(0,0,0,0.18)] flex items-center justify-center transition-transform duration-300 hover:rotate-[-14deg]">
-              <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-pastel-pink border border-pastel-dark/30" />
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#12152b] border-2 border-purple-500/60 shadow-[0_0_12px_rgba(168,85,247,0.45)] flex items-center justify-center transition-transform duration-300 hover:rotate-[-14deg]">
+              <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc]" />
             </div>
           </div>
-          {/* Right Panda Ear with Bamboo Sprout */}
+          {/* Right Panda Ear with Golden Bamboo Sprout */}
           <div className="relative group/ear">
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-pastel-dark border-2 border-pastel-dark shadow-[1.5px_1.5px_0_rgba(0,0,0,0.18)] flex items-center justify-center transition-transform duration-300 hover:rotate-[14deg]">
-              <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-pastel-pink border border-pastel-dark/30" />
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#12152b] border-2 border-purple-500/60 shadow-[0_0_12px_rgba(168,85,247,0.45)] flex items-center justify-center transition-transform duration-300 hover:rotate-[14deg]">
+              <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc]" />
             </div>
-            <span className="absolute -top-2.5 -right-1 text-xs select-none">🎋</span>
+            <span className="absolute -top-2.5 -right-1 text-xs select-none drop-shadow-[0_0_8px_rgba(251,191,36,0.8)]">🏮</span>
           </div>
         </div>
       )}
@@ -359,22 +359,28 @@ export const Window: React.FC<WindowProps> = ({
             toggleMaximize();
           }
         }}
-        className={`${headerColor} px-3 sm:px-4 py-2 border-b-2 sm:border-b-[2.5px] border-pastel-dark flex flex-col justify-center cursor-grab active:cursor-grabbing select-none touch-none min-h-[46px] sm:min-h-[50px] shrink-0 relative z-10`}
+        className={`${
+          isPanda 
+            ? 'bg-gradient-to-r from-[#151838] via-[#241c48] to-[#171936] text-white border-b border-purple-500/40 shadow-[0_4px_20px_rgba(0,0,0,0.5)]' 
+            : `${headerColor} text-pastel-dark border-b-2 sm:border-b-[2.5px] border-pastel-dark`
+        } px-3 sm:px-4 py-2 flex flex-col justify-center cursor-grab active:cursor-grabbing select-none touch-none min-h-[46px] sm:min-h-[50px] shrink-0 relative z-10 transition-colors duration-300`}
         title="Drag on desktop · Drag to move on mobile (swipe down to minimize) · Double click to maximize"
       >
         {/* Mobile Swipe / Drag Pill Indicator */}
-        <div className="w-10 h-1 rounded-full bg-pastel-dark/30 mx-auto -mt-0.5 mb-1 sm:hidden pointer-events-none" />
+        <div className={`w-10 h-1 rounded-full mx-auto -mt-0.5 mb-1 sm:hidden pointer-events-none ${isPanda ? 'bg-purple-400/40' : 'bg-pastel-dark/30'}`} />
 
         <div className="flex items-center justify-between w-full">
-          <div className="flex items-center gap-1.5 sm:gap-2 font-bold text-xs sm:text-sm text-pastel-dark tracking-wide truncate flex-1 min-w-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 font-extrabold text-xs sm:text-sm tracking-wide truncate flex-1 min-w-0">
             {isPanda ? (
-              <span className="text-xs sm:text-sm shrink-0">🐾</span>
+              <span className="text-xs sm:text-sm shrink-0 drop-shadow-[0_0_8px_rgba(168,85,247,0.7)]">🐼</span>
             ) : (
               <span className="text-xs sm:text-sm shrink-0">🐱</span>
             )}
-            <span className="truncate">{title}</span>
+            <span className={`truncate ${isPanda ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]' : 'text-pastel-dark'}`}>{title}</span>
             {isMaximized && (
-              <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded-full bg-white/90 border border-pastel-dark text-pastel-dark shrink-0 hidden sm:inline-flex shadow-2xs">
+              <span className={`text-[9px] font-extrabold px-1.5 py-0.2 rounded-full shrink-0 hidden sm:inline-flex shadow-2xs ${
+                isPanda ? 'bg-purple-900/80 border border-purple-400 text-purple-200' : 'bg-white/90 border border-pastel-dark text-pastel-dark'
+              }`}>
                 Maximized
               </span>
             )}
@@ -398,9 +404,13 @@ export const Window: React.FC<WindowProps> = ({
                 }}
                 title="Minimize to Dock"
                 aria-label="Minimize"
-                className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-white border-2 border-pastel-dark flex items-center justify-center hover:bg-pastel-peach active:scale-90 transition-all text-pastel-dark shadow-xs cursor-pointer touch-manipulation"
+                className={`w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full flex items-center justify-center active:scale-90 transition-all shadow-xs cursor-pointer touch-manipulation ${
+                  isPanda 
+                    ? 'bg-[#141833] border border-purple-500/40 text-purple-200 hover:bg-purple-600/30 hover:border-purple-300' 
+                    : 'bg-white border-2 border-pastel-dark text-pastel-dark hover:bg-pastel-peach'
+                }`}
               >
-                <Minus className="w-4 h-4 sm:w-4 sm:h-4" strokeWidth={3.5} />
+                <Minus className="w-4 h-4 sm:w-4 sm:h-4" strokeWidth={3} />
               </button>
             )}
 
@@ -417,9 +427,13 @@ export const Window: React.FC<WindowProps> = ({
               }}
               title={isMaximized ? 'Restore window size' : 'Expand window'}
               aria-label={isMaximized ? 'Restore window size' : 'Expand window'}
-              className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-white border-2 border-pastel-dark flex items-center justify-center hover:bg-pastel-mint active:scale-90 transition-all text-pastel-dark shadow-xs cursor-pointer touch-manipulation"
+              className={`w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full flex items-center justify-center active:scale-90 transition-all shadow-xs cursor-pointer touch-manipulation ${
+                isPanda 
+                  ? 'bg-[#141833] border border-purple-500/40 text-purple-200 hover:bg-purple-600/30 hover:border-purple-300' 
+                  : 'bg-white border-2 border-pastel-dark text-pastel-dark hover:bg-pastel-mint'
+              }`}
             >
-              <Square className="w-3.5 h-3.5 sm:w-3.5 sm:h-3.5" strokeWidth={3.5} />
+              <Square className="w-3.5 h-3.5 sm:w-3.5 sm:h-3.5" strokeWidth={3} />
             </button>
 
             <button
@@ -437,9 +451,13 @@ export const Window: React.FC<WindowProps> = ({
               }}
               title="Close Tab"
               aria-label="Close"
-              className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-white border-2 border-pastel-dark flex items-center justify-center hover:bg-rose-500 hover:text-white active:scale-90 transition-all text-pastel-dark font-bold shadow-xs cursor-pointer touch-manipulation"
+              className={`w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full flex items-center justify-center font-bold active:scale-90 transition-all shadow-xs cursor-pointer touch-manipulation ${
+                isPanda 
+                  ? 'bg-[#141833] border border-purple-500/40 text-purple-200 hover:bg-rose-500 hover:text-white hover:border-rose-400' 
+                  : 'bg-white border-2 border-pastel-dark text-pastel-dark hover:bg-rose-500 hover:text-white'
+              }`}
             >
-              <X className="w-4.5 h-4.5 sm:w-4.5 sm:h-4.5" strokeWidth={3.5} />
+              <X className="w-4.5 h-4.5 sm:w-4.5 sm:h-4.5" strokeWidth={3} />
             </button>
           </div>
         </div>
@@ -447,9 +465,9 @@ export const Window: React.FC<WindowProps> = ({
 
       {/* Window Body */}
       <div
-        className={`p-3 sm:p-4 overflow-y-auto overflow-x-hidden w-full max-w-full bg-[#fafdfa] text-pastel-dark flex-1 overscroll-contain pb-10 sm:pb-8 ${
-          isDragging ? 'pointer-events-none select-none' : ''
-        }`}
+        className={`p-3 sm:p-4 overflow-y-auto overflow-x-hidden w-full max-w-full flex-1 overscroll-contain pb-10 sm:pb-8 transition-colors duration-300 ${
+          isPanda ? 'bg-[#0b0e1f]/95 text-slate-100' : 'bg-[#fafdfa] text-pastel-dark'
+        } ${isDragging ? 'pointer-events-none select-none' : ''}`}
         style={{
           WebkitOverflowScrolling: 'touch',
         }}

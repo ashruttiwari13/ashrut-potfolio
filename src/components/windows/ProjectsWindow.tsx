@@ -17,12 +17,14 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { soundFX } from '@/lib/soundEffects';
+import { useTheme } from '@/context/ThemeContext';
 
 interface ProjectsWindowProps {
   projects: Project[];
 }
 
 export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
+  const { isPanda } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [activeProject, setActiveProject] = useState<Project | null>(null);
@@ -64,14 +66,26 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
   return (
     <div className="space-y-4">
       {/* Professional Scope Banner */}
-      <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 bg-pastel-mint/30 border border-pastel-dark rounded-retro-sm text-[11px] text-pastel-dark shadow-xs">
+      <div
+        className={`flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-retro-sm text-[11px] shadow-xs ${
+          isPanda
+            ? 'bg-[#121633]/90 border border-purple-500/30 text-purple-200'
+            : 'bg-pastel-mint/30 border border-pastel-dark text-pastel-dark'
+        }`}
+      >
         <div className="flex items-center gap-1.5">
-          <span className="text-base shrink-0">💼</span>
+          <span className="text-base shrink-0">{isPanda ? '🎋' : '💼'}</span>
           <span>
             <strong>Primary Career Focus:</strong> Unreal Engine 5 Game Development & 3D Character/Asset Art.
           </span>
         </div>
-        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-pastel-lavender border border-pastel-dark shrink-0">
+        <span
+          className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${
+            isPanda
+              ? 'bg-purple-900/60 border border-purple-500/40 text-purple-300'
+              : 'bg-pastel-lavender border border-pastel-dark text-pastel-dark'
+          }`}
+        >
           🎬 Filmmaking = Personal Hobby
         </span>
       </div>
@@ -79,19 +93,30 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
       {/* Search and Filters Bar */}
       <div className="flex flex-col sm:flex-row gap-2">
         <div className="relative flex-1">
-          <Search size={15} className="absolute left-3 top-2.5 text-pastel-dark/60" />
+          <Search
+            size={15}
+            className={`absolute left-3 top-2.5 ${
+              isPanda ? 'text-purple-300/60' : 'text-pastel-dark/60'
+            }`}
+          />
           <input
             type="text"
             placeholder="Search projects, tools (e.g. Unreal, C++, Blender)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 text-xs bg-white border-2 border-pastel-dark rounded-full focus:outline-none focus:ring-2 focus:ring-pastel-pink shadow-sm"
+            className={`w-full pl-9 pr-3 py-1.5 text-xs rounded-full focus:outline-none shadow-sm transition-all ${
+              isPanda
+                ? 'bg-[#0c0f24] border border-purple-500/40 text-white placeholder-slate-400 focus:ring-2 focus:ring-purple-500/50'
+                : 'bg-white border-2 border-pastel-dark text-pastel-dark focus:ring-2 focus:ring-pastel-pink'
+            }`}
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => setSearchQuery('')}
-              className="absolute right-2.5 top-2 text-pastel-dark/60 hover:text-pastel-dark"
+              className={`absolute right-2.5 top-2 ${
+                isPanda ? 'text-purple-300/70 hover:text-white' : 'text-pastel-dark/60 hover:text-pastel-dark'
+              }`}
             >
               <X size={14} />
             </button>
@@ -108,10 +133,14 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                 soundFX.playClick(620);
                 setSelectedCategory(cat.value);
               }}
-              className={`retro-btn text-[10px] sm:text-[11px] px-2.5 py-1 whitespace-nowrap shrink-0 ${
+              className={`retro-btn text-[10px] sm:text-[11px] px-2.5 py-1 whitespace-nowrap shrink-0 transition-all ${
                 selectedCategory === cat.value
-                  ? 'bg-pastel-pink shadow-[2px_2px_0_#3d3d3d]'
-                  : 'bg-white hover:bg-pastel-peach/50'
+                  ? isPanda
+                    ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white border-purple-400/50 shadow-[0_0_12px_rgba(168,85,247,0.5)]'
+                    : 'bg-pastel-pink shadow-[2px_2px_0_#3d3d3d]'
+                  : isPanda
+                    ? 'bg-[#121633] border border-purple-500/30 text-slate-300 hover:bg-[#1a1f46]'
+                    : 'bg-white hover:bg-pastel-peach/50 text-pastel-dark'
               }`}
             >
               {cat.label}
@@ -122,17 +151,25 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
 
       {/* Projects Grid */}
       {filteredProjects.length === 0 ? (
-        <div className="p-8 text-center bg-white border-2 border-dashed border-pastel-dark rounded-retro">
-          <Gamepad2 className="w-10 h-10 mx-auto text-pastel-dark/40 mb-2 animate-bounce" />
-          <h4 className="font-bold text-sm text-pastel-dark">No projects match your filter</h4>
-          <p className="text-xs text-pastel-soft mt-1">Try clearing your search term or select another category.</p>
+        <div
+          className={`p-8 text-center rounded-retro border-2 border-dashed ${
+            isPanda
+              ? 'bg-[#0c0f24]/80 border-purple-500/40 text-slate-300'
+              : 'bg-white border-pastel-dark text-pastel-dark'
+          }`}
+        >
+          <Gamepad2 className="w-10 h-10 mx-auto text-purple-400/60 mb-2 animate-bounce" />
+          <h4 className="font-bold text-sm">No projects match your filter</h4>
+          <p className="text-xs text-slate-400 mt-1">Try clearing your search term or select another category.</p>
           <button
             type="button"
             onClick={() => {
               setSearchQuery('');
               setSelectedCategory('all');
             }}
-            className="retro-btn text-xs mt-3 bg-pastel-mint"
+            className={`retro-btn text-xs mt-3 ${
+              isPanda ? 'bg-purple-600 text-white' : 'bg-pastel-mint'
+            }`}
           >
             Clear Filters
           </button>
@@ -145,11 +182,21 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
             return (
               <div
                 key={project.id}
-                className="retro-card flex flex-col justify-between bg-white overflow-hidden p-3 group min-w-0"
+                className={`flex flex-col justify-between overflow-hidden p-3 group min-w-0 rounded-2xl transition-all ${
+                  isPanda
+                    ? 'bg-[#0c0f24]/90 border border-purple-500/40 shadow-[0_0_20px_rgba(139,92,246,0.15)] hover:border-purple-400 hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] text-slate-100'
+                    : 'retro-card bg-white'
+                }`}
               >
                 <div className="min-w-0">
                   {/* Visual Header / Cover Art */}
-                  <div className="relative aspect-[16/9] w-full rounded-retro-sm bg-[#dedede] border-2 border-pastel-dark overflow-hidden flex items-center justify-center mb-2.5 shadow-sm group-hover:border-pastel-coral transition-colors">
+                  <div
+                    className={`relative aspect-[16/9] w-full rounded-xl overflow-hidden flex items-center justify-center mb-2.5 shadow-sm transition-colors ${
+                      isPanda
+                        ? 'bg-[#080a18] border border-purple-500/30 group-hover:border-purple-400/70'
+                        : 'bg-[#dedede] border-2 border-pastel-dark group-hover:border-pastel-coral'
+                    }`}
+                  >
                     {hasRealPhoto ? (
                       <img
                         src={project.cover_image}
@@ -157,12 +204,22 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                         className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-pastel-peach via-pastel-lavender to-pastel-mint flex items-center justify-center text-center p-3">
+                      <div
+                        className={`w-full h-full flex items-center justify-center text-center p-3 ${
+                          isPanda
+                            ? 'bg-gradient-to-br from-[#121633] via-[#1f1638] to-[#121633]'
+                            : 'bg-gradient-to-br from-pastel-peach via-pastel-lavender to-pastel-mint'
+                        }`}
+                      >
                         <div>
                           <span className="text-3xl filter drop-shadow">
                             {project.category === 'game-dev' ? '⚔️' : project.category === 'cinematography' ? '🎬' : '💀'}
                           </span>
-                          <h5 className="font-extrabold text-sm text-pastel-dark mt-1 tracking-wide break-words">
+                          <h5
+                            className={`font-extrabold text-sm mt-1 tracking-wide break-words ${
+                              isPanda ? 'text-white' : 'text-pastel-dark'
+                            }`}
+                          >
                             {project.title}
                           </h5>
                         </div>
@@ -171,7 +228,13 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
 
                     {/* Featured Badge */}
                     {project.is_featured && (
-                      <span className="absolute top-2 left-2 flex items-center gap-1 text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-pastel-yellow border border-pastel-dark text-pastel-dark shadow-xs">
+                      <span
+                        className={`absolute top-2 left-2 flex items-center gap-1 text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-xs ${
+                          isPanda
+                            ? 'bg-purple-600/90 border border-purple-400/50 text-white shadow-[0_0_8px_rgba(168,85,247,0.6)]'
+                            : 'bg-pastel-yellow border border-pastel-dark text-pastel-dark'
+                        }`}
+                      >
                         <Sparkles size={10} />
                         <span>Featured</span>
                       </span>
@@ -179,10 +242,14 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
 
                     {/* Distinct Category Nature Badge */}
                     <span
-                      className={`absolute top-2 right-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-pastel-dark shadow-xs ${
+                      className={`absolute top-2 right-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-xs ${
                         project.category === 'cinematography'
-                          ? 'bg-pastel-lavender text-pastel-dark'
-                          : 'bg-pastel-mint text-pastel-dark'
+                          ? isPanda
+                            ? 'bg-indigo-900/80 border border-indigo-400/40 text-indigo-200'
+                            : 'bg-pastel-lavender border border-pastel-dark text-pastel-dark'
+                          : isPanda
+                            ? 'bg-[#141738]/90 border border-purple-500/40 text-purple-200'
+                            : 'bg-pastel-mint border border-pastel-dark text-pastel-dark'
                       }`}
                     >
                       {project.category === 'cinematography' ? '🎬 Creative Hobby' : '💼 Core Work'}
@@ -191,23 +258,45 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                     {/* 3D Model Badge & Status */}
                     <div className="absolute bottom-2 left-2 flex items-center gap-1">
                       {project.model_embed_url && (
-                        <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-pastel-sky/95 border border-pastel-dark text-pastel-dark shadow-xs flex items-center gap-1">
+                        <span
+                          className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1 ${
+                            isPanda
+                              ? 'bg-purple-900/90 border border-purple-400/50 text-purple-200'
+                              : 'bg-pastel-sky/95 border border-pastel-dark text-pastel-dark'
+                          }`}
+                        >
                           <Box size={10} />
                           <span>3D Model</span>
                         </span>
                       )}
                     </div>
 
-                    <span className="absolute bottom-2 right-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/95 border border-pastel-dark text-pastel-dark shadow-xs">
+                    <span
+                      className={`absolute bottom-2 right-2 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs ${
+                        isPanda
+                          ? 'bg-[#0c0f24]/90 border border-purple-500/40 text-purple-200'
+                          : 'bg-white/95 border border-pastel-dark text-pastel-dark'
+                      }`}
+                    >
                       {project.status}
                     </span>
                   </div>
 
                   {/* Details */}
-                  <h4 className="font-extrabold text-base text-pastel-dark group-hover:text-amber-800 transition-colors break-words">
+                  <h4
+                    className={`font-extrabold text-base transition-colors break-words ${
+                      isPanda
+                        ? 'text-white group-hover:text-purple-300'
+                        : 'text-pastel-dark group-hover:text-amber-800'
+                    }`}
+                  >
                     {project.title}
                   </h4>
-                  <p className="text-xs font-semibold text-pastel-soft mt-0.5 break-words line-clamp-2">
+                  <p
+                    className={`text-xs font-semibold mt-0.5 break-words line-clamp-2 ${
+                      isPanda ? 'text-slate-300' : 'text-pastel-soft'
+                    }`}
+                  >
                     {project.tagline}
                   </p>
 
@@ -216,13 +305,23 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                     {project.technologies.slice(0, 4).map((tech, i) => (
                       <span
                         key={i}
-                        className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-pastel-warm border border-pastel-dark/30 text-pastel-dark"
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
+                          isPanda
+                            ? 'bg-[#141738] border border-purple-500/30 text-purple-200'
+                            : 'bg-pastel-warm border border-pastel-dark/30 text-pastel-dark'
+                        }`}
                       >
                         {tech}
                       </span>
                     ))}
                     {project.technologies.length > 4 && (
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-pastel-warm/60 text-pastel-dark/70">
+                      <span
+                        className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${
+                          isPanda
+                            ? 'bg-[#141738]/60 text-purple-300/70'
+                            : 'bg-pastel-warm/60 text-pastel-dark/70'
+                        }`}
+                      >
                         +{project.technologies.length - 4}
                       </span>
                     )}
@@ -230,11 +329,19 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex flex-wrap items-center justify-between gap-2 pt-3 mt-3 border-t border-pastel-dark/10">
+                <div
+                  className={`flex flex-wrap items-center justify-between gap-2 pt-3 mt-3 border-t ${
+                    isPanda ? 'border-purple-500/20' : 'border-pastel-dark/10'
+                  }`}
+                >
                   <button
                     type="button"
                     onClick={() => handleOpenInspect(project)}
-                    className="retro-btn text-xs px-2.5 py-1 bg-pastel-mint shrink-0"
+                    className={`retro-btn text-xs px-2.5 py-1 shrink-0 ${
+                      isPanda
+                        ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-purple-400/40 shadow-[0_0_10px_rgba(168,85,247,0.4)]'
+                        : 'bg-pastel-mint'
+                    }`}
                   >
                     <Eye size={12} strokeWidth={2.5} />
                     <span>Inspect</span>
@@ -246,10 +353,14 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                         href={project.sketchfab_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-1.5 rounded-full bg-pastel-sky/40 border border-pastel-dark hover:bg-pastel-sky transition-colors"
+                        className={`p-1.5 rounded-full border transition-colors ${
+                          isPanda
+                            ? 'bg-[#141738] border-purple-500/40 text-purple-300 hover:bg-purple-600 hover:text-white'
+                            : 'bg-pastel-sky/40 border-pastel-dark hover:bg-pastel-sky text-pastel-dark'
+                        }`}
                         title="View 3D Model on Sketchfab"
                       >
-                        <Box size={13} className="text-pastel-dark" />
+                        <Box size={13} />
                       </a>
                     )}
                     {project.github_url && (
@@ -257,7 +368,11 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                         href={project.github_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-1.5 rounded-full bg-white border border-pastel-dark hover:bg-pastel-peach transition-colors"
+                        className={`p-1.5 rounded-full border transition-colors ${
+                          isPanda
+                            ? 'bg-[#141738] border-purple-500/40 text-slate-300 hover:bg-purple-600 hover:text-white'
+                            : 'bg-white border-pastel-dark hover:bg-pastel-peach text-pastel-dark'
+                        }`}
                         title="GitHub Repository"
                       >
                         <Github size={13} />
@@ -268,7 +383,11 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                         href={project.video_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-1.5 rounded-full bg-white border border-pastel-dark hover:bg-pastel-pink transition-colors"
+                        className={`p-1.5 rounded-full border transition-colors ${
+                          isPanda
+                            ? 'bg-[#141738] border-purple-500/40 text-rose-400 hover:bg-rose-600 hover:text-white'
+                            : 'bg-white border-pastel-dark hover:bg-pastel-pink text-pastel-dark'
+                        }`}
                         title="Watch Video"
                       >
                         <Play size={13} />
@@ -279,7 +398,11 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                         href={project.demo_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-1.5 rounded-full bg-white border border-pastel-dark hover:bg-pastel-lavender transition-colors"
+                        className={`p-1.5 rounded-full border transition-colors ${
+                          isPanda
+                            ? 'bg-[#141738] border-purple-500/40 text-purple-300 hover:bg-purple-600 hover:text-white'
+                            : 'bg-white border-pastel-dark hover:bg-pastel-lavender text-pastel-dark'
+                        }`}
                         title="Interactive Project / Demo"
                       >
                         <ExternalLink size={13} />
@@ -295,11 +418,23 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
 
       {/* Project Detail Modal */}
       {activeProject && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
-          <div className="retro-window max-w-xl w-full bg-[#fffcf3] overflow-hidden animate-in fade-in zoom-in-95 max-h-[90vh] flex flex-col">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div
+            className={`max-w-xl w-full overflow-hidden animate-in fade-in zoom-in-95 max-h-[90vh] flex flex-col rounded-2xl ${
+              isPanda
+                ? 'bg-[#0c0f24] border-2 border-purple-500/50 shadow-[0_0_40px_rgba(168,85,247,0.4)] text-slate-100'
+                : 'retro-window bg-[#fffcf3]'
+            }`}
+          >
             {/* Header */}
-            <div className="bg-pastel-peach px-4 py-2.5 border-b-[3px] border-pastel-dark flex items-center justify-between shrink-0">
-              <h3 className="font-extrabold text-sm text-pastel-dark flex items-center gap-2">
+            <div
+              className={`px-4 py-2.5 flex items-center justify-between shrink-0 ${
+                isPanda
+                  ? 'bg-gradient-to-r from-[#17193c] via-[#241c48] to-[#17193c] border-b border-purple-500/40 text-white'
+                  : 'bg-pastel-peach border-b-[3px] border-pastel-dark text-pastel-dark'
+              }`}
+            >
+              <h3 className="font-extrabold text-sm flex items-center gap-2">
                 <span>{activeProject.model_embed_url ? '🗿' : '👾'}</span>
                 <span>{activeProject.title}</span>
               </h3>
@@ -309,7 +444,11 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                   soundFX.playWindowClose();
                   setActiveProject(null);
                 }}
-                className="w-6 h-6 rounded-full bg-white border-2 border-pastel-dark flex items-center justify-center hover:bg-pastel-coral hover:text-white transition-colors cursor-pointer"
+                className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
+                  isPanda
+                    ? 'bg-white/10 hover:bg-rose-500 text-white'
+                    : 'bg-white border-2 border-pastel-dark hover:bg-pastel-coral hover:text-white text-pastel-dark'
+                }`}
               >
                 <X size={12} strokeWidth={3} />
               </button>
@@ -317,22 +456,35 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
 
             {/* Scrollable Content */}
             <div className="p-4 sm:p-5 space-y-3.5 overflow-y-auto flex-1">
-              {/* Media Visual Area: Photo or Interactive 3D */}
+              {/* Media Visual Area */}
               <div className="space-y-2">
-                {/* Switcher if 3D model is available */}
                 {activeProject.model_embed_url && (
                   <div className="flex items-center justify-between gap-2 pb-1">
-                    <span className="text-[11px] font-extrabold text-pastel-dark flex items-center gap-1">
+                    <span
+                      className={`text-[11px] font-extrabold flex items-center gap-1 ${
+                        isPanda ? 'text-purple-300' : 'text-pastel-dark'
+                      }`}
+                    >
                       <span>Visual Showcase</span>
                     </span>
-                    <div className="flex items-center gap-1 bg-white p-0.5 rounded-full border border-pastel-dark shadow-xs">
+                    <div
+                      className={`flex items-center gap-1 p-0.5 rounded-full border shadow-xs ${
+                        isPanda
+                          ? 'bg-[#121633] border-purple-500/30'
+                          : 'bg-white border-pastel-dark'
+                      }`}
+                    >
                       <button
                         type="button"
                         onClick={() => setViewMode('photo')}
                         className={`px-2.5 py-0.5 text-[11px] font-bold rounded-full transition-colors flex items-center gap-1 ${
                           viewMode === 'photo'
-                            ? 'bg-pastel-peach text-pastel-dark border border-pastel-dark shadow-xs'
-                            : 'text-pastel-dark/70 hover:text-pastel-dark'
+                            ? isPanda
+                              ? 'bg-purple-600 text-white shadow-xs'
+                              : 'bg-pastel-peach text-pastel-dark border border-pastel-dark shadow-xs'
+                            : isPanda
+                              ? 'text-slate-400 hover:text-white'
+                              : 'text-pastel-dark/70 hover:text-pastel-dark'
                         }`}
                       >
                         <ImageIcon size={12} />
@@ -343,8 +495,12 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                         onClick={() => setViewMode('3d')}
                         className={`px-2.5 py-0.5 text-[11px] font-bold rounded-full transition-colors flex items-center gap-1 ${
                           viewMode === '3d'
-                            ? 'bg-pastel-sky text-pastel-dark border border-pastel-dark shadow-xs'
-                            : 'text-pastel-dark/70 hover:text-pastel-dark'
+                            ? isPanda
+                              ? 'bg-purple-600 text-white shadow-xs'
+                              : 'bg-pastel-sky text-pastel-dark border border-pastel-dark shadow-xs'
+                            : isPanda
+                              ? 'text-slate-400 hover:text-white'
+                              : 'text-pastel-dark/70 hover:text-pastel-dark'
                         }`}
                       >
                         <Box size={12} />
@@ -355,7 +511,13 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                 )}
 
                 {/* Display Frame */}
-                <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-retro-sm bg-[#dedede] border-2 border-pastel-dark overflow-hidden flex items-center justify-center shadow-sm">
+                <div
+                  className={`relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-xl overflow-hidden flex items-center justify-center shadow-sm ${
+                    isPanda
+                      ? 'bg-[#080a18] border border-purple-500/40'
+                      : 'bg-[#dedede] border-2 border-pastel-dark'
+                  }`}
+                >
                   {viewMode === '3d' && activeProject.model_embed_url ? (
                     <iframe
                       title={`${activeProject.title} Interactive 3D Model`}
@@ -371,22 +533,35 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                       className="w-full h-full object-contain"
                     />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-pastel-peach via-pastel-lavender to-pastel-mint flex flex-col items-center justify-center text-center p-4">
+                    <div
+                      className={`w-full h-full flex flex-col items-center justify-center text-center p-4 ${
+                        isPanda
+                          ? 'bg-gradient-to-br from-[#121633] via-[#1f1638] to-[#121633]'
+                          : 'bg-gradient-to-br from-pastel-peach via-pastel-lavender to-pastel-mint'
+                      }`}
+                    >
                       <span className="text-4xl filter drop-shadow">
                         {activeProject.category === 'game-dev' ? '⚔️' : activeProject.category === 'cinematography' ? '🎬' : '💀'}
                       </span>
-                      <h4 className="font-extrabold text-base text-pastel-dark mt-2">
+                      <h4
+                        className={`font-extrabold text-base mt-2 ${
+                          isPanda ? 'text-white' : 'text-pastel-dark'
+                        }`}
+                      >
                         {activeProject.title}
                       </h4>
                     </div>
                   )}
 
-                  {/* Overlay button to switch to 3D if in photo mode */}
                   {viewMode === 'photo' && activeProject.model_embed_url && (
                     <button
                       type="button"
                       onClick={() => setViewMode('3d')}
-                      className="absolute bottom-2.5 right-2.5 retro-btn text-[11px] px-2.5 py-1 bg-pastel-sky text-pastel-dark shadow-md flex items-center gap-1.5"
+                      className={`absolute bottom-2.5 right-2.5 retro-btn text-[11px] px-2.5 py-1 shadow-md flex items-center gap-1.5 ${
+                        isPanda
+                          ? 'bg-purple-600 text-white border-purple-400/50'
+                          : 'bg-pastel-sky text-pastel-dark'
+                      }`}
                     >
                       <Box size={13} />
                       <span>Rotate in 3D</span>
@@ -394,10 +569,16 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                   )}
                 </div>
 
-                {/* Gallery Thumbnails if available */}
+                {/* Gallery Thumbnails */}
                 {activeProject.gallery_images && activeProject.gallery_images.length > 1 && (
                   <div className="flex items-center gap-2 pt-1">
-                    <span className="text-[10px] font-bold text-pastel-soft uppercase">Views:</span>
+                    <span
+                      className={`text-[10px] font-bold uppercase ${
+                        isPanda ? 'text-purple-300/70' : 'text-pastel-soft'
+                      }`}
+                    >
+                      Views:
+                    </span>
                     <div className="flex items-center gap-1.5">
                       {activeProject.gallery_images.map((imgUrl, idx) => (
                         <button
@@ -407,10 +588,14 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                             setSelectedImage(imgUrl);
                             setViewMode('photo');
                           }}
-                          className={`w-12 h-9 rounded-md border-2 overflow-hidden transition-all bg-[#dedede] ${
+                          className={`w-12 h-9 rounded-md border-2 overflow-hidden transition-all ${
                             selectedImage === imgUrl && viewMode === 'photo'
-                              ? 'border-pastel-dark scale-105 shadow-xs'
-                              : 'border-pastel-dark/30 hover:border-pastel-dark'
+                              ? isPanda
+                                ? 'border-purple-400 scale-105 shadow-md'
+                                : 'border-pastel-dark scale-105 shadow-xs'
+                              : isPanda
+                                ? 'border-purple-500/30 hover:border-purple-400'
+                                : 'border-pastel-dark/30 hover:border-pastel-dark'
                           }`}
                         >
                           <img
@@ -426,69 +611,87 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
               </div>
 
               {/* Role & Specs Box */}
-              <div className="p-3 bg-white border-2 border-pastel-dark rounded-retro-sm">
-                <span className="text-[11px] font-bold text-pastel-soft uppercase">Role & Focus:</span>
-                <p className="font-bold text-sm text-pastel-dark mt-0.5">{activeProject.role}</p>
+              <div
+                className={`p-3 rounded-xl ${
+                  isPanda
+                    ? 'bg-[#121633]/90 border border-purple-500/30'
+                    : 'bg-white border-2 border-pastel-dark rounded-retro-sm'
+                }`}
+              >
+                <span
+                  className={`text-[11px] font-bold uppercase ${
+                    isPanda ? 'text-purple-300' : 'text-pastel-soft'
+                  }`}
+                >
+                  Role & Focus:
+                </span>
+                <p className={`font-bold text-sm mt-0.5 ${isPanda ? 'text-white' : 'text-pastel-dark'}`}>
+                  {activeProject.role}
+                </p>
 
                 <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
-                  <span className="font-semibold text-pastel-soft">Discipline:</span>
+                  <span className={isPanda ? 'text-slate-400 font-semibold' : 'text-pastel-soft font-semibold'}>
+                    Discipline:
+                  </span>
                   <span
-                    className={`px-2 py-0.5 rounded-full border border-pastel-dark font-extrabold text-[10px] ${
+                    className={`px-2 py-0.5 rounded-full font-extrabold text-[10px] ${
                       activeProject.category === 'cinematography'
-                        ? 'bg-pastel-lavender text-pastel-dark'
-                        : 'bg-pastel-mint text-pastel-dark'
+                        ? isPanda
+                          ? 'bg-indigo-900/60 border border-indigo-400/40 text-indigo-200'
+                          : 'bg-pastel-lavender border border-pastel-dark text-pastel-dark'
+                        : isPanda
+                          ? 'bg-purple-900/60 border border-purple-400/40 text-purple-200'
+                          : 'bg-pastel-mint border border-pastel-dark text-pastel-dark'
                     }`}
                   >
                     {activeProject.category === 'cinematography'
                       ? '🎬 Personal Creative Hobby'
                       : '💼 Professional Game Dev / 3D Art'}
                   </span>
-                  <span className="font-semibold text-pastel-soft ml-1">Status:</span>
-                  <span className="px-2 py-0.5 rounded-full bg-pastel-warm border border-pastel-dark font-bold text-[10px]">
+                  <span className={`font-semibold ml-1 ${isPanda ? 'text-slate-400' : 'text-pastel-soft'}`}>
+                    Status:
+                  </span>
+                  <span
+                    className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
+                      isPanda
+                        ? 'bg-[#141738] border border-purple-500/30 text-purple-200'
+                        : 'bg-pastel-warm border border-pastel-dark text-pastel-dark'
+                    }`}
+                  >
                     {activeProject.status}
                   </span>
                 </div>
-
-                {/* 3D Model Specs if available */}
-                {(activeProject.triangles_count || activeProject.vertices_count) && (
-                  <div className="mt-2.5 pt-2 border-t border-pastel-dark/15 flex flex-wrap gap-2 text-[11px]">
-                    {activeProject.triangles_count && (
-                      <span className="px-2 py-0.5 rounded-md bg-pastel-warm/60 border border-pastel-dark/30 font-bold text-pastel-dark">
-                        🔺 Triangles: <strong>{activeProject.triangles_count}</strong>
-                      </span>
-                    )}
-                    {activeProject.vertices_count && (
-                      <span className="px-2 py-0.5 rounded-md bg-pastel-warm/60 border border-pastel-dark/30 font-bold text-pastel-dark">
-                        🔹 Vertices: <strong>{activeProject.vertices_count}</strong>
-                      </span>
-                    )}
-                    <span className="px-2 py-0.5 rounded-md bg-pastel-mint/50 border border-pastel-dark/30 font-bold text-pastel-dark">
-                      ✨ Real-Time PBR Workflow
-                    </span>
-                  </div>
-                )}
               </div>
 
-              {/* Project Overview */}
-              <div>
-                <h4 className="font-bold text-xs uppercase tracking-wider text-pastel-soft mb-1">
-                  Project Overview
-                </h4>
-                <p className="text-xs sm:text-sm text-pastel-dark leading-relaxed whitespace-pre-line bg-pastel-warm/50 p-3 rounded-retro-sm border border-pastel-dark/20">
-                  {activeProject.description}
-                </p>
+              {/* Description */}
+              <div
+                className={`p-3 rounded-xl text-xs sm:text-[13px] leading-relaxed ${
+                  isPanda
+                    ? 'bg-[#0f122c]/80 border border-purple-500/20 text-slate-300'
+                    : 'bg-pastel-warm/50 border border-pastel-dark/20 text-pastel-dark'
+                }`}
+              >
+                <p>{activeProject.description}</p>
               </div>
 
               {/* Tech Stack */}
               <div>
-                <h4 className="font-bold text-xs uppercase tracking-wider text-pastel-soft mb-1.5">
-                  Tech Stack & Pipeline
-                </h4>
+                <span
+                  className={`text-[11px] font-bold uppercase tracking-wider block mb-1.5 ${
+                    isPanda ? 'text-purple-300' : 'text-pastel-soft'
+                  }`}
+                >
+                  Technologies & Shaders:
+                </span>
                 <div className="flex flex-wrap gap-1.5">
-                  {activeProject.technologies.map((tech, idx) => (
+                  {activeProject.technologies.map((tech, i) => (
                     <span
-                      key={idx}
-                      className="text-xs font-bold px-2.5 py-1 rounded-full bg-white border border-pastel-dark shadow-xs"
+                      key={i}
+                      className={`text-xs font-bold px-2.5 py-1 rounded-lg ${
+                        isPanda
+                          ? 'bg-[#141738] border border-purple-500/30 text-purple-200'
+                          : 'bg-white border border-pastel-dark text-pastel-dark shadow-xs'
+                      }`}
                     >
                       {tech}
                     </span>
@@ -496,29 +699,25 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                 </div>
               </div>
 
-              {/* External Links */}
-              <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-pastel-dark/15">
-                {activeProject.sketchfab_url && (
-                  <a
-                    href={activeProject.sketchfab_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ backgroundColor: '#1caad9', color: '#ffffff' }}
-                    className="retro-btn retro-btn-sketchfab text-xs !bg-[#1caad9] !text-white hover:!bg-[#1594be] shadow-sm"
-                  >
-                    <Box size={13} className="text-white shrink-0" />
-                    <span className="text-white font-extrabold">View on Sketchfab 3D</span>
-                  </a>
-                )}
-                {activeProject.demo_url && activeProject.demo_url !== activeProject.sketchfab_url && (
+              {/* Links Action */}
+              <div
+                className={`flex flex-wrap items-center gap-2 pt-3 border-t ${
+                  isPanda ? 'border-purple-500/20' : 'border-pastel-dark/15'
+                }`}
+              >
+                {activeProject.demo_url && (
                   <a
                     href={activeProject.demo_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="retro-btn retro-btn-mint text-xs"
+                    className={`retro-btn text-xs px-3 py-1.5 ${
+                      isPanda
+                        ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-[0_0_12px_rgba(168,85,247,0.5)]'
+                        : 'bg-pastel-mint'
+                    }`}
                   >
-                    <ExternalLink size={12} />
-                    <span>Live Demo</span>
+                    <ExternalLink size={13} />
+                    <span>Live Interactive Demo</span>
                   </a>
                 )}
                 {activeProject.github_url && (
@@ -526,30 +725,31 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                     href={activeProject.github_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="retro-btn text-xs bg-white"
+                    className={`retro-btn text-xs px-3 py-1.5 ${
+                      isPanda
+                        ? 'bg-[#141738] border-purple-500/40 text-white hover:bg-purple-600'
+                        : 'bg-white'
+                    }`}
                   >
-                    <Github size={12} />
+                    <Github size={13} />
                     <span>View Repository</span>
                   </a>
                 )}
-                {activeProject.video_url && (
+                {activeProject.sketchfab_url && (
                   <a
-                    href={activeProject.video_url}
+                    href={activeProject.sketchfab_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="retro-btn retro-btn-primary text-xs"
+                    className={`retro-btn text-xs px-3 py-1.5 ${
+                      isPanda
+                        ? 'bg-[#141738] border-purple-500/40 text-purple-300 hover:bg-purple-600 hover:text-white'
+                        : 'bg-pastel-sky'
+                    }`}
                   >
-                    <Play size={12} />
-                    <span>Watch Showcase</span>
+                    <Box size={13} />
+                    <span>Sketchfab 3D Scene</span>
                   </a>
                 )}
-                <Link
-                  href={`/projects/${activeProject.slug}`}
-                  className="retro-btn text-xs bg-pastel-lavender ml-auto"
-                >
-                  <span>Standalone Page</span>
-                  <ExternalLink size={11} />
-                </Link>
               </div>
             </div>
           </div>

@@ -24,17 +24,17 @@ interface SkillsWindowProps {
 }
 
 const iconMap: Record<string, React.ReactNode> = {
-  Flame: <Flame className="w-5 h-5 text-amber-600" />,
-  Box: <Box className="w-5 h-5 text-blue-600" />,
-  BoxSelect: <BoxSelect className="w-5 h-5 text-orange-600" />,
-  Sparkles: <Sparkles className="w-5 h-5 text-purple-600" />,
-  Palette: <Palette className="w-5 h-5 text-pink-600" />,
-  Code: <Code className="w-5 h-5 text-emerald-600" />,
-  Terminal: <Terminal className="w-5 h-5 text-teal-600" />,
-  Video: <Video className="w-5 h-5 text-rose-600" />,
-  Zap: <Zap className="w-5 h-5 text-yellow-600" />,
-  Layers: <Layers className="w-5 h-5 text-indigo-600" />,
-  Wrench: <Wrench className="w-5 h-5 text-gray-600" />,
+  Flame: <Flame className="w-5 h-5 text-amber-500" />,
+  Box: <Box className="w-5 h-5 text-cyan-400" />,
+  BoxSelect: <BoxSelect className="w-5 h-5 text-orange-400" />,
+  Sparkles: <Sparkles className="w-5 h-5 text-purple-400" />,
+  Palette: <Palette className="w-5 h-5 text-pink-400" />,
+  Code: <Code className="w-5 h-5 text-emerald-400" />,
+  Terminal: <Terminal className="w-5 h-5 text-teal-400" />,
+  Video: <Video className="w-5 h-5 text-rose-400" />,
+  Zap: <Zap className="w-5 h-5 text-yellow-400" />,
+  Layers: <Layers className="w-5 h-5 text-indigo-400" />,
+  Wrench: <Wrench className="w-5 h-5 text-slate-400" />,
 };
 
 export const SkillsWindow: React.FC<SkillsWindowProps> = ({ skills }) => {
@@ -56,18 +56,36 @@ export const SkillsWindow: React.FC<SkillsWindowProps> = ({ skills }) => {
   return (
     <div className="space-y-3">
       {/* Scope banner */}
-      <div className="flex flex-wrap items-center justify-between gap-1.5 p-1.5 sm:p-2 bg-pastel-mint/30 border border-pastel-dark rounded-retro-sm text-[10.5px] text-pastel-dark shadow-xs">
+      <div
+        className={`flex flex-wrap items-center justify-between gap-1.5 p-2 rounded-retro-sm text-[10.5px] shadow-xs ${
+          isPanda
+            ? 'bg-[#121633]/90 border border-purple-500/30 text-purple-200'
+            : 'bg-pastel-mint/30 border border-pastel-dark text-pastel-dark'
+        }`}
+      >
         <div className="flex items-center gap-1.5">
-          <span className="font-extrabold text-[11px]">{isPanda ? '🐾 Panda Dev Career Focus:' : '💼 Career Focus:'}</span>
+          <span className="font-extrabold text-[11px]">
+            {isPanda ? '🐾 Panda Dev Career Focus:' : '💼 Career Focus:'}
+          </span>
           <span>Unreal Engine 5 Game Developer & 3D Character/Asset Artist</span>
         </div>
-        <span className="text-[9.5px] font-bold px-2 py-0.2 rounded-full bg-pastel-lavender border border-pastel-dark shrink-0">
+        <span
+          className={`text-[9.5px] font-bold px-2 py-0.2 rounded-full shrink-0 ${
+            isPanda
+              ? 'bg-purple-900/60 border border-purple-500/40 text-purple-200'
+              : 'bg-pastel-lavender border border-pastel-dark text-pastel-dark'
+          }`}
+        >
           {isPanda ? '🎬 Filmmaking = Creative Hobby 🎋' : '🎬 Filmmaking = Personal Creative Hobby'}
         </span>
       </div>
 
       {/* Category Filter Pills / Tabs */}
-      <div className="flex overflow-x-auto no-scrollbar gap-1 pb-1 border-b border-pastel-dark/10 touch-pan-x sm:flex-wrap">
+      <div
+        className={`flex overflow-x-auto no-scrollbar gap-1 pb-1 border-b touch-pan-x sm:flex-wrap ${
+          isPanda ? 'border-purple-500/20' : 'border-pastel-dark/10'
+        }`}
+      >
         {categories.map((cat) => (
           <button
             key={cat.value}
@@ -76,10 +94,14 @@ export const SkillsWindow: React.FC<SkillsWindowProps> = ({ skills }) => {
               soundFX.playClick(620);
               setSelectedCategory(cat.value);
             }}
-            className={`retro-btn text-[10.5px] sm:text-xs px-2.5 py-1 whitespace-nowrap shrink-0 ${
+            className={`retro-btn text-[10.5px] sm:text-xs px-2.5 py-1 whitespace-nowrap shrink-0 transition-all ${
               selectedCategory === cat.value
-                ? 'bg-pastel-pink shadow-[2px_2px_0_#3d3d3d] -translate-y-0.5'
-                : 'bg-white hover:bg-pastel-peach/50'
+                ? isPanda
+                  ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white border-purple-400/50 shadow-[0_0_12px_rgba(168,85,247,0.5)]'
+                  : 'bg-pastel-pink shadow-[2px_2px_0_#3d3d3d] -translate-y-0.5'
+                : isPanda
+                  ? 'bg-[#121633] border border-purple-500/30 text-slate-300 hover:bg-[#1a1f46]'
+                  : 'bg-white hover:bg-pastel-peach/50 text-pastel-dark'
             }`}
           >
             {cat.label}
@@ -90,32 +112,62 @@ export const SkillsWindow: React.FC<SkillsWindowProps> = ({ skills }) => {
       {/* Skills Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         {filteredSkills.map((skill) => {
-          const icon = iconMap[skill.icon_name] || <Wrench className="w-4 h-4 text-gray-600" />;
+          const icon = iconMap[skill.icon_name] || <Wrench className="w-4 h-4 text-slate-400" />;
           const isHobby = skill.category === 'cinematography';
           return (
             <div
               key={skill.id}
-              className="retro-card flex items-start gap-2.5 p-2 sm:p-2.5 bg-white min-w-0"
+              className={`flex items-start gap-2.5 p-2 sm:p-2.5 min-w-0 rounded-xl transition-all ${
+                isPanda
+                  ? 'bg-[#0c0f24]/90 border border-purple-500/30 shadow-[0_0_15px_rgba(139,92,246,0.12)] hover:border-purple-400/70 text-slate-100'
+                  : 'retro-card bg-white'
+              }`}
             >
-              <div className="p-1.5 rounded-lg bg-pastel-warm border border-pastel-dark/30 shrink-0 shadow-xs">
+              <div
+                className={`p-2 rounded-lg shrink-0 shadow-xs flex items-center justify-center ${
+                  isPanda
+                    ? 'bg-[#141738] border border-purple-500/30 shadow-[0_0_8px_rgba(139,92,246,0.2)]'
+                    : 'bg-pastel-warm border border-pastel-dark/30'
+                }`}
+              >
                 {icon}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-1 flex-wrap">
-                  <h4 className="font-extrabold text-xs sm:text-[13px] text-pastel-dark break-words">
+                  <h4
+                    className={`font-extrabold text-xs sm:text-[13px] break-words ${
+                      isPanda ? 'text-white' : 'text-pastel-dark'
+                    }`}
+                  >
                     {skill.name}
                   </h4>
                   {isHobby ? (
-                    <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded-full bg-pastel-lavender border border-pastel-dark text-pastel-dark shrink-0">
+                    <span
+                      className={`text-[9px] font-extrabold px-1.5 py-0.2 rounded-full shrink-0 ${
+                        isPanda
+                          ? 'bg-indigo-900/60 border border-indigo-400/40 text-indigo-200'
+                          : 'bg-pastel-lavender border border-pastel-dark text-pastel-dark'
+                      }`}
+                    >
                       🎬 Hobby
                     </span>
                   ) : skill.is_highlight ? (
-                    <span className="text-[9px] font-extrabold px-1.5 py-0.2 rounded-full bg-pastel-mint border border-pastel-dark text-pastel-dark shrink-0">
+                    <span
+                      className={`text-[9px] font-extrabold px-1.5 py-0.2 rounded-full shrink-0 ${
+                        isPanda
+                          ? 'bg-purple-900/60 border border-purple-400/40 text-purple-200 shadow-xs'
+                          : 'bg-pastel-mint border border-pastel-dark text-pastel-dark'
+                      }`}
+                    >
                       💼 Core
                     </span>
                   ) : null}
                 </div>
-                <p className="text-[10px] sm:text-[11px] font-semibold text-pastel-soft mt-0.5 break-words">
+                <p
+                  className={`text-[10px] sm:text-[11px] font-semibold mt-0.5 break-words ${
+                    isPanda ? 'text-slate-300' : 'text-pastel-soft'
+                  }`}
+                >
                   {skill.proficiency_level}
                 </p>
               </div>
@@ -125,8 +177,17 @@ export const SkillsWindow: React.FC<SkillsWindowProps> = ({ skills }) => {
       </div>
 
       {/* Production Pipeline Note */}
-      <div className="p-2 sm:p-2.5 bg-pastel-lavender/40 border border-pastel-dark rounded-retro-sm text-[10.5px] text-pastel-dark flex items-center gap-2 break-words">
-        <CheckCircle2 size={14} className="text-pastel-dark shrink-0" />
+      <div
+        className={`p-2 sm:p-2.5 rounded-retro-sm text-[10.5px] flex items-center gap-2 break-words ${
+          isPanda
+            ? 'bg-[#0f122c]/80 border border-purple-500/30 text-purple-200'
+            : 'bg-pastel-lavender/40 border border-pastel-dark text-pastel-dark'
+        }`}
+      >
+        <CheckCircle2
+          size={14}
+          className={`shrink-0 ${isPanda ? 'text-purple-400' : 'text-pastel-dark'}`}
+        />
         <span className="break-words">
           End-to-end pipeline: Concept ➔ 3D Sculpt & Modeling ➔ Blender Retopology & Rigging ➔ Substance PBR Texturing ➔ Unreal/Godot Integration & Shaders.
         </span>

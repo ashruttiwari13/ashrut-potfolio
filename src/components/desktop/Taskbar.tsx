@@ -69,7 +69,11 @@ export const Taskbar: React.FC<TaskbarProps> = ({
         style={{
           top: 'max(0.375rem, env(safe-area-inset-top, 0.375rem))',
         }}
-        className="fixed left-2 right-[74px] sm:right-[100px] z-[300] flex md:hidden items-center justify-between gap-1.5 px-2.5 py-1 bg-[rgba(255,250,240,0.96)] backdrop-blur-md rounded-2xl border-2 border-pastel-dark shadow-retro-sm text-xs font-bold pointer-events-auto select-none"
+        className={`fixed left-2 right-[74px] sm:right-[100px] z-[300] flex md:hidden items-center justify-between gap-1.5 px-2.5 py-1 backdrop-blur-md rounded-2xl border-2 shadow-retro-sm text-xs font-bold pointer-events-auto select-none transition-colors duration-300 ${
+          isPanda 
+            ? 'bg-[#0c0f22]/92 border-purple-500/40 text-white shadow-[0_4px_20px_rgba(0,0,0,0.6)]' 
+            : 'bg-[rgba(255,250,240,0.96)] border-pastel-dark text-pastel-dark'
+        }`}
       >
         {/* Left: System Status Pill */}
         <button
@@ -78,10 +82,14 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             soundFX.playClick(620);
             if (onOpenContact) onOpenContact();
           }}
-          className="flex items-center gap-1 px-2 py-0.5 bg-pastel-mint/90 rounded-full border border-pastel-dark text-pastel-dark text-[9.5px] font-extrabold hover:bg-pastel-peach active:scale-95 transition-all truncate"
+          className={`flex items-center gap-1 px-2 py-0.5 rounded-full border text-[9.5px] font-extrabold active:scale-95 transition-all truncate ${
+            isPanda 
+              ? 'bg-purple-950/80 border-purple-500/40 text-purple-200 hover:bg-purple-900' 
+              : 'bg-pastel-mint/90 border-pastel-dark text-pastel-dark hover:bg-pastel-peach'
+          }`}
           title="Open for Freelance Opportunities - Click to Hire Me"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping shrink-0" />
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping shrink-0" />
           <span className="truncate">{isPanda ? '🐼 Ashrut · Hire 🎋' : '👾 Ashrut · Hire'}</span>
         </button>
 
@@ -91,7 +99,11 @@ export const Taskbar: React.FC<TaskbarProps> = ({
           <button
             type="button"
             onClick={toggleTheme}
-            className="retro-btn text-[9.5px] px-2 py-0.5 bg-white hover:bg-pastel-peach active:scale-90 flex items-center gap-1"
+            className={`retro-btn text-[9.5px] px-2 py-0.5 active:scale-90 flex items-center gap-1 ${
+              isPanda 
+                ? 'bg-[#141833] text-white border-purple-500/40 hover:bg-purple-900' 
+                : 'bg-white text-pastel-dark hover:bg-pastel-peach'
+            }`}
             title={isPanda ? "Switch to Cat theme (click to shift)" : "Switch to Panda theme (click to shift)"}
             aria-label="Shift website theme"
           >
@@ -103,15 +115,23 @@ export const Taskbar: React.FC<TaskbarProps> = ({
           <button
             type="button"
             onClick={handleMinimizeAll}
-            className="retro-btn text-[9.5px] px-2 py-0.5 bg-white hover:bg-pastel-sky active:scale-90"
+            className={`retro-btn text-[9.5px] px-2 py-0.5 active:scale-90 ${
+              isPanda 
+                ? 'bg-[#141833] text-white border-purple-500/40 hover:bg-purple-900' 
+                : 'bg-white text-pastel-dark hover:bg-pastel-sky'
+            }`}
             title="Minimize all windows to see desktop"
           >
-            <Sparkles size={10} strokeWidth={2.5} className="text-emerald-600" />
+            <Sparkles size={10} strokeWidth={2.5} className={isPanda ? "text-purple-300" : "text-emerald-600"} />
             <span>{isPanda ? 'Desk 🎋' : 'Desk'}</span>
           </button>
 
           {/* Clock */}
-          <div className="flex items-center gap-1 px-1.5 py-0.5 bg-white rounded-full border border-pastel-dark text-pastel-dark text-[9.5px] font-bold">
+          <div className={`flex items-center gap-1 px-1.5 py-0.5 rounded-full border text-[9.5px] font-bold ${
+            isPanda 
+              ? 'bg-[#10142c] border-purple-500/30 text-purple-200' 
+              : 'bg-white border-pastel-dark text-pastel-dark'
+          }`}>
             <Clock size={9} strokeWidth={2.5} />
             <span>{time || '--:--'}</span>
           </div>
@@ -122,25 +142,35 @@ export const Taskbar: React.FC<TaskbarProps> = ({
       <footer 
         role="region"
         aria-label="Desktop taskbar"
-        className="fixed bottom-3 right-4 z-[300] hidden md:flex items-center bg-[rgba(255,255,255,0.96)] backdrop-blur-md rounded-full border-[2.5px] border-pastel-dark shadow-retro text-xs font-bold pointer-events-auto select-none transition-all duration-300 ease-out"
+        className={`fixed bottom-3 right-4 z-[300] hidden md:flex items-center backdrop-blur-md rounded-full border-[2.5px] shadow-retro text-xs font-bold pointer-events-auto select-none transition-all duration-300 ease-out ${
+          isPanda 
+            ? 'bg-[#0c0f22]/90 border-purple-500/40 text-white shadow-[0_8px_32px_rgba(0,0,0,0.7),0_0_20px_rgba(139,92,246,0.25)]' 
+            : 'bg-[rgba(255,255,255,0.96)] border-pastel-dark text-pastel-dark'
+        }`}
       >
         {!isExpanded ? (
           /* Compressed / Compact State: Click anywhere to open sideways */
           <button
             type="button"
             onClick={handleToggleExpand}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-pastel-mint/30 active:scale-95 transition-all cursor-pointer group"
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-full active:scale-95 transition-all cursor-pointer group ${
+              isPanda ? 'hover:bg-purple-900/30 text-white' : 'hover:bg-pastel-mint/30 text-pastel-dark'
+            }`}
             title="Click to expand toolbar sideways"
             aria-expanded={false}
           >
-            <div className="p-1 rounded-full bg-pastel-mint border border-pastel-dark group-hover:-translate-x-0.5 transition-transform flex items-center justify-center">
-              <ChevronLeft size={13} strokeWidth={3} className="text-pastel-dark" />
+            <div className={`p-1 rounded-full border group-hover:-translate-x-0.5 transition-transform flex items-center justify-center ${
+              isPanda ? 'bg-purple-900 border-purple-400 text-purple-200' : 'bg-pastel-mint border-pastel-dark text-pastel-dark'
+            }`}>
+              <ChevronLeft size={13} strokeWidth={3} />
             </div>
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
-            <span className="text-[11.5px] text-pastel-dark font-extrabold tracking-tight">
-              {isPanda ? 'Panda OS 🎋' : 'Retro OS 🐱'}
+            <span className={`w-2 h-2 rounded-full animate-ping shrink-0 ${isPanda ? 'bg-purple-400 shadow-[0_0_8px_#c084fc]' : 'bg-emerald-500'}`} />
+            <span className="text-[11.5px] font-extrabold tracking-tight">
+              {isPanda ? 'Moonlit Panda 🎋' : 'Retro OS 🐱'}
             </span>
-            <div className="flex items-center gap-1 px-2.5 py-0.5 bg-white rounded-full border border-pastel-dark text-pastel-dark text-[10.5px]">
+            <div className={`flex items-center gap-1 px-2.5 py-0.5 rounded-full border text-[10.5px] ${
+              isPanda ? 'bg-[#121630] border-purple-500/30 text-purple-200' : 'bg-white border-pastel-dark text-pastel-dark'
+            }`}>
               <Clock size={10} strokeWidth={2.5} />
               <span>{time || '--:--'}</span>
             </div>
@@ -152,7 +182,11 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             <button
               type="button"
               onClick={handleToggleExpand}
-              className="p-1 sm:p-1.5 rounded-full bg-pastel-mint hover:bg-pastel-peach border border-pastel-dark text-pastel-dark transition-all cursor-pointer hover:translate-x-0.5 active:scale-90"
+              className={`p-1 sm:p-1.5 rounded-full border transition-all cursor-pointer hover:translate-x-0.5 active:scale-90 ${
+                isPanda 
+                  ? 'bg-purple-950 border-purple-400 text-purple-200 hover:bg-purple-900' 
+                  : 'bg-pastel-mint border-pastel-dark text-pastel-dark hover:bg-pastel-peach'
+              }`}
               title="Compress toolbar sideways"
               aria-expanded={true}
               aria-label="Compress toolbar"
@@ -167,10 +201,14 @@ export const Taskbar: React.FC<TaskbarProps> = ({
                 soundFX.playClick(620);
                 if (onOpenContact) onOpenContact();
               }}
-              className="flex items-center gap-1.5 px-2.5 py-1 bg-pastel-mint/90 hover:bg-pastel-mint rounded-full border border-pastel-dark text-pastel-dark cursor-pointer transition-colors"
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border cursor-pointer transition-colors ${
+                isPanda 
+                  ? 'bg-purple-950/80 border-purple-500/40 text-purple-200 hover:bg-purple-900' 
+                  : 'bg-pastel-mint/90 border-pastel-dark text-pastel-dark hover:bg-pastel-mint'
+              }`}
               title="Open for Freelance Opportunities - Click to message"
             >
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
+              <span className={`w-2 h-2 rounded-full animate-ping shrink-0 ${isPanda ? 'bg-purple-400' : 'bg-emerald-500'}`} />
               <span className="text-[11px] whitespace-nowrap">
                 {isPanda ? 'Open for Freelance 🎋' : 'Open for Freelance'}
               </span>
@@ -180,13 +218,19 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             <button
               type="button"
               onClick={toggleTheme}
-              className="retro-btn text-[11px] px-2.5 py-1 bg-white hover:bg-pastel-peach active:scale-95 flex items-center gap-1.5 transition-all shadow-retro-sm"
+              className={`retro-btn text-[11px] px-2.5 py-1 active:scale-95 flex items-center gap-1.5 transition-all shadow-retro-sm ${
+                isPanda 
+                  ? 'bg-[#141833] text-white border-purple-500/40 hover:bg-purple-900/50' 
+                  : 'bg-white text-pastel-dark hover:bg-pastel-peach'
+              }`}
               title={isPanda ? "Currently Panda Theme. Click to switch to Cat Theme 🐱" : "Currently Cat Theme. Click to switch to Panda Theme 🐼"}
               aria-label="Shift between Panda and Cat themes"
             >
               <span className="text-sm shrink-0">{isPanda ? '🐼' : '🐱'}</span>
               <span>{isPanda ? 'Panda Mode' : 'Cat Mode'}</span>
-              <span className="text-[8.5px] font-extrabold px-1.5 py-0.2 rounded-full bg-pastel-mint border border-pastel-dark text-pastel-dark shrink-0">
+              <span className={`text-[8.5px] font-extrabold px-1.5 py-0.2 rounded-full border shrink-0 ${
+                isPanda ? 'bg-purple-600 border-purple-400 text-white' : 'bg-pastel-mint border-pastel-dark text-pastel-dark'
+              }`}>
                 Shift ⇄
               </span>
             </button>
@@ -195,7 +239,9 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             <button
               type="button"
               onClick={handleResetWindows}
-              className="retro-btn text-[11px] px-2.5 py-1 bg-white hover:bg-pastel-peach"
+              className={`retro-btn text-[11px] px-2.5 py-1 ${
+                isPanda ? 'bg-[#141833] text-white border-purple-500/40 hover:bg-purple-900/50' : 'bg-white hover:bg-pastel-peach'
+              }`}
               title="Arrange windows to original positions"
             >
               <RotateCcw size={12} strokeWidth={2.5} />
@@ -205,7 +251,9 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             <button
               type="button"
               onClick={handleBringAllFront}
-              className="retro-btn text-[11px] px-2.5 py-1 bg-white hover:bg-pastel-lavender"
+              className={`retro-btn text-[11px] px-2.5 py-1 ${
+                isPanda ? 'bg-[#141833] text-white border-purple-500/40 hover:bg-purple-900/50' : 'bg-white hover:bg-pastel-lavender'
+              }`}
               title="Bring all open windows forward"
             >
               <Layers size={12} strokeWidth={2.5} />
@@ -215,15 +263,19 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             <button
               type="button"
               onClick={handleMinimizeAll}
-              className="retro-btn text-[11px] px-2.5 py-1 bg-white hover:bg-pastel-sky"
+              className={`retro-btn text-[11px] px-2.5 py-1 ${
+                isPanda ? 'bg-[#141833] text-white border-purple-500/40 hover:bg-purple-900/50' : 'bg-white hover:bg-pastel-sky'
+              }`}
               title="Minimize / hide all windows to reveal desktop"
             >
-              <Sparkles size={12} strokeWidth={2.5} />
+              <Sparkles size={12} strokeWidth={2.5} className={isPanda ? "text-purple-300" : ""} />
               <span>Desk</span>
             </button>
 
             {/* Clock */}
-            <div className="flex items-center gap-1 px-3 py-1 bg-white rounded-full border border-pastel-dark text-pastel-dark text-[11px]">
+            <div className={`flex items-center gap-1 px-3 py-1 rounded-full border text-[11px] ${
+              isPanda ? 'bg-[#10142c] border-purple-500/30 text-purple-200' : 'bg-white border-pastel-dark text-pastel-dark'
+            }`}>
               <Clock size={11} strokeWidth={2.5} />
               <span>{time || '--:--'}</span>
             </div>
@@ -232,10 +284,12 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             <Link
               href="/admin"
               onClick={() => soundFX.playClick(700)}
-              className="p-1.5 rounded-full bg-pastel-peach border border-pastel-dark hover:bg-pastel-pink transition-colors"
+              className={`p-1.5 rounded-full border transition-colors ${
+                isPanda ? 'bg-purple-950 border-purple-400 text-purple-200 hover:bg-purple-800' : 'bg-pastel-peach border-pastel-dark text-pastel-dark hover:bg-pastel-pink'
+              }`}
               title="Admin Dashboard"
             >
-              <ShieldCheck size={14} className="text-pastel-dark" />
+              <ShieldCheck size={14} />
             </Link>
           </div>
         )}
