@@ -118,14 +118,35 @@ export const IconDock: React.FC<IconDockProps> = ({
     >
       {/* Mascot Top Badge / Theme Switcher (Desktop only) */}
       <div className="relative hidden md:flex flex-col items-center mb-1">
-        {/* Cute Panda Ears on Dock Top */}
-        {isPanda && (
+        {/* Cute Ears on Dock Top */}
+        {isPanda ? (
           <div className="absolute -top-4 flex justify-between w-9 pointer-events-none">
             <div className="w-3.5 h-3.5 rounded-full bg-pastel-dark flex items-center justify-center">
               <div className="w-1.5 h-1.5 rounded-full bg-pastel-pink" />
             </div>
             <div className="w-3.5 h-3.5 rounded-full bg-pastel-dark flex items-center justify-center">
               <div className="w-1.5 h-1.5 rounded-full bg-pastel-pink" />
+            </div>
+          </div>
+        ) : (
+          <div className="absolute -top-3.5 flex justify-between w-9 pointer-events-none">
+            <div 
+              className="w-3.5 h-3.5 bg-pastel-dark flex items-center justify-center"
+              style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
+            >
+              <div 
+                className="w-1.5 h-1.5 bg-pastel-pink mt-0.5"
+                style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
+              />
+            </div>
+            <div 
+              className="w-3.5 h-3.5 bg-pastel-dark flex items-center justify-center"
+              style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
+            >
+              <div 
+                className="w-1.5 h-1.5 bg-pastel-pink mt-0.5"
+                style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
+              />
             </div>
           </div>
         )}

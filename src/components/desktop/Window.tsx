@@ -297,7 +297,7 @@ export const Window: React.FC<WindowProps> = ({
           : 'shadow-retro transition-all duration-200'
       }`}
     >
-      {/* Cute Panda Ears Frame */}
+      {/* Cute Ears Frame */}
       {isPanda && !isMaximized && (
         <div className="absolute -top-3.5 left-0 right-0 flex justify-between px-6 sm:px-8 pointer-events-none z-0">
           {/* Left Panda Ear */}
@@ -312,6 +312,36 @@ export const Window: React.FC<WindowProps> = ({
               <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-pastel-pink border border-pastel-dark/30" />
             </div>
             <span className="absolute -top-2.5 -right-1 text-xs select-none">🎋</span>
+          </div>
+        </div>
+      )}
+
+      {!isPanda && !isMaximized && (
+        <div className="absolute -top-3.5 left-0 right-0 flex justify-between px-6 sm:px-8 pointer-events-none z-0">
+          {/* Left Cat Ear */}
+          <div className="relative group/ear">
+            <div 
+              className="w-7 h-7 sm:w-8 sm:h-8 bg-pastel-dark border-2 border-pastel-dark shadow-[1.5px_1.5px_0_rgba(0,0,0,0.18)] flex items-center justify-center transition-transform duration-300 hover:rotate-[-14deg]"
+              style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
+            >
+              <div 
+                className="w-3.5 h-3.5 sm:w-4 sm:h-4 bg-pastel-pink mt-1"
+                style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
+              />
+            </div>
+          </div>
+          {/* Right Cat Ear with Sakura Blossom */}
+          <div className="relative group/ear">
+            <div 
+              className="w-7 h-7 sm:w-8 sm:h-8 bg-pastel-dark border-2 border-pastel-dark shadow-[1.5px_1.5px_0_rgba(0,0,0,0.18)] flex items-center justify-center transition-transform duration-300 hover:rotate-[14deg]"
+              style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
+            >
+              <div 
+                className="w-3.5 h-3.5 sm:w-4 sm:h-4 bg-pastel-pink mt-1"
+                style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
+              />
+            </div>
+            <span className="absolute -top-2.5 -right-1 text-xs select-none">🌸</span>
           </div>
         </div>
       )}
@@ -340,7 +370,7 @@ export const Window: React.FC<WindowProps> = ({
             {isPanda ? (
               <span className="text-xs sm:text-sm shrink-0">🐾</span>
             ) : (
-              <span className="w-2 h-2 rounded-full bg-pastel-dark/30 animate-pulse shrink-0" />
+              <span className="text-xs sm:text-sm shrink-0">🐱</span>
             )}
             <span className="truncate">{title}</span>
             {isMaximized && (

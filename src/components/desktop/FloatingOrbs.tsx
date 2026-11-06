@@ -247,6 +247,172 @@ export const FloatingOrbs: React.FC = () => {
             </div>
           </>
         )}
+
+        {/* Floating Sakura Petals, Chibi Cats & Cozy Elements (strictly in Cat theme) */}
+        {!isPanda && (
+          <>
+            {/* 1. Cute Chibi Cat floating on cloud (top left-center) */}
+            <div 
+              className="absolute pointer-events-none opacity-80 animate-[chibiPandaFloat_6s_ease-in-out_infinite]"
+              style={{ top: '9%', left: '22%' }}
+            >
+              <div className="relative">
+                {/* Puffy zen cloud */}
+                <div className="px-3 py-1 bg-white/95 rounded-full border-[1.5px] border-pastel-dark shadow-retro-sm flex items-center gap-1">
+                  <span className="text-[10px]">🌸</span>
+                  <span className="text-[9px] font-extrabold text-pastel-dark tracking-tight">cat nap</span>
+                </div>
+                {/* Baby cat peeking over cloud */}
+                <div className="absolute -top-5 left-1/2 -translate-x-1/2 flex flex-col items-center">
+                  {/* Pointy ears */}
+                  <div className="flex justify-between w-9 -mb-1.5 z-0">
+                    <div 
+                      className="w-3.5 h-3.5 bg-[#3d3d3d] flex items-center justify-center"
+                      style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
+                    >
+                      <div 
+                        className="w-1.5 h-1.5 bg-pink-300 mt-0.5"
+                        style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
+                      />
+                    </div>
+                    <div 
+                      className="w-3.5 h-3.5 bg-[#3d3d3d] flex items-center justify-center"
+                      style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
+                    >
+                      <div 
+                        className="w-1.5 h-1.5 bg-pink-300 mt-0.5"
+                        style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
+                      />
+                    </div>
+                  </div>
+                  {/* Face */}
+                  <div className="w-8 h-6.5 rounded-full bg-[#fedbb4] border-[1.5px] border-[#3d3d3d] shadow-xs flex flex-col items-center justify-center relative z-10">
+                    <div className="flex justify-between w-5 mt-0.5 text-[6px] text-[#3d3d3d] font-black leading-none">
+                      <span>^</span>
+                      <span>^</span>
+                    </div>
+                    <div className="flex items-center gap-0.5 -mt-0.5">
+                      <div className="w-1.5 h-0.5 rounded-full bg-pink-400" />
+                      <span className="text-[4px] text-[#3d3d3d] font-bold">w</span>
+                      <div className="w-1.5 h-0.5 rounded-full bg-pink-400" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 2. Cute Chibi Sleeping Cat napping on cloud (bottom right-center) */}
+            <div 
+              className="absolute pointer-events-none opacity-80 animate-[chibiPandaFloat_7s_ease-in-out_infinite_2s]"
+              style={{ bottom: '14%', right: '20%' }}
+            >
+              <div className="relative">
+                {/* Puffy zen cloud */}
+                <div className="px-3 py-1 bg-white/95 rounded-full border-[1.5px] border-pastel-dark shadow-retro-sm flex items-center gap-1">
+                  <span className="text-[10px]">💤</span>
+                  <span className="text-[9px] font-extrabold text-pastel-dark tracking-tight">purr vibes</span>
+                </div>
+                {/* Baby sleeping cat */}
+                <div className="absolute -top-5 left-1/2 -translate-x-1/2 flex flex-col items-center">
+                  <div className="flex justify-between w-9 -mb-1.5 z-0">
+                    <div 
+                      className="w-3.5 h-3.5 bg-[#3d3d3d] flex items-center justify-center"
+                      style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
+                    >
+                      <div 
+                        className="w-1.5 h-1.5 bg-pink-300 mt-0.5"
+                        style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
+                      />
+                    </div>
+                    <div 
+                      className="w-3.5 h-3.5 bg-[#3d3d3d] flex items-center justify-center"
+                      style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
+                    >
+                      <div 
+                        className="w-1.5 h-1.5 bg-pink-300 mt-0.5"
+                        style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}
+                      />
+                    </div>
+                  </div>
+                  <div className="w-8 h-6.5 rounded-full bg-[#fedbb4] border-[1.5px] border-[#3d3d3d] shadow-xs flex flex-col items-center justify-center relative z-10">
+                    <div className="flex justify-between w-5 mt-1 text-[7px] text-[#3d3d3d] font-black leading-none">
+                      <span>˘</span>
+                      <span>˘</span>
+                    </div>
+                    <div className="flex items-center gap-0.5 -mt-0.5">
+                      <div className="w-1.5 h-0.5 rounded-full bg-pink-400" />
+                      <span className="text-[4px] text-[#3d3d3d]">v</span>
+                      <div className="w-1.5 h-0.5 rounded-full bg-pink-400" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 3. Floating Yarn Balls & Sakura Petals */}
+            <div 
+              className="absolute pointer-events-none opacity-45 animate-[bambooLeafFloat1_14s_ease-in-out_infinite]"
+              style={{ top: '15%', right: '18%' }}
+            >
+              <span className="text-xl select-none">🧶</span>
+            </div>
+
+            <div 
+              className="absolute pointer-events-none opacity-50 animate-[bambooLeafFloat2_16s_ease-in-out_infinite]"
+              style={{ bottom: '26%', left: '22%' }}
+            >
+              <span className="text-lg select-none">🌸</span>
+            </div>
+
+            <div 
+              className="absolute pointer-events-none opacity-40 animate-[bambooLeafFloat1_18s_ease-in-out_infinite_2s]"
+              style={{ top: '38%', left: '8%' }}
+            >
+              <span className="text-base select-none">✨</span>
+            </div>
+
+            <div 
+              className="absolute pointer-events-none opacity-50 animate-[bambooLeafFloat2_12s_ease-in-out_infinite_1s]"
+              style={{ top: '52%', right: '10%' }}
+            >
+              <span className="text-base select-none">🌸</span>
+            </div>
+
+            <div 
+              className="absolute pointer-events-none opacity-40 animate-[bambooLeafFloat1_15s_ease-in-out_infinite_3s]"
+              style={{ bottom: '38%', left: '15%' }}
+            >
+              <span className="text-sm select-none">🐾</span>
+            </div>
+
+            {/* Cute Translucent Cat Paw Prints */}
+            <div 
+              className="absolute pointer-events-none opacity-20"
+              style={{ bottom: '15%', right: '7%' }}
+            >
+              <svg width="56" height="56" viewBox="0 0 56 56" fill="#3d3d3d">
+                <ellipse cx="28" cy="34" rx="14" ry="11" />
+                <circle cx="16" cy="18" r="4.5" />
+                <circle cx="24" cy="14" r="4.8" />
+                <circle cx="32" cy="14" r="4.8" />
+                <circle cx="40" cy="18" r="4.5" />
+              </svg>
+            </div>
+
+            <div 
+              className="absolute pointer-events-none opacity-15"
+              style={{ top: '8%', left: '16%' }}
+            >
+              <svg width="48" height="48" viewBox="0 0 56 56" fill="#3d3d3d">
+                <ellipse cx="28" cy="34" rx="14" ry="11" />
+                <circle cx="16" cy="18" r="4.5" />
+                <circle cx="24" cy="14" r="4.8" />
+                <circle cx="32" cy="14" r="4.8" />
+                <circle cx="40" cy="18" r="4.5" />
+              </svg>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Subtle Retro Pixel Grid */}

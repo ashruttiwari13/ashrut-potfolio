@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <defs>
+    <filter id="cozy-shadow-cat-s1" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#3d3d3d" flood-opacity="0.18" />
+    </filter>
+    <linearGradient id="cloud-grad-cat-s1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#fff0e6" />
+    </linearGradient>
+    <linearGradient id="cat-body-grad-s1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fedbb4" />
+      <stop offset="100%" stop-color="#f8be86" />
+    </linearGradient>
+  </defs>
+
+  <!-- Puffy Zen Cloud -->
+  <g filter="url(#cozy-shadow-cat-s1)">
+    <path d="M 45 195 
+             C 30 195 20 180 30 165 
+             C 25 150 45 140 60 148 
+             C 75 135 110 135 125 148 
+             C 140 135 175 135 190 150 
+             C 210 145 225 160 215 178 
+             C 225 192 210 205 195 200 
+             C 180 208 60 208 45 195 Z" 
+          fill="url(#cloud-grad-cat-s1)" stroke="#3d3d3d" stroke-width="4.5" stroke-linejoin="round" />
+  </g>
+
+  <!-- Curled Tail Wagging -->
+  <path d="M 165 160 C 198 155, 212 125, 195 108 C 185 98, 175 106, 182 116 C 188 126, 180 145, 160 150" 
+        fill="none" stroke="#f8be86" stroke-width="12" stroke-linecap="round" />
+  <path d="M 195 108 C 190 102, 180 106, 184 116" 
+        fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round" />
+
+  <!-- Ears (Wiggling slightly in rhythm) -->
+  <path d="M 60 84 L 70 38 Q 90 52 96 78 Z" fill="#f8be86" stroke="#3d3d3d" stroke-width="4.5" stroke-linejoin="round" />
+  <path d="M 68 78 L 75 48 Q 87 58 91 74 Z" fill="#ffaec0" />
+  
+  <path d="M 178 86 L 168 40 Q 148 54 142 80 Z" fill="#f8be86" stroke="#3d3d3d" stroke-width="4.5" stroke-linejoin="round" />
+  <path d="M 170 80 L 163 50 Q 151 60 147 76 Z" fill="#ffaec0" />
+  <circle cx="170" cy="44" r="4.5" fill="#ffb6c1" stroke="#3d3d3d" stroke-width="1.5" />
+  <circle cx="170" cy="44" r="1.8" fill="#ffd166" />
+
+  <!-- Body -->
+  <ellipse cx="120" cy="148" rx="56" ry="44" fill="url(#cat-body-grad-s1)" stroke="#3d3d3d" stroke-width="4.5" />
+  <ellipse cx="120" cy="154" rx="36" ry="30" fill="#fffcf5" stroke="#3d3d3d" stroke-width="3.5" />
+
+  <!-- Left Paw Resting -->
+  <ellipse cx="76" cy="172" rx="16" ry="12" fill="#f8be86" stroke="#3d3d3d" stroke-width="4" />
+  <ellipse cx="76" cy="173" rx="7" ry="5.5" fill="#ffaec0" />
+  <circle cx="76" cy="165" r="2.4" fill="#ffaec0" />
+
+  <!-- Right Paw Raised Joyfully -->
+  <ellipse cx="166" cy="162" rx="15" ry="13" fill="#f8be86" stroke="#3d3d3d" stroke-width="4" />
+  <ellipse cx="166" cy="162" rx="7" ry="6" fill="#ffaec0" />
+  <circle cx="166" cy="154" r="2.4" fill="#ffaec0" />
+
+  <!-- Head tilted slightly singing -->
+  <ellipse cx="118" cy="104" rx="54" ry="46" fill="url(#cat-body-grad-s1)" stroke="#3d3d3d" stroke-width="4.5" />
+
+  <!-- Stripes -->
+  <path d="M 118 68 L 118 80" stroke="#e08e4d" stroke-width="3" stroke-linecap="round" />
+  <path d="M 109 71 L 112 81" stroke="#e08e4d" stroke-width="2.8" stroke-linecap="round" />
+  <path d="M 127 71 L 124 81" stroke="#e08e4d" stroke-width="2.8" stroke-linecap="round" />
+
+  <!-- Cheeks Muzzle -->
+  <ellipse cx="109" cy="120" rx="13" ry="10" fill="#fffcf5" stroke="#3d3d3d" stroke-width="2.5" />
+  <ellipse cx="127" cy="120" rx="13" ry="10" fill="#fffcf5" stroke="#3d3d3d" stroke-width="2.5" />
+
+  <ellipse cx="78" cy="118" rx="11" ry="7" fill="#ffb6c1" opacity="0.9" />
+  <ellipse cx="158" cy="118" rx="11" ry="7" fill="#ffb6c1" opacity="0.9" />
+
+  <!-- Joyful Singing Closed Happy Arc Eyes (^ ^) -->
+  <path d="M 88 105 Q 96 97 104 105" fill="none" stroke="#3d3d3d" stroke-width="3.5" stroke-linecap="round" />
+  <path d="M 132 105 Q 140 97 148 105" fill="none" stroke="#3d3d3d" stroke-width="3.5" stroke-linecap="round" />
+
+  <!-- Nose -->
+  <polygon points="114,114 122,114 118,119" fill="#ffaec0" stroke="#3d3d3d" stroke-width="1.8" stroke-linejoin="round" />
+
+  <!-- Open Singing Mouth with Pink Tongue -->
+  <path d="M 112 122 Q 118 134 124 122 Z" fill="#ff708f" stroke="#3d3d3d" stroke-width="2.5" stroke-linejoin="round" />
+  <circle cx="118" cy="128" r="3.5" fill="#ffaec0" />
+
+  <!-- Whiskers -->
+  <line x1="66" y1="114" x2="86" y2="116" stroke="#3d3d3d" stroke-width="2" stroke-linecap="round" />
+  <line x1="64" y1="122" x2="86" y2="122" stroke="#3d3d3d" stroke-width="2" stroke-linecap="round" />
+  <line x1="170" y1="114" x2="150" y2="116" stroke="#3d3d3d" stroke-width="2" stroke-linecap="round" />
+  <line x1="172" y1="122" x2="150" y2="122" stroke="#3d3d3d" stroke-width="2" stroke-linecap="round" />
+</svg>
+

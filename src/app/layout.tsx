@@ -60,6 +60,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={quicksand.variable}>
+      <head>
+        <link rel="preload" href="/assets/panda_idle.svg" as="image" type="image/svg+xml" />
+        <link rel="preload" href="/assets/panda_sing_1.svg" as="image" type="image/svg+xml" />
+        <link rel="preload" href="/assets/panda_sing_2.svg" as="image" type="image/svg+xml" />
+        <link rel="preload" href="/assets/cat_idle.svg" as="image" type="image/svg+xml" />
+        <link rel="preload" href="/assets/cat_sing_1.svg" as="image" type="image/svg+xml" />
+        <link rel="preload" href="/assets/cat_sing_2.svg" as="image" type="image/svg+xml" />
+      </head>
       <body className="antialiased select-none font-sans bg-pastel-bg text-pastel-dark min-h-screen overflow-hidden">
         <ThemeProvider>
           {children}
