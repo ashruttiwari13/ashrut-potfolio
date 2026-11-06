@@ -1,22 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
   <defs>
-    <!-- Soft cloud shadow -->
-    <filter id="cozy-shadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#1e2424" flood-opacity="0.16" />
+    <!-- Soft sticker drop shadow matching retro cat pin -->
+    <filter id="panda-cozy-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#1e2424" flood-opacity="0.22" />
     </filter>
-    <linearGradient id="cloud-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+    <linearGradient id="panda-cloud-grad" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#ffffff" />
-      <stop offset="100%" stop-color="#e8f5e9" />
-    </linearGradient>
-    <linearGradient id="bamboo-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#74c69d" />
-      <stop offset="50%" stop-color="#95d5b2" />
-      <stop offset="100%" stop-color="#52b788" />
+      <stop offset="100%" stop-color="#f0fdf4" />
     </linearGradient>
   </defs>
 
-  <!-- Puffy Zen Cloud / Pillow underneath -->
-  <g filter="url(#cozy-shadow)">
+  <!-- Puffy White Cloud Pillow underneath (Exact cat shape) -->
+  <g filter="url(#panda-cozy-shadow)">
     <path d="M 45 195 
              C 30 195 20 180 30 165 
              C 25 150 45 140 60 148 
@@ -25,95 +20,68 @@
              C 210 145 225 160 215 178 
              C 225 192 210 205 195 200 
              C 180 208 60 208 45 195 Z" 
-          fill="url(#cloud-grad)" stroke="#1e2424" stroke-width="4.5" stroke-linejoin="round" />
+          fill="url(#panda-cloud-grad)" stroke="#1e2424" stroke-width="4.5" stroke-linejoin="round" />
   </g>
 
-  <!-- Back Ears -->
+  <!-- Cute Round Panda Ears -->
   <!-- Left Ear -->
-  <circle cx="68" cy="68" r="26" fill="#1e2424" stroke="#1e2424" stroke-width="5" />
-  <circle cx="69" cy="67" r="14" fill="#2d373b" opacity="0.6" />
-  <!-- Right Ear with cute bamboo leaf tucked behind -->
-  <circle cx="172" cy="68" r="26" fill="#1e2424" stroke="#1e2424" stroke-width="5" />
-  <circle cx="171" cy="67" r="14" fill="#2d373b" opacity="0.6" />
+  <circle cx="70" cy="68" r="22" fill="#1e2424" stroke="#1e2424" stroke-width="4.5" />
+  <circle cx="72" cy="70" r="10" fill="#ffaec0" />
 
-  <!-- Cute Bamboo Leaf behind right ear -->
-  <path d="M 178 48 C 195 32, 215 42, 212 56 C 198 58, 185 56, 178 48 Z" fill="#52b788" stroke="#1e2424" stroke-width="3.5" stroke-linejoin="round" />
-  <path d="M 178 48 Q 198 48 210 54" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round" />
+  <!-- Right Ear with cute bamboo leaf tucked behind tip -->
+  <circle cx="170" cy="68" r="22" fill="#1e2424" stroke="#1e2424" stroke-width="4.5" />
+  <circle cx="168" cy="70" r="10" fill="#ffaec0" />
+  <!-- Cute little bamboo sprout accessory at ear tip -->
+  <path d="M 178 48 C 192 38, 204 46, 198 56 C 188 56, 182 52, 178 48 Z" fill="#52b788" stroke="#1e2424" stroke-width="2.5" stroke-linejoin="round" />
+  <circle cx="180" cy="46" r="2.5" fill="#ffd166" stroke="#1e2424" stroke-width="1.2" />
 
-  <!-- Body (Fluffy round torso) -->
-  <ellipse cx="120" cy="148" rx="58" ry="46" fill="#ffffff" stroke="#1e2424" stroke-width="5" />
-  
-  <!-- Black Back/Shoulder Patch across body -->
-  <path d="M 68 135 C 75 115, 165 115, 172 135 C 160 162, 80 162, 68 135 Z" fill="#1e2424" />
+  <!-- Panda Body (Round fluffy chibi shape) -->
+  <ellipse cx="120" cy="148" rx="54" ry="44" fill="#1e2424" stroke="#1e2424" stroke-width="4.5" />
 
-  <!-- Fluffy White Belly -->
-  <ellipse cx="120" cy="154" rx="38" ry="32" fill="#ffffff" stroke="#1e2424" stroke-width="4" />
+  <!-- Chubby White Belly (Matches cat chest curve) -->
+  <ellipse cx="120" cy="154" rx="38" ry="32" fill="#ffffff" stroke="#1e2424" stroke-width="3.5" />
 
-  <!-- Back/Feet Paws -->
-  <!-- Left Foot with paw pads -->
-  <ellipse cx="64" cy="176" rx="20" ry="15" fill="#1e2424" stroke="#1e2424" stroke-width="4.5" />
-  <ellipse cx="64" cy="177" rx="10" ry="7.5" fill="#ffaec0" />
-  <circle cx="56" cy="168" r="3" fill="#ffaec0" />
-  <circle cx="64" cy="166" r="3.2" fill="#ffaec0" />
-  <circle cx="72" cy="168" r="3" fill="#ffaec0" />
+  <!-- Front Paws Resting on Cloud with Pink Pads (Exact cat paws style) -->
+  <!-- Left Paw -->
+  <ellipse cx="80" cy="172" rx="16" ry="12" fill="#1e2424" stroke="#1e2424" stroke-width="4" />
+  <ellipse cx="80" cy="173" rx="8" ry="6.5" fill="#ffaec0" />
+  <circle cx="73" cy="166" r="2.2" fill="#ffaec0" />
+  <circle cx="80" cy="164" r="2.4" fill="#ffaec0" />
+  <circle cx="87" cy="166" r="2.2" fill="#ffaec0" />
 
-  <!-- Right Foot with paw pads -->
-  <ellipse cx="176" cy="176" rx="20" ry="15" fill="#1e2424" stroke="#1e2424" stroke-width="4.5" />
-  <ellipse cx="176" cy="177" rx="10" ry="7.5" fill="#ffaec0" />
-  <circle cx="168" cy="168" r="3" fill="#ffaec0" />
-  <circle cx="176" cy="166" r="3.2" fill="#ffaec0" />
-  <circle cx="184" cy="168" r="3" fill="#ffaec0" />
+  <!-- Right Paw -->
+  <ellipse cx="160" cy="172" rx="16" ry="12" fill="#1e2424" stroke="#1e2424" stroke-width="4" />
+  <ellipse cx="160" cy="173" rx="8" ry="6.5" fill="#ffaec0" />
+  <circle cx="153" cy="166" r="2.2" fill="#ffaec0" />
+  <circle cx="160" cy="164" r="2.4" fill="#ffaec0" />
+  <circle cx="167" cy="166" r="2.2" fill="#ffaec0" />
 
-  <!-- Head (Large and adorable) -->
-  <ellipse cx="120" cy="104" rx="58" ry="50" fill="#ffffff" stroke="#1e2424" stroke-width="5" />
+  <!-- Head (Large, round, chubby chibi head) -->
+  <ellipse cx="120" cy="104" rx="56" ry="48" fill="#ffffff" stroke="#1e2424" stroke-width="4.5" />
 
-  <!-- Eye Patches (Signature Panda teardrop/oval patches tilted inward) -->
-  <!-- Left Eye Patch -->
-  <ellipse cx="98" cy="100" rx="17" ry="21" fill="#1e2424" transform="rotate(-18 98 100)" />
-  <!-- Right Eye Patch -->
-  <ellipse cx="142" cy="100" rx="17" ry="21" fill="#1e2424" transform="rotate(18 142 100)" />
+  <!-- Panda Teardrop Eye Patches -->
+  <ellipse cx="96" cy="100" rx="15" ry="19" fill="#1e2424" transform="rotate(-15 96 100)" />
+  <ellipse cx="144" cy="100" rx="15" ry="19" fill="#1e2424" transform="rotate(15 144 100)" />
 
-  <!-- Big Sparkling Panda Eyes -->
-  <circle cx="100" cy="99" r="7.5" fill="#ffffff" />
-  <circle cx="102.5" cy="96.5" r="3" fill="#ffffff" />
-  <circle cx="140" cy="99" r="7.5" fill="#ffffff" />
-  <circle cx="142.5" cy="96.5" r="3" fill="#ffffff" />
+  <!-- Idle Peaceful Smiling Arc Eyes (˘ ‿ ˘) inside patches -->
+  <path d="M 89 100 Q 96 107 103 100" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" />
+  <path d="M 137 100 Q 144 107 151 100" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" />
+
+  <!-- White Muzzle -->
+  <ellipse cx="120" cy="118" rx="15" ry="11" fill="#ffffff" stroke="#1e2424" stroke-width="2.5" />
+
+  <!-- Tiny Black Panda Nose -->
+  <polygon points="116,113 124,113 120,118" fill="#1e2424" stroke="#1e2424" stroke-width="1.5" stroke-linejoin="round" />
+
+  <!-- Sweet Happy Cat-style Smile (:3) -->
+  <path d="M 113 120 Q 120 125 120 119 Q 120 125 127 120" fill="none" stroke="#1e2424" stroke-width="2.5" stroke-linecap="round" />
 
   <!-- Rosy Blushing Cheeks -->
-  <ellipse cx="80" cy="122" rx="12" ry="8" fill="#ffaec0" opacity="0.85" />
-  <ellipse cx="160" cy="122" rx="12" ry="8" fill="#ffaec0" opacity="0.85" />
-
-  <!-- Cute Nose -->
-  <path d="M 114 112 C 117 109, 123 109, 126 112 C 128 116, 122 121, 120 121 C 118 121, 112 116, 114 112 Z" fill="#1e2424" />
-
-  <!-- Gentle Happy Mouth (:3 style) -->
-  <path d="M 111 123 Q 120 128 120 121 Q 120 128 129 123" fill="none" stroke="#1e2424" stroke-width="3.5" stroke-linecap="round" />
-
-  <!-- Bamboo Stalk being held -->
-  <g>
-    <!-- Stalk segments -->
-    <rect x="114" y="118" width="12" height="58" rx="5" fill="url(#bamboo-grad)" stroke="#1e2424" stroke-width="3.5" />
-    <line x1="113" y1="136" x2="127" y2="136" stroke="#1e2424" stroke-width="3" stroke-linecap="round" />
-    <line x1="113" y1="156" x2="127" y2="156" stroke="#1e2424" stroke-width="3" stroke-linecap="round" />
-    
-    <!-- Fresh bamboo leaves shooting off -->
-    <path d="M 126 132 C 145 124, 155 132, 150 142 C 138 142, 128 136, 126 132 Z" fill="#52b788" stroke="#1e2424" stroke-width="2.5" />
-    <path d="M 114 146 C 98 140, 88 148, 92 156 C 104 156, 112 150, 114 146 Z" fill="#74c69d" stroke="#1e2424" stroke-width="2.5" />
-  </g>
-
-  <!-- Paws holding the bamboo shoot -->
-  <!-- Left Paw -->
-  <ellipse cx="106" cy="144" rx="14" ry="11" fill="#1e2424" stroke="#1e2424" stroke-width="4" transform="rotate(-15 106 144)" />
-  <circle cx="104" cy="144" r="4" fill="#ffaec0" />
-  <!-- Right Paw -->
-  <ellipse cx="134" cy="144" rx="14" ry="11" fill="#1e2424" stroke="#1e2424" stroke-width="4" transform="rotate(15 134 144)" />
-  <circle cx="136" cy="144" r="4" fill="#ffaec0" />
-
-  <!-- Floating Zen Bamboo Leaf Sparkles -->
-  <g opacity="0.9">
-    <path d="M 40 90 C 50 82, 58 86, 56 94 C 48 96, 42 94, 40 90 Z" fill="#74c69d" stroke="#1e2424" stroke-width="2" />
-    <circle cx="48" cy="74" r="2.5" fill="#f5dd90" stroke="#1e2424" stroke-width="1.5" />
-    <circle cx="198" cy="108" r="2.5" fill="#ffaec0" stroke="#1e2424" stroke-width="1.5" />
-  </g>
+  <ellipse cx="76" cy="120" rx="11" ry="7" fill="#ffaec0" opacity="0.85" />
+  <ellipse cx="164" cy="120" rx="11" ry="7" fill="#ffaec0" opacity="0.85" />
+  <!-- Cute cheek stripes like cat -->
+  <line x1="68" y1="117" x2="74" y2="117" stroke="#ffaec0" stroke-width="2" stroke-linecap="round" />
+  <line x1="66" y1="123" x2="73" y2="123" stroke="#ffaec0" stroke-width="2" stroke-linecap="round" />
+  <line x1="172" y1="117" x2="166" y2="117" stroke="#ffaec0" stroke-width="2" stroke-linecap="round" />
+  <line x1="174" y1="123" x2="167" y2="123" stroke="#ffaec0" stroke-width="2" stroke-linecap="round" />
 </svg>
-

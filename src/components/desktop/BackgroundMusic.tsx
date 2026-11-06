@@ -391,7 +391,7 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
             {/* Mascot Sprite on Cloud with Strict Key for Instant Theme Swapping */}
             <div
               key={isPanda ? 'mascot-panda' : 'mascot-cat'}
-              className={`relative drop-shadow-[2px_3px_0_rgba(61,61,61,0.22)] flex items-center justify-center overflow-visible transition-transform ${
+              className={`relative w-[54px] h-[54px] sm:w-[84px] sm:h-[84px] drop-shadow-[2px_3px_0_rgba(61,61,61,0.22)] flex items-center justify-center overflow-visible transition-transform ${
                 isPanda
                   ? (isHappyHop
                       ? 'animate-[pandaHappyHop_0.55s_ease-in-out]'
@@ -401,7 +401,7 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
                   : (isSinging
                       ? 'animate-[catSingBounce_0.84s_ease-in-out_infinite]'
                       : 'animate-[catIdleFloat_3s_ease-in-out_infinite]')
-              } ${isPanda ? 'w-[50px] h-[50px] sm:w-[88px] sm:h-[88px]' : 'w-[54px] h-[54px] sm:w-[84px] sm:h-[84px]'}`}
+              }`}
             >
               {isPanda ? (
                 <>
@@ -409,8 +409,8 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
                     key="panda-idle"
                     src="/assets/panda_idle.svg"
                     alt="Cute panda resting among bamboo"
-                    width={88}
-                    height={88}
+                    width={84}
+                    height={84}
                     loading="eager"
                     decoding="sync"
                     className={`w-full h-full object-contain select-none pointer-events-none ${
@@ -421,8 +421,8 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
                     key="panda-sing-1"
                     src="/assets/panda_sing_1.svg"
                     alt="Cute panda singing cheerfully frame 1"
-                    width={88}
-                    height={88}
+                    width={84}
+                    height={84}
                     loading="eager"
                     decoding="sync"
                     className={`w-full h-full object-contain select-none pointer-events-none ${
@@ -433,8 +433,8 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
                     key="panda-sing-2"
                     src="/assets/panda_sing_2.svg"
                     alt="Cute panda dancing and singing frame 2"
-                    width={88}
-                    height={88}
+                    width={84}
+                    height={84}
                     loading="eager"
                     decoding="sync"
                     className={`w-full h-full object-contain select-none pointer-events-none ${
@@ -484,67 +484,42 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
               )}
             </div>
 
-            {/* Status Indicator Badge Under Mascot */}
-            {isPanda ? (
-              <span
-                className={`text-[8px] sm:text-[9.5px] font-extrabold px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full border-[1.5px] border-pastel-dark shadow-retro-sm -mt-0.5 transition-all duration-150 flex items-center gap-1.5 ${
-                  isSinging
-                    ? 'bg-pastel-mint text-pastel-dark shadow-[1.5px_1.5px_0_#1e2424]'
-                    : isHovered
-                    ? 'bg-pastel-peach text-pastel-dark'
-                    : 'bg-white/95 text-pastel-dark'
-                }`}
-              >
+            {/* Status Indicator Badge Under Mascot - Lo-Fi Vintage Capsule */}
+            <div
+              className={`flex flex-col items-center justify-center px-4 py-1 sm:px-5 sm:py-1 rounded-full border-2 border-pastel-dark shadow-[2px_2.5px_0_#1e2424] -mt-0.5 transition-all duration-150 select-none ${
+                isSinging
+                  ? (isPanda ? 'bg-[#d8f3dc] text-pastel-dark' : 'bg-[#ffe8d4] text-pastel-dark')
+                  : isHovered
+                  ? 'bg-pastel-peach text-pastel-dark'
+                  : 'bg-white/95 text-pastel-dark'
+              }`}
+            >
+              <span className="text-[9.5px] sm:text-[11px] font-extrabold text-pastel-dark tracking-tight leading-tight">
+                Lo-Fi
+              </span>
+              <div className="flex items-center gap-1.5 leading-none mt-0.5">
                 {isSinging ? (
                   <>
-                    <Volume2 size={9} className="text-emerald-800 shrink-0" />
-                    <span>Panda 🎋</span>
-                    <span className="flex items-end gap-0.5 h-2 shrink-0">
+                    <Volume2 size={10} className="text-emerald-800 shrink-0" />
+                    <span className="text-[9.5px] sm:text-[11px] font-extrabold text-pastel-dark">
+                      {isPanda ? 'Panda 🎋' : 'Cat 🎵'}
+                    </span>
+                    <span className="flex items-end gap-0.5 h-2.5 shrink-0">
                       <span className="w-0.5 h-1 bg-emerald-700 rounded-full animate-pulse" />
-                      <span className="w-0.5 h-2 bg-emerald-800 rounded-full animate-[pulse_0.5s_infinite]" />
+                      <span className="w-0.5 h-2.5 bg-emerald-800 rounded-full animate-[pulse_0.5s_infinite]" />
                       <span className="w-0.5 h-1.5 bg-emerald-700 rounded-full animate-pulse" />
                     </span>
                   </>
                 ) : (
                   <>
-                    <VolumeX size={9} className="text-rose-600 shrink-0" />
-                    <span>Panda Zzz 💤</span>
+                    <VolumeX size={10} className="text-rose-600 shrink-0" />
+                    <span className="text-[9.5px] sm:text-[11px] font-extrabold text-pastel-dark">
+                      {isPanda ? 'Panda 💤' : 'Cat 💤'}
+                    </span>
                   </>
                 )}
-              </span>
-            ) : (
-              <div
-                className={`flex flex-col items-center justify-center px-4 py-1 sm:px-5 sm:py-1 rounded-full border-2 border-pastel-dark shadow-[2px_2.5px_0_#3d3d3d] -mt-0.5 transition-all duration-150 select-none ${
-                  isSinging
-                    ? 'bg-[#ffe8d4] text-pastel-dark'
-                    : isHovered
-                    ? 'bg-pastel-peach text-pastel-dark'
-                    : 'bg-white/95 text-pastel-dark'
-                }`}
-              >
-                <span className="text-[9.5px] sm:text-[11px] font-extrabold text-pastel-dark tracking-tight leading-tight">
-                  Lo-Fi
-                </span>
-                <div className="flex items-center gap-1.5 leading-none mt-0.5">
-                  {isSinging ? (
-                    <>
-                      <Volume2 size={10} className="text-emerald-800 shrink-0" />
-                      <span className="text-[9.5px] sm:text-[11px] font-extrabold text-pastel-dark">Cat 🎵</span>
-                      <span className="flex items-end gap-0.5 h-2.5 shrink-0">
-                        <span className="w-0.5 h-1 bg-emerald-700 rounded-full animate-pulse" />
-                        <span className="w-0.5 h-2.5 bg-emerald-800 rounded-full animate-[pulse_0.5s_infinite]" />
-                        <span className="w-0.5 h-1.5 bg-emerald-700 rounded-full animate-pulse" />
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <VolumeX size={10} className="text-rose-600 shrink-0" />
-                      <span className="text-[9.5px] sm:text-[11px] font-extrabold text-pastel-dark">Cat 💤</span>
-                    </>
-                  )}
-                </div>
               </div>
-            )}
+            </div>
           </button>
         </div>
       </div>
