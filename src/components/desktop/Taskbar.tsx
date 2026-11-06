@@ -82,24 +82,24 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             soundFX.playClick(620);
             if (onOpenContact) onOpenContact();
           }}
-          className={`flex items-center gap-1 px-2 py-0.5 rounded-full border text-[9.5px] font-extrabold active:scale-95 transition-all truncate ${
+          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-black active:scale-95 transition-all truncate ${
             isPanda 
               ? 'bg-purple-950/80 border-purple-500/40 text-purple-200 hover:bg-purple-900' 
               : 'bg-pastel-mint/90 border-pastel-dark text-pastel-dark hover:bg-pastel-peach'
           }`}
           title="Open for Freelance Opportunities - Click to Hire Me"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping shrink-0" />
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0" />
           <span className="truncate">{isPanda ? '🐼 Ashrut · Hire 🎋' : '👾 Ashrut · Hire'}</span>
         </button>
 
         {/* Center / Right controls */}
-        <div className="flex items-center gap-1 shrink-0">
+        <div className="flex items-center gap-1.5 shrink-0">
           {/* Theme Shift Button (Mobile) */}
           <button
             type="button"
             onClick={toggleTheme}
-            className={`retro-btn text-[9.5px] px-2 py-0.5 active:scale-90 flex items-center gap-1 ${
+            className={`retro-btn text-xs font-black px-2.5 py-1 active:scale-90 flex items-center gap-1 ${
               isPanda 
                 ? 'bg-[#141833] text-white border-purple-500/40 hover:bg-purple-900' 
                 : 'bg-white text-pastel-dark hover:bg-pastel-peach'
@@ -115,24 +115,24 @@ export const Taskbar: React.FC<TaskbarProps> = ({
           <button
             type="button"
             onClick={handleMinimizeAll}
-            className={`retro-btn text-[9.5px] px-2 py-0.5 active:scale-90 ${
+            className={`retro-btn text-xs font-black px-2.5 py-1 active:scale-90 ${
               isPanda 
                 ? 'bg-[#141833] text-white border-purple-500/40 hover:bg-purple-900' 
                 : 'bg-white text-pastel-dark hover:bg-pastel-sky'
             }`}
             title="Minimize all windows to see desktop"
           >
-            <Sparkles size={10} strokeWidth={2.5} className={isPanda ? "text-purple-300" : "text-emerald-600"} />
+            <Sparkles size={12} strokeWidth={2.5} className={isPanda ? "text-purple-300" : "text-emerald-600"} />
             <span>{isPanda ? 'Desk 🎋' : 'Desk'}</span>
           </button>
 
           {/* Clock */}
-          <div className={`flex items-center gap-1 px-1.5 py-0.5 rounded-full border text-[9.5px] font-bold ${
+          <div className={`flex items-center gap-1 px-2 py-1 rounded-full border text-xs font-black ${
             isPanda 
               ? 'bg-[#10142c] border-purple-500/30 text-purple-200' 
               : 'bg-white border-pastel-dark text-pastel-dark'
           }`}>
-            <Clock size={9} strokeWidth={2.5} />
+            <Clock size={11} strokeWidth={2.5} />
             <span>{time || '--:--'}</span>
           </div>
         </div>
@@ -164,25 +164,25 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             }`}>
               <ChevronLeft size={13} strokeWidth={3} />
             </div>
-            <span className={`w-2 h-2 rounded-full animate-ping shrink-0 ${isPanda ? 'bg-purple-400 shadow-[0_0_8px_#c084fc]' : 'bg-emerald-500'}`} />
-            <span className="text-[11.5px] font-extrabold tracking-tight">
+            <span className={`w-2.5 h-2.5 rounded-full animate-ping shrink-0 ${isPanda ? 'bg-purple-400 shadow-[0_0_8px_#c084fc]' : 'bg-emerald-500'}`} />
+            <span className="text-xs sm:text-sm font-black tracking-tight">
               {isPanda ? 'Moonlit Panda 🎋' : 'Retro OS 🐱'}
             </span>
-            <div className={`flex items-center gap-1 px-2.5 py-0.5 rounded-full border text-[10.5px] ${
+            <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-black ${
               isPanda ? 'bg-[#121630] border-purple-500/30 text-purple-200' : 'bg-white border-pastel-dark text-pastel-dark'
             }`}>
-              <Clock size={10} strokeWidth={2.5} />
+              <Clock size={12} strokeWidth={2.5} />
               <span>{time || '--:--'}</span>
             </div>
           </button>
         ) : (
           /* Full Expanded State: Slides open sideways with all controls */
-          <div className="flex items-center gap-2 p-1.5 sm:p-2 animate-fadeIn">
-            {/* Compress Button (chevron pointing right to compress sideways) */}
+          <div className="flex items-center gap-2.5 p-2 animate-fadeIn">
+            {/* Compress Button */}
             <button
               type="button"
               onClick={handleToggleExpand}
-              className={`p-1 sm:p-1.5 rounded-full border transition-all cursor-pointer hover:translate-x-0.5 active:scale-90 ${
+              className={`p-1.5 rounded-full border transition-all cursor-pointer hover:translate-x-0.5 active:scale-90 ${
                 isPanda 
                   ? 'bg-purple-950 border-purple-400 text-purple-200 hover:bg-purple-900' 
                   : 'bg-pastel-mint border-pastel-dark text-pastel-dark hover:bg-pastel-peach'
@@ -191,7 +191,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
               aria-expanded={true}
               aria-label="Compress toolbar"
             >
-              <ChevronRight size={14} strokeWidth={3} />
+              <ChevronRight size={15} strokeWidth={3} />
             </button>
 
             {/* Live Status Pill */}
@@ -201,7 +201,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
                 soundFX.playClick(620);
                 if (onOpenContact) onOpenContact();
               }}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border cursor-pointer transition-colors ${
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full border cursor-pointer transition-colors ${
                 isPanda 
                   ? 'bg-purple-950/80 border-purple-500/40 text-purple-200 hover:bg-purple-900' 
                   : 'bg-pastel-mint/90 border-pastel-dark text-pastel-dark hover:bg-pastel-mint'
@@ -209,7 +209,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
               title="Open for Freelance Opportunities - Click to message"
             >
               <span className={`w-2 h-2 rounded-full animate-ping shrink-0 ${isPanda ? 'bg-purple-400' : 'bg-emerald-500'}`} />
-              <span className="text-[11px] whitespace-nowrap">
+              <span className="text-xs sm:text-sm font-black whitespace-nowrap">
                 {isPanda ? 'Open for Freelance 🎋' : 'Open for Freelance'}
               </span>
             </button>
@@ -218,7 +218,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             <button
               type="button"
               onClick={toggleTheme}
-              className={`retro-btn text-[11px] px-2.5 py-1 active:scale-95 flex items-center gap-1.5 transition-all shadow-retro-sm ${
+              className={`retro-btn text-xs sm:text-sm font-black px-3 py-1.5 active:scale-95 flex items-center gap-1.5 transition-all shadow-retro-sm ${
                 isPanda 
                   ? 'bg-[#141833] text-white border-purple-500/40 hover:bg-purple-900/50' 
                   : 'bg-white text-pastel-dark hover:bg-pastel-peach'
@@ -226,9 +226,9 @@ export const Taskbar: React.FC<TaskbarProps> = ({
               title={isPanda ? "Currently Panda Theme. Click to switch to Cat Theme 🐱" : "Currently Cat Theme. Click to switch to Panda Theme 🐼"}
               aria-label="Shift between Panda and Cat themes"
             >
-              <span className="text-sm shrink-0">{isPanda ? '🐼' : '🐱'}</span>
+              <span className="text-base shrink-0">{isPanda ? '🐼' : '🐱'}</span>
               <span>{isPanda ? 'Panda Mode' : 'Cat Mode'}</span>
-              <span className={`text-[8.5px] font-extrabold px-1.5 py-0.2 rounded-full border shrink-0 ${
+              <span className={`text-[9.5px] font-black px-2 py-0.5 rounded-full border shrink-0 ${
                 isPanda ? 'bg-purple-600 border-purple-400 text-white' : 'bg-pastel-mint border-pastel-dark text-pastel-dark'
               }`}>
                 Shift ⇄
@@ -239,7 +239,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             <button
               type="button"
               onClick={handleResetWindows}
-              className={`retro-btn text-[11px] px-2.5 py-1 ${
+              className={`retro-btn text-xs sm:text-sm font-black px-3 py-1.5 ${
                 isPanda ? 'bg-[#141833] text-white border-purple-500/40 hover:bg-purple-900/50' : 'bg-white hover:bg-pastel-peach'
               }`}
               title="Arrange windows to original positions"

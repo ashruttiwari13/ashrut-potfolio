@@ -502,30 +502,30 @@ export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
                   : 'bg-white/95 border-pastel-dark text-pastel-dark shadow-[2px_2.5px_0_#3d3d3d]'
               }`}
             >
-              <span className={`text-[9.5px] sm:text-[11px] font-extrabold tracking-tight leading-tight ${
+              <span className={`text-xs sm:text-sm font-black tracking-tight leading-tight ${
                 isPanda ? 'text-purple-300 drop-shadow-[0_0_6px_rgba(192,132,252,0.4)]' : 'text-pastel-dark'
               }`}>
                 Lo-Fi
               </span>
-              <div className="flex items-center gap-1.5 leading-none mt-0.5">
+              <div className="flex items-center gap-1.5 leading-none mt-1">
                 {isSinging ? (
                   <>
-                    <Volume2 size={10} className={`shrink-0 ${isPanda ? 'text-purple-400' : 'text-emerald-800'}`} />
-                    <span className={`text-[9.5px] sm:text-[11px] font-extrabold ${
+                    <Volume2 size={12} className={`shrink-0 ${isPanda ? 'text-purple-400' : 'text-emerald-800'}`} />
+                    <span className={`text-xs sm:text-sm font-black ${
                       isPanda ? 'text-white' : 'text-pastel-dark'
                     }`}>
                       {isPanda ? 'Panda 🎧' : 'Cat 🎵'}
                     </span>
-                    <span className="flex items-end gap-0.5 h-2.5 shrink-0">
-                      <span className={`w-0.5 h-1 rounded-full animate-pulse ${isPanda ? 'bg-purple-400' : 'bg-emerald-700'}`} />
-                      <span className={`w-0.5 h-2.5 rounded-full animate-[pulse_0.5s_infinite] ${isPanda ? 'bg-cyan-400 shadow-[0_0_6px_#22d3ee]' : 'bg-emerald-800'}`} />
-                      <span className={`w-0.5 h-1.5 rounded-full animate-pulse ${isPanda ? 'bg-fuchsia-400' : 'bg-emerald-700'}`} />
+                    <span className="flex items-end gap-0.5 h-3 shrink-0">
+                      <span className={`w-0.5 h-1.5 rounded-full animate-pulse ${isPanda ? 'bg-purple-400' : 'bg-emerald-700'}`} />
+                      <span className={`w-0.5 h-3 rounded-full animate-[pulse_0.5s_infinite] ${isPanda ? 'bg-cyan-400 shadow-[0_0_6px_#22d3ee]' : 'bg-emerald-800'}`} />
+                      <span className={`w-0.5 h-2 rounded-full animate-pulse ${isPanda ? 'bg-fuchsia-400' : 'bg-emerald-700'}`} />
                     </span>
                   </>
                 ) : (
                   <>
-                    <VolumeX size={10} className="text-rose-500 shrink-0" />
-                    <span className={`text-[9.5px] sm:text-[11px] font-extrabold ${
+                    <VolumeX size={12} className="text-rose-500 shrink-0" />
+                    <span className={`text-xs sm:text-sm font-black ${
                       isPanda ? 'text-slate-300' : 'text-pastel-dark'
                     }`}>
                       {isPanda ? 'Panda 💤' : 'Cat 💤'}

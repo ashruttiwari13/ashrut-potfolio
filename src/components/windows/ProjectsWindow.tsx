@@ -67,22 +67,22 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
     <div className="space-y-4">
       {/* Professional Scope Banner */}
       <div
-        className={`flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-retro-sm text-[11px] shadow-xs ${
+        className={`flex flex-wrap items-center justify-between gap-2 p-3 rounded-retro-sm text-xs sm:text-sm shadow-xs ${
           isPanda
             ? 'bg-[#121633]/90 border border-purple-500/30 text-purple-200'
             : 'bg-pastel-mint/30 border border-pastel-dark text-pastel-dark'
         }`}
       >
-        <div className="flex items-center gap-1.5">
-          <span className="text-base shrink-0">{isPanda ? '🎋' : '💼'}</span>
-          <span>
+        <div className="flex items-center gap-2">
+          <span className="text-lg shrink-0">{isPanda ? '🎋' : '💼'}</span>
+          <span className="font-bold">
             <strong>Primary Career Focus:</strong> Unreal Engine 5 Game Development & 3D Character/Asset Art.
           </span>
         </div>
         <span
-          className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${
+          className={`text-xs font-black px-2.5 py-0.5 rounded-full shrink-0 ${
             isPanda
-              ? 'bg-purple-900/60 border border-purple-500/40 text-purple-300'
+              ? 'bg-purple-900/60 border border-purple-500/40 text-purple-200'
               : 'bg-pastel-lavender border border-pastel-dark text-pastel-dark'
           }`}
         >
@@ -91,11 +91,11 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
       </div>
 
       {/* Search and Filters Bar */}
-      <div className="flex flex-col sm:flex-row gap-2">
+      <div className="flex flex-col sm:flex-row gap-2.5">
         <div className="relative flex-1">
           <Search
-            size={15}
-            className={`absolute left-3 top-2.5 ${
+            size={17}
+            className={`absolute left-3.5 top-3 ${
               isPanda ? 'text-purple-300/60' : 'text-pastel-dark/60'
             }`}
           />
@@ -104,7 +104,7 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
             placeholder="Search projects, tools (e.g. Unreal, C++, Blender)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className={`w-full pl-9 pr-3 py-1.5 text-xs rounded-full focus:outline-none shadow-sm transition-all ${
+            className={`w-full pl-10 pr-3.5 py-2 text-xs sm:text-sm font-bold rounded-full focus:outline-none shadow-sm transition-all ${
               isPanda
                 ? 'bg-[#0c0f24] border border-purple-500/40 text-white placeholder-slate-400 focus:ring-2 focus:ring-purple-500/50'
                 : 'bg-white border-2 border-pastel-dark text-pastel-dark focus:ring-2 focus:ring-pastel-pink'
@@ -114,17 +114,17 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
             <button
               type="button"
               onClick={() => setSearchQuery('')}
-              className={`absolute right-2.5 top-2 ${
+              className={`absolute right-3 top-2.5 ${
                 isPanda ? 'text-purple-300/70 hover:text-white' : 'text-pastel-dark/60 hover:text-pastel-dark'
               }`}
             >
-              <X size={14} />
+              <X size={15} />
             </button>
           )}
         </div>
 
         {/* Categories */}
-        <div className="flex overflow-x-auto no-scrollbar gap-1 pb-1 touch-pan-x sm:flex-wrap">
+        <div className="flex overflow-x-auto no-scrollbar gap-1.5 pb-1 touch-pan-x sm:flex-wrap">
           {categories.map((cat) => (
             <button
               key={cat.value}
@@ -133,7 +133,7 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                 soundFX.playClick(620);
                 setSelectedCategory(cat.value);
               }}
-              className={`retro-btn text-[10px] sm:text-[11px] px-2.5 py-1 whitespace-nowrap shrink-0 transition-all ${
+              className={`retro-btn text-xs sm:text-sm font-black px-3 py-1.5 whitespace-nowrap shrink-0 transition-all ${
                 selectedCategory === cat.value
                   ? isPanda
                     ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white border-purple-400/50 shadow-[0_0_12px_rgba(168,85,247,0.5)]'
@@ -283,17 +283,17 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                   </div>
 
                   {/* Details */}
-                  <h4
-                    className={`font-extrabold text-base transition-colors break-words ${
+                  <h3
+                    className={`font-black text-lg sm:text-xl md:text-2xl transition-colors break-words tracking-tight ${
                       isPanda
                         ? 'text-white group-hover:text-purple-300'
                         : 'text-pastel-dark group-hover:text-amber-800'
                     }`}
                   >
                     {project.title}
-                  </h4>
+                  </h3>
                   <p
-                    className={`text-xs font-semibold mt-0.5 break-words line-clamp-2 ${
+                    className={`text-xs sm:text-sm font-bold mt-1 break-words line-clamp-2 leading-snug ${
                       isPanda ? 'text-slate-300' : 'text-pastel-soft'
                     }`}
                   >
@@ -301,11 +301,11 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                   </p>
 
                   {/* Tech Pills */}
-                  <div className="flex flex-wrap gap-1 mt-2">
+                  <div className="flex flex-wrap gap-1.5 mt-2.5">
                     {project.technologies.slice(0, 4).map((tech, i) => (
                       <span
                         key={i}
-                        className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
+                        className={`text-xs font-bold px-2.5 py-1 rounded-lg ${
                           isPanda
                             ? 'bg-[#141738] border border-purple-500/30 text-purple-200'
                             : 'bg-pastel-warm border border-pastel-dark/30 text-pastel-dark'
@@ -316,7 +316,7 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                     ))}
                     {project.technologies.length > 4 && (
                       <span
-                        className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${
+                        className={`text-xs font-bold px-2 py-1 rounded-lg ${
                           isPanda
                             ? 'bg-[#141738]/60 text-purple-300/70'
                             : 'bg-pastel-warm/60 text-pastel-dark/70'
@@ -330,20 +330,20 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
 
                 {/* Action Buttons */}
                 <div
-                  className={`flex flex-wrap items-center justify-between gap-2 pt-3 mt-3 border-t ${
+                  className={`flex flex-wrap items-center justify-between gap-2 pt-3.5 mt-3.5 border-t ${
                     isPanda ? 'border-purple-500/20' : 'border-pastel-dark/10'
                   }`}
                 >
                   <button
                     type="button"
                     onClick={() => handleOpenInspect(project)}
-                    className={`retro-btn text-xs px-2.5 py-1 shrink-0 ${
+                    className={`retro-btn text-xs sm:text-sm font-black px-3.5 py-1.5 shrink-0 ${
                       isPanda
                         ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-purple-400/40 shadow-[0_0_10px_rgba(168,85,247,0.4)]'
                         : 'bg-pastel-mint'
                     }`}
                   >
-                    <Eye size={12} strokeWidth={2.5} />
+                    <Eye size={14} strokeWidth={2.5} />
                     <span>Inspect</span>
                   </button>
 
@@ -428,13 +428,13 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
           >
             {/* Header */}
             <div
-              className={`px-4 py-2.5 flex items-center justify-between shrink-0 ${
+              className={`px-4 py-3 flex items-center justify-between shrink-0 ${
                 isPanda
                   ? 'bg-gradient-to-r from-[#17193c] via-[#241c48] to-[#17193c] border-b border-purple-500/40 text-white'
                   : 'bg-pastel-peach border-b-[3px] border-pastel-dark text-pastel-dark'
               }`}
             >
-              <h3 className="font-extrabold text-sm flex items-center gap-2">
+              <h3 className="font-black text-base sm:text-lg md:text-xl flex items-center gap-2">
                 <span>{activeProject.model_embed_url ? '🗿' : '👾'}</span>
                 <span>{activeProject.title}</span>
               </h3>
@@ -444,13 +444,13 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                   soundFX.playWindowClose();
                   setActiveProject(null);
                 }}
-                className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
+                className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors cursor-pointer ${
                   isPanda
                     ? 'bg-white/10 hover:bg-rose-500 text-white'
                     : 'bg-white border-2 border-pastel-dark hover:bg-pastel-coral hover:text-white text-pastel-dark'
                 }`}
               >
-                <X size={12} strokeWidth={3} />
+                <X size={14} strokeWidth={3} />
               </button>
             </div>
 
@@ -612,29 +612,29 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
 
               {/* Role & Specs Box */}
               <div
-                className={`p-3 rounded-xl ${
+                className={`p-3.5 sm:p-4 rounded-xl ${
                   isPanda
                     ? 'bg-[#121633]/90 border border-purple-500/30'
                     : 'bg-white border-2 border-pastel-dark rounded-retro-sm'
                 }`}
               >
                 <span
-                  className={`text-[11px] font-bold uppercase ${
+                  className={`text-xs font-black uppercase tracking-wider ${
                     isPanda ? 'text-purple-300' : 'text-pastel-soft'
                   }`}
                 >
                   Role & Focus:
                 </span>
-                <p className={`font-bold text-sm mt-0.5 ${isPanda ? 'text-white' : 'text-pastel-dark'}`}>
+                <p className={`font-black text-sm sm:text-base md:text-lg mt-1 ${isPanda ? 'text-white' : 'text-pastel-dark'}`}>
                   {activeProject.role}
                 </p>
 
-                <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
-                  <span className={isPanda ? 'text-slate-400 font-semibold' : 'text-pastel-soft font-semibold'}>
+                <div className="mt-2.5 flex flex-wrap items-center gap-2 text-xs sm:text-sm">
+                  <span className={isPanda ? 'text-slate-300 font-bold' : 'text-pastel-soft font-bold'}>
                     Discipline:
                   </span>
                   <span
-                    className={`px-2 py-0.5 rounded-full font-extrabold text-[10px] ${
+                    className={`px-2.5 py-0.5 rounded-full font-black text-xs ${
                       activeProject.category === 'cinematography'
                         ? isPanda
                           ? 'bg-indigo-900/60 border border-indigo-400/40 text-indigo-200'
@@ -648,11 +648,11 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
                       ? '🎬 Personal Creative Hobby'
                       : '💼 Professional Game Dev / 3D Art'}
                   </span>
-                  <span className={`font-semibold ml-1 ${isPanda ? 'text-slate-400' : 'text-pastel-soft'}`}>
+                  <span className={`font-bold ml-1.5 ${isPanda ? 'text-slate-300' : 'text-pastel-soft'}`}>
                     Status:
                   </span>
                   <span
-                    className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
+                    className={`px-2.5 py-0.5 rounded-full font-black text-xs ${
                       isPanda
                         ? 'bg-[#141738] border border-purple-500/30 text-purple-200'
                         : 'bg-pastel-warm border border-pastel-dark text-pastel-dark'
@@ -665,9 +665,9 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
 
               {/* Description */}
               <div
-                className={`p-3 rounded-xl text-xs sm:text-[13px] leading-relaxed ${
+                className={`p-3.5 sm:p-4 rounded-xl text-xs sm:text-sm md:text-[14.5px] leading-relaxed font-medium ${
                   isPanda
-                    ? 'bg-[#0f122c]/80 border border-purple-500/20 text-slate-300'
+                    ? 'bg-[#0f122c]/80 border border-purple-500/20 text-slate-200'
                     : 'bg-pastel-warm/50 border border-pastel-dark/20 text-pastel-dark'
                 }`}
               >
@@ -677,17 +677,17 @@ export const ProjectsWindow: React.FC<ProjectsWindowProps> = ({ projects }) => {
               {/* Tech Stack */}
               <div>
                 <span
-                  className={`text-[11px] font-bold uppercase tracking-wider block mb-1.5 ${
+                  className={`text-xs font-black uppercase tracking-wider block mb-2 ${
                     isPanda ? 'text-purple-300' : 'text-pastel-soft'
                   }`}
                 >
                   Technologies & Shaders:
                 </span>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-2">
                   {activeProject.technologies.map((tech, i) => (
                     <span
                       key={i}
-                      className={`text-xs font-bold px-2.5 py-1 rounded-lg ${
+                      className={`text-xs sm:text-sm font-black px-3 py-1 rounded-lg ${
                         isPanda
                           ? 'bg-[#141738] border border-purple-500/30 text-purple-200'
                           : 'bg-white border border-pastel-dark text-pastel-dark shadow-xs'

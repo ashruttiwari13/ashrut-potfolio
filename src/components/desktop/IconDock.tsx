@@ -206,7 +206,7 @@ export const IconDock: React.FC<IconDockProps> = ({
               }`}>
                 {item.icon}
               </div>
-              <span className={`text-[8.5px] sm:text-[9px] md:text-[9.5px] font-bold mt-0.5 px-1.5 py-0.2 rounded-full whitespace-nowrap shadow-xs ${
+              <span className={`text-[9.5px] sm:text-[10.5px] md:text-xs font-black mt-1 px-2 py-0.5 rounded-full whitespace-nowrap shadow-xs ${
                 isPanda 
                   ? 'bg-[#121630]/95 text-purple-200 border border-purple-500/30'
                   : 'bg-white/95 text-pastel-dark border border-pastel-dark/20'
@@ -269,7 +269,7 @@ export const IconDock: React.FC<IconDockProps> = ({
               )}
             </div>
             <span
-              className={`text-[8.5px] sm:text-[9px] md:text-[9.5px] font-bold mt-0.5 px-1.5 py-0.2 rounded-full transition-colors whitespace-nowrap shadow-xs ${
+              className={`text-[9.5px] sm:text-[10.5px] md:text-xs font-black mt-1 px-2 py-0.5 rounded-full transition-colors whitespace-nowrap shadow-xs ${
                 isPanda
                   ? isTopmost
                     ? 'bg-purple-600 text-white border border-purple-400'

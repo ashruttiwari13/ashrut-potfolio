@@ -50,56 +50,56 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
     {
       id: 'profileWin',
       title: isPanda ? '🐼 Ashrut Tiwari · Unreal 5 Game Dev & 3D Artist' : '👾 Ashrut Tiwari · Unreal 5 Game Dev & 3D Artist',
-      width: isPanda ? 570 : 520,
+      width: isPanda ? 600 : 560,
       headerColor: isPanda ? 'bg-pastel-mint' : 'bg-pastel-pink',
       defaultOpen: true,
     },
     {
       id: 'projectsWin',
       title: isPanda ? '🎋 Bamboo Studio · Playable Dreams & 3D Creations' : '🎮 Playable Dreams & 3D Portfolio',
-      width: 680,
+      width: 720,
       headerColor: 'bg-pastel-peach',
       defaultOpen: false,
     },
     {
       id: 'skillsWin',
       title: isPanda ? '🐾 Panda Toolbox · Game Dev & Technical Skills' : '🧰 Technical & Creative Toolbox',
-      width: 540,
+      width: 580,
       headerColor: 'bg-pastel-mint',
       defaultOpen: false,
     },
     {
       id: 'achievementsWin',
       title: isPanda ? '🏆 Golden Bamboo Awards · Industry Recognitions' : '🏆 Awards & Recognitions',
-      width: 520,
+      width: 580,
       headerColor: 'bg-pastel-lavender',
       defaultOpen: false,
     },
     {
       id: 'hobbiesWin',
       title: isPanda ? '🎬 Beyond the Bamboo Grove · Filmmaking & Visuals' : '🎬 Outside the Engine',
-      width: 540,
+      width: 580,
       headerColor: 'bg-pastel-peach',
       defaultOpen: false,
     },
     {
       id: 'gameWin',
       title: '⚔️ Pixel Quest: The Lost Crystal · 2D Adventure',
-      width: 720,
+      width: 760,
       headerColor: 'bg-pastel-sky',
       defaultOpen: false,
     },
     {
       id: 'resumeWin',
       title: isPanda ? '📄 Panda Scrolls · Experience Timeline & CV' : '📄 Curriculum Vitae & Experience Timeline',
-      width: 560,
+      width: 600,
       headerColor: 'bg-pastel-lavender',
       defaultOpen: false,
     },
     {
       id: 'contactWin',
       title: isPanda ? '💌 Panda Post · Commissions & Freelance Studio' : '💼 Freelance Studio & Commissions · Ashrut Tiwari',
-      width: 560,
+      width: 600,
       headerColor: 'bg-pastel-pink',
       defaultOpen: false,
     },
@@ -333,7 +333,7 @@ export const DesktopExperience: React.FC<DesktopExperienceProps> = ({
         isMaximized={maximizedWindowId === 'profileWin'}
         onToggleMaximize={() => toggleMaximizeWindow('profileWin')}
         zIndex={windowsState.profileWin.zIndex}
-        width={isPanda ? 570 : 520}
+        width={isPanda ? 600 : 560}
         headerColor={isPanda ? 'bg-pastel-mint' : 'bg-pastel-pink'}
         onClose={() => closeWindow('profileWin')}
         onFocus={() => bringToFront('profileWin')}

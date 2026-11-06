@@ -51,15 +51,23 @@ export const Window: React.FC<WindowProps> = ({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Window coordinate calculation (desktop)
+  // Window coordinate calculation (desktop & tablet & mobile)
   const calculateCenter = useCallback(() => {
     if (typeof window === 'undefined') return { x: 120, y: 80 };
-    const winWidth = typeof width === 'number' ? width : 520;
+    const winWidth = typeof width === 'number' ? width : 560;
     const isSmall = window.innerWidth < 768;
-    const x = isSmall
-      ? Math.max(10, Math.floor((window.innerWidth - Math.min(winWidth, window.innerWidth - 20)) / 2))
-      : Math.max(100, Math.floor((window.innerWidth - winWidth) / 2));
-    const y = isSmall ? 84 : Math.max(20, Math.floor((window.innerHeight - 560) / 2));
+    if (isSmall) {
+      const actualWidth = Math.min(winWidth, window.innerWidth - 12);
+      const x = Math.max(6, Math.floor((window.innerWidth - actualWidth) / 2));
+      const y = Math.max(76, Math.floor((window.innerHeight - 560) / 2));
+      return { x, y };
+    }
+    // Desktop & Tablet: Dock is on left (~90px wide)
+    const dockSpace = 92;
+    const availableWidth = window.innerWidth - dockSpace;
+    const actualWidth = Math.min(winWidth, availableWidth - 28);
+    const x = Math.max(dockSpace + 8, Math.floor(dockSpace + (availableWidth - actualWidth) / 2));
+    const y = Math.max(20, Math.floor((window.innerHeight - 620) / 2));
     return { x, y };
   }, [width]);
 
@@ -235,44 +243,44 @@ export const Window: React.FC<WindowProps> = ({
     ...(isMobile
       ? isMaximized
         ? {
-            top: 'max(80px, calc(env(safe-area-inset-top, 0px) + 76px))',
-            bottom: 'max(68px, calc(env(safe-area-inset-bottom, 0px) + 64px))',
-            left: '8px',
-            right: '8px',
+            top: 'max(72px, calc(env(safe-area-inset-top, 0px) + 68px))',
+            bottom: 'max(64px, calc(env(safe-area-inset-bottom, 0px) + 60px))',
+            left: '6px',
+            right: '6px',
             width: 'auto',
-            height: 'calc(100dvh - max(152px, calc(env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px) + 144px)))',
+            height: 'calc(100dvh - max(140px, calc(env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px) + 132px)))',
             maxHeight: 'none',
             maxWidth: 'none',
           }
         : {
-            top: 'max(84px, calc(env(safe-area-inset-top, 0px) + 80px))',
-            bottom: 'max(72px, calc(env(safe-area-inset-bottom, 0px) + 68px))',
-            left: '8px',
-            right: '8px',
+            top: 'max(76px, calc(env(safe-area-inset-top, 0px) + 72px))',
+            bottom: 'max(68px, calc(env(safe-area-inset-bottom, 0px) + 64px))',
+            left: '6px',
+            right: '6px',
             width: 'auto',
-            maxWidth: '640px',
+            maxWidth: '720px',
             margin: '0 auto',
             transform: `translate3d(${mobileOffset.x}px, ${mobileOffset.y}px, 0)`,
             transition: isDraggingMobileRef.current ? 'none' : 'transform 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1)',
-            height: 'calc(100dvh - max(162px, calc(env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px) + 152px)))',
-            maxHeight: 'calc(100dvh - max(162px, calc(env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px) + 152px)))',
+            height: 'calc(100dvh - max(148px, calc(env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px) + 140px)))',
+            maxHeight: 'calc(100dvh - max(148px, calc(env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px) + 140px)))',
           }
       : isMaximized
       ? {
           top: '12px',
-          left: '98px',
-          right: '102px',
-          bottom: '64px',
+          left: '96px',
+          right: '16px',
+          bottom: '56px',
           width: 'auto',
           maxWidth: 'none',
-          height: 'calc(100vh - 76px)',
+          height: 'calc(100vh - 68px)',
         }
       : {
           top: `${position.y}px`,
           left: `${position.x}px`,
           width: typeof width === 'number' ? `${width}px` : width,
-          maxWidth: '94vw',
-          maxHeight: 'calc(100vh - 80px)',
+          maxWidth: 'calc(100vw - 110px)',
+          maxHeight: 'calc(100vh - 54px)',
         }),
   };
 
@@ -363,23 +371,23 @@ export const Window: React.FC<WindowProps> = ({
           isPanda 
             ? 'bg-gradient-to-r from-[#151838] via-[#241c48] to-[#171936] text-white border-b border-purple-500/40 shadow-[0_4px_20px_rgba(0,0,0,0.5)]' 
             : `${headerColor} text-pastel-dark border-b-2 sm:border-b-[2.5px] border-pastel-dark`
-        } px-3 sm:px-4 py-2 flex flex-col justify-center cursor-grab active:cursor-grabbing select-none touch-none min-h-[46px] sm:min-h-[50px] shrink-0 relative z-10 transition-colors duration-300`}
+        } px-3.5 sm:px-4 md:px-5 py-2.5 sm:py-3 flex flex-col justify-center cursor-grab active:cursor-grabbing select-none touch-none min-h-[48px] sm:min-h-[54px] shrink-0 relative z-10 transition-colors duration-300`}
         title="Drag on desktop · Drag to move on mobile (swipe down to minimize) · Double click to maximize"
       >
         {/* Mobile Swipe / Drag Pill Indicator */}
-        <div className={`w-10 h-1 rounded-full mx-auto -mt-0.5 mb-1 sm:hidden pointer-events-none ${isPanda ? 'bg-purple-400/40' : 'bg-pastel-dark/30'}`} />
+        <div className={`w-10 h-1.5 rounded-full mx-auto -mt-0.5 mb-1.5 sm:hidden pointer-events-none ${isPanda ? 'bg-purple-400/50' : 'bg-pastel-dark/30'}`} />
 
         <div className="flex items-center justify-between w-full">
-          <div className="flex items-center gap-1.5 sm:gap-2 font-extrabold text-xs sm:text-sm tracking-wide truncate flex-1 min-w-0">
+          <div className="flex items-center gap-2 sm:gap-2.5 font-black text-sm sm:text-base md:text-lg tracking-wide truncate flex-1 min-w-0">
             {isPanda ? (
-              <span className="text-xs sm:text-sm shrink-0 drop-shadow-[0_0_8px_rgba(168,85,247,0.7)]">🐼</span>
+              <span className="text-sm sm:text-base md:text-lg shrink-0 drop-shadow-[0_0_8px_rgba(168,85,247,0.7)]">🐼</span>
             ) : (
-              <span className="text-xs sm:text-sm shrink-0">🐱</span>
+              <span className="text-sm sm:text-base md:text-lg shrink-0">🐱</span>
             )}
-            <span className={`truncate ${isPanda ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]' : 'text-pastel-dark'}`}>{title}</span>
+            <span className={`truncate font-black ${isPanda ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.25)]' : 'text-pastel-dark'}`}>{title}</span>
             {isMaximized && (
-              <span className={`text-[9px] font-extrabold px-1.5 py-0.2 rounded-full shrink-0 hidden sm:inline-flex shadow-2xs ${
-                isPanda ? 'bg-purple-900/80 border border-purple-400 text-purple-200' : 'bg-white/90 border border-pastel-dark text-pastel-dark'
+              <span className={`text-[10px] sm:text-xs font-black px-2 py-0.5 rounded-full shrink-0 hidden sm:inline-flex shadow-xs ${
+                isPanda ? 'bg-purple-900/90 border border-purple-400 text-purple-200' : 'bg-white/90 border border-pastel-dark text-pastel-dark'
               }`}>
                 Maximized
               </span>
